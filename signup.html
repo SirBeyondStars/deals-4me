@@ -1,1 +1,227 @@
-<!-- signup.html content -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Deals-4Me – Sign Up</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <!-- Optional: basic styling; you can also rely on styles/main.css if you prefer -->
+  <link rel="stylesheet" href="styles/main.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+  <div class="w-full max-w-md">
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold text-rose-600">Deals-4Me</h1>
+        <p class="text-gray-500 text-sm">Create your account</p>
+      </div>
+
+      <form id="signupForm" class="space-y-4">
+        <!-- Email / Password -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Email</label>
+          <input id="email" type="email" required
+                 class="mt-1 w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+        </div>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Password</label>
+            <input id="password" type="password" required
+                   class="mt-1 w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Confirm Password</label>
+            <input id="password2" type="password" required
+                   class="mt-1 w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+          </div>
+        </div>
+
+        <!-- Address (used to enforce single household owner) -->
+        <div class="mt-4">
+          <label class="block text-sm font-medium text-gray-700">Address Line 1</label>
+          <input id="addr1" type="text" required placeholder="123 Main St"
+                 class="mt-1 w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Address Line 2 (optional)</label>
+          <input id="addr2" type="text" placeholder="Apt, Unit, etc."
+                 class="mt-1 w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700">City</label>
+            <input id="city" type="text" required
+                   class="mt-1 w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">State</label>
+            <input id="state" type="text" maxlength="2" required placeholder="MA"
+                   class="mt-1 w-full uppercase border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">ZIP Code</label>
+          <input id="zip" type="text" inputmode="numeric" maxlength="10" required placeholder="02108"
+                 class="mt-1 w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+        </div>
+
+        <!-- 4-digit PIN -->
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 mt-2">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">4‑digit PIN</label>
+            <input id="pin" type="password" inputmode="numeric" maxlength="4" required placeholder="••••"
+                   class="mt-1 w-full tracking-widest text-center text-xl border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Confirm PIN</label>
+            <input id="pin2" type="password" inputmode="numeric" maxlength="4" required placeholder="••••"
+                   class="mt-1 w-full tracking-widest text-center text-xl border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+          </div>
+        </div>
+
+        <!-- Terms -->
+        <label class="inline-flex items-center text-sm text-gray-600 mt-2">
+          <input id="agree" type="checkbox" class="mr-2" required />
+          I agree to the Terms of Service and Privacy Policy.
+        </label>
+
+        <!-- Submit -->
+        <button id="btnSignup" type="submit"
+                class="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 rounded-lg mt-2">
+          Create Account
+        </button>
+
+        <p id="error" class="text-sm text-red-600 mt-2 hidden"></p>
+      </form>
+
+      <p class="text-center text-sm text-gray-600 mt-4">
+        Already have an account?
+        <a class="text-rose-600 hover:text-rose-700 underline" href="login.html">Log in</a>
+      </p>
+    </div>
+
+    <p class="text-center text-xs text-gray-400 mt-4">© 2025 Deals-4Me</p>
+  </div>
+
+  <!-- Firebase (CDN) + Sign-up Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth, createUserWithEmailAndPassword, updateProfile
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      getFirestore, collection, query, where, getDocs, doc, setDoc, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // Your Firebase config (from your console)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCL76t1c3F315zxjoeDHUif1SCRILwLB-k",
+      authDomain: "deals-4me-24e59.firebaseapp.com",
+      projectId: "deals-4me-24e59",
+      storageBucket: "deals-4me-24e59.firebasestorage.app",
+      messagingSenderId: "371824876408",
+      appId: "1:371824876408:web:6835492135efd123a7468d",
+      measurementId: "G-9BR1V8ETC6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Helpers
+    const $ = (id) => document.getElementById(id);
+    const show = (el) => el.classList.remove('hidden');
+    const hide = (el) => el.classList.add('hidden');
+
+    function norm(str) {
+      return (str || "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ")
+        .replace(/[.,#]/g, "");
+    }
+    function makeHouseholdKey(line1, zip) {
+      return `${norm(line1)}|${(zip || "").trim()}`;
+    }
+    function isFourDigitPin(p) { return /^[0-9]{4}$/.test(p); }
+    async function sha256Hex(input) {
+      const enc = new TextEncoder().encode(input);
+      const buf = await crypto.subtle.digest('SHA-256', enc);
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
+    const form = $('signupForm');
+    const errEl = $('error');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hide(errEl);
+
+      const email = $('email').value.trim();
+      const password = $('password').value;
+      const password2 = $('password2').value;
+
+      const addr1 = $('addr1').value;
+      const addr2 = $('addr2').value;
+      const city = $('city').value;
+      const state = $('state').value.toUpperCase();
+      const zip = $('zip').value;
+
+      const pin = $('pin').value;
+      const pin2 = $('pin2').value;
+
+      // Basic validation
+      if (password !== password2) {
+        errEl.textContent = "Passwords do not match.";
+        show(errEl); return;
+      }
+      if (!isFourDigitPin(pin) || pin !== pin2) {
+        errEl.textContent = "PINs must match and be exactly 4 digits.";
+        show(errEl); return;
+      }
+      if (!$('agree').checked) {
+        errEl.textContent = "Please accept the Terms to continue.";
+        show(errEl); return;
+      }
+
+      try {
+        // Enforce single main account per address:
+        const householdKey = makeHouseholdKey(addr1, zip);
+        const q = query(collection(db, "users"), where("householdKey", "==", householdKey));
+        const existing = await getDocs(q);
+        if (!existing.empty) {
+          errEl.innerHTML = "An account already exists for this address.<br/>Please have the main account holder add you as a family member (Gold/Platinum).";
+          show(errEl);
+          return;
+        }
+
+        // Create auth user
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        // Optional: set a display name based on email
+        await updateProfile(cred.user, { displayName: email.split("@")[0] });
+
+        // Store profile in Firestore
+        const pinHash = await sha256Hex(pin);
+        const userRef = doc(db, "users", cred.user.uid);
+        await setDoc(userRef, {
+          email,
+          tier: "basic",          // default until upgrade via Stripe
+          pinHash,
+          address: { line1: addr1, line2: addr2, city, state, zip },
+          householdKey,
+          role: "owner",          // main account for this address
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+
+        // Done → send to login to perform PIN flow
+        window.location.href = "login.html";
+      } catch (err) {
+        console.error(err);
+        errEl.textContent = err?.message || "Sign-up failed.";
+        show(errEl);
+      }
+    });
+  </script>
+</body>
+</html>
