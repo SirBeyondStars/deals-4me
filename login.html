@@ -4,116 +4,146 @@
   <meta charset="utf-8" />
   <title>Deals-4Me – Login</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <!-- Tailwind (CDN) for quick styling; safe to keep or swap to your CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>.fade-swap{transition:opacity 700ms ease}</style>
 </head>
-<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
-  <div class="w-full max-w-md">
-    <div class="bg-white rounded-xl shadow-lg p-6">
-      <div class="text-center mb-6">
-        <h1 class="text-2xl font-bold text-rose-600">Deals-4Me</h1>
-        <p class="text-gray-500 text-sm">Welcome back — sign in to continue</p>
+<body class="bg-gray-50 min-h-screen">
+  <div class="min-h-screen grid grid-cols-1 md:grid-cols-2">
+    <!-- LEFT: Circulars images -->
+    <aside class="relative hidden md:block">
+      <div class="absolute inset-0 bg-gradient-to-br from-rose-200 via-amber-100 to-sky-100"></div>
+      <div class="absolute inset-0 overflow-hidden">
+        <img id="slideA" class="fade-swap absolute inset-0 w-full h-full object-cover opacity-100" src="images/circular1.jpg" alt="Deals preview A" />
+        <img id="slideB" class="fade-swap absolute inset-0 w-full h-full object-cover opacity-0"   src="images/circular2.jpg" alt="Deals preview B" />
       </div>
+      <div class="absolute bottom-6 left-6 bg-white/80 backdrop-blur rounded-xl px-4 py-3 shadow">
+        <h2 class="text-lg font-semibold text-gray-800">Discover Weekly Flyers</h2>
+        <p class="text-sm text-gray-600">Compare prices from your favorite stores in one place.</p>
+      </div>
+    </aside>
 
-      <!-- Step 1: Email / Password -->
-      <form id="emailForm" class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Email</label>
-          <input id="email" type="email" required
-                 class="mt-1 w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Password</label>
-          <input id="password" type="password" required
-                 class="mt-1 w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
-        </div>
-        <div class="flex items-center justify-between">
-          <label class="inline-flex items-center text-sm text-gray-600">
-            <input id="rememberMe" type="checkbox" class="mr-2" />
-            Remember me
-          </label>
-          <a href="#" id="showSignup"
-             class="text-sm text-rose-600 hover:text-rose-700 underline">New here? Sign up</a>
-        </div>
-        <button id="btnEmailSignIn" type="submit"
-                class="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 rounded-lg">
-          Sign in
-        </button>
-        <p id="emailError" class="text-sm text-red-600 mt-2 hidden"></p>
-      </form>
+    <!-- RIGHT: Login card -->
+    <main class="flex items-center justify-center p-6">
+      <div class="w-full max-w-md">
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+          <div class="text-center mb-6">
+            <h1 class="text-3xl font-extrabold text-rose-600">Deals‑4Me</h1>
+            <p class="text-gray-500 text-sm">Welcome back — sign in to continue</p>
+          </div>
 
-      <!-- Step 2a: Enter PIN -->
-      <form id="pinForm" class="space-y-4 hidden mt-6">
-        <div class="text-center">
-          <h2 class="text-lg font-semibold">Enter your 4‑digit PIN</h2>
-          <p class="text-gray-500 text-sm">For your household’s security.</p>
-        </div>
-        <input id="pinInput" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••" required
-               class="mt-1 w-full tracking-widest text-center text-2xl border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
-        <div class="flex items-center justify-between">
-          <button id="btnVerifyPin" type="submit"
-                  class="bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 px-4 rounded-lg">
-            Verify PIN
-          </button>
-          <button id="btnForgotPin" type="button"
-                  class="text-sm text-blue-600 hover:text-blue-700 underline">
-            Forgot PIN?
-          </button>
-        </div>
-        <p id="pinError" class="text-sm text-red-600 mt-2 hidden"></p>
-      </form>
+          <!-- Step 1: Email / Password -->
+          <form id="emailForm" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Email</label>
+              <input id="email" type="email" required
+                     class="mt-1 w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Password</label>
+              <input id="password" type="password" required
+                     class="mt-1 w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+            </div>
+            <div class="flex items-center justify-between">
+              <label class="inline-flex items-center text-sm text-gray-600">
+                <input id="rememberMe" type="checkbox" class="mr-2" />
+                Remember me
+              </label>
+              <a href="signup.html" class="text-sm text-rose-600 hover:text-rose-700 underline">New here? Sign up</a>
+            </div>
+            <button id="btnEmailSignIn" type="submit"
+                    class="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 rounded-lg">
+              Sign in
+            </button>
+            <p id="emailError" class="text-sm text-red-600 mt-2 hidden"></p>
+          </form>
 
-      <!-- Step 2b: Set PIN (first time or reset) -->
-      <form id="setPinForm" class="space-y-4 hidden mt-6">
-        <div class="text-center">
-          <h2 class="text-lg font-semibold">Set a 4‑digit PIN</h2>
-          <p class="text-gray-500 text-sm">You’ll enter this after login each time.</p>
-        </div>
-        <input id="newPin" type="password" inputmode="numeric" maxlength="4" placeholder="New PIN" required
-               class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
-        <input id="confirmPin" type="password" inputmode="numeric" maxlength="4" placeholder="Confirm PIN" required
-               class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
-        <div id="reauthBlock" class="hidden">
-          <p class="text-sm text-gray-500">For security, re‑enter your password to reset PIN.</p>
-          <input id="reauthPassword" type="password" placeholder="Account password"
-                 class="mt-1 w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
-        </div>
-        <div class="flex items-center justify-between">
-          <button id="btnSavePin" type="submit"
-                  class="bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 px-4 rounded-lg">
-            Save PIN
-          </button>
-          <button id="btnCancelSet" type="button"
-                  class="text-sm text-gray-600 hover:text-gray-800 underline">
-            Cancel
-          </button>
-        </div>
-        <p id="setPinError" class="text-sm text-red-600 mt-2 hidden"></p>
-      </form>
+          <!-- Step 2: Enter PIN -->
+          <form id="pinForm" class="space-y-4 hidden mt-6">
+            <div class="text-center">
+              <h2 class="text-lg font-semibold">Enter your 4‑digit PIN</h2>
+              <p class="text-gray-500 text-sm">For your household’s security.</p>
+            </div>
+            <input id="pinInput" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••" required
+                   class="mt-1 w-full tracking-widest text-center text-2xl border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+            <div class="flex items-center justify-between">
+              <button id="btnVerifyPin" type="submit"
+                      class="bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 px-4 rounded-lg">
+                Verify PIN
+              </button>
+              <button id="btnForgotPin" type="button"
+                      class="text-sm text-blue-600 hover:text-blue-700 underline">
+                Forgot PIN?
+              </button>
+            </div>
+            <p id="pinError" class="text-sm text-red-600 mt-2 hidden"></p>
+          </form>
 
-      <!-- Loading state -->
-      <div id="loading" class="hidden mt-6 text-center text-sm text-gray-500">Working...</div>
-    </div>
+          <!-- Step 2b: Set/Reset PIN -->
+          <form id="setPinForm" class="space-y-4 hidden mt-6">
+            <div class="text-center">
+              <h2 class="text-lg font-semibold">Set a 4‑digit PIN</h2>
+              <p class="text-gray-500 text-sm">You’ll enter this after login each time.</p>
+            </div>
+            <input id="newPin" type="password" inputmode="numeric" maxlength="4" placeholder="New PIN" required
+                   class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+            <input id="confirmPin" type="password" inputmode="numeric" maxlength="4" placeholder="Confirm PIN" required
+                   class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+            <div id="reauthBlock" class="hidden">
+              <p class="text-sm text-gray-500">For security, re‑enter your password to reset PIN.</p>
+              <input id="reauthPassword" type="password" placeholder="Account password"
+                     class="mt-1 w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+            </div>
+            <div class="flex items-center justify-between">
+              <button id="btnSavePin" type="submit"
+                      class="bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 px-4 rounded-lg">
+                Save PIN
+              </button>
+              <button id="btnCancelSet" type="button"
+                      class="text-sm text-gray-600 hover:text-gray-800 underline">
+                Cancel
+              </button>
+            </div>
+            <p id="setPinError" class="text-sm text-red-600 mt-2 hidden"></p>
+          </form>
 
-    <p class="text-center text-xs text-gray-400 mt-4">
-      © 2025 Deals-4Me
-    </p>
+          <div id="loading" class="hidden mt-6 text-center text-sm text-gray-500">Working...</div>
+        </div>
+        <p class="text-center text-xs text-gray-400 mt-4">© 2025 Deals‑4Me</p>
+      </div>
+    </main>
   </div>
 
-  <!-- Firebase (CDN, modular v10) + App Logic -->
+  <!-- Redirect signed-in users away from login -->
+  <script src="scripts/auth-redirect.js"></script>
+
+  <!-- Firebase + App Logic (CDN modular) -->
   <script type="module">
-    // --- Firebase imports (CDN) ---
+    // Slideshow
+    const images = [
+      "images/circular1.jpg",
+      "images/circular2.jpg",
+      "images/circular3.jpg"
+    ];
+    const slideA = document.getElementById('slideA');
+    const slideB = document.getElementById('slideB');
+    let idx = 0, showingA = true;
+    function nextImage(){
+      const next = images[(idx+1)%images.length];
+      if (showingA){ slideB.src = next; slideB.style.opacity = 1; slideA.style.opacity = 0; }
+      else { slideA.src = next; slideA.style.opacity = 1; slideB.style.opacity = 0; }
+      idx=(idx+1)%images.length; showingA=!showingA;
+    }
+    setInterval(nextImage, 4000);
+
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import {
       getAuth, setPersistence, browserLocalPersistence,
-      signInWithEmailAndPassword, reauthenticateWithCredential,
-      EmailAuthProvider
+      signInWithEmailAndPassword, reauthenticateWithCredential, EmailAuthProvider
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import {
       getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // --- Your Firebase config (from your console) ---
     const firebaseConfig = {
       apiKey: "AIzaSyCL76t1c3F315zxjoeDHUif1SCRILwLB-k",
       authDomain: "deals-4me-24e59.firebaseapp.com",
@@ -123,226 +153,115 @@
       appId: "1:371824876408:web:6835492135efd123a7468d",
       measurementId: "G-9BR1V8ETC6"
     };
-
-    // --- Initialize ---
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // --- UI Elements ---
+    // UI refs
     const emailForm = document.getElementById('emailForm');
     const emailEl = document.getElementById('email');
     const passwordEl = document.getElementById('password');
     const rememberMeEl = document.getElementById('rememberMe');
     const emailError = document.getElementById('emailError');
-
     const pinForm = document.getElementById('pinForm');
     const pinInput = document.getElementById('pinInput');
     const pinError = document.getElementById('pinError');
     const btnForgotPin = document.getElementById('btnForgotPin');
-
     const setPinForm = document.getElementById('setPinForm');
     const newPinEl = document.getElementById('newPin');
     const confirmPinEl = document.getElementById('confirmPin');
     const reauthBlock = document.getElementById('reauthBlock');
     const reauthPasswordEl = document.getElementById('reauthPassword');
     const setPinError = document.getElementById('setPinError');
-
     const loading = document.getElementById('loading');
-    const showSignup = document.getElementById('showSignup');
 
-    showSignup.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.location.href = 'signup.html';
-    });
-
-    // --- Helpers ---
-    function show(el) { el.classList.remove('hidden'); }
-    function hide(el) { el.classList.add('hidden'); }
-
-    async function sha256Hex(input) {
+    function show(el){ el.classList.remove('hidden'); }
+    function hide(el){ el.classList.add('hidden'); }
+    async function sha256Hex(input){
       const enc = new TextEncoder().encode(input);
       const buf = await crypto.subtle.digest('SHA-256', enc);
-      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+      return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
     }
+    const isFourDigitPin = (s) => /^[0-9]{4}$/.test(s);
+    let attemptsLeft = 3, pinResetMode = false;
 
-    function isFourDigitPin(str) {
-      return /^[0-9]{4}$/.test(str);
-    }
+    // Helper to honor ?next=
+    const params = new URLSearchParams(location.search);
+    const nextUrl = params.get('next') || 'index.html';
 
-    let attemptsLeft = 3;
-    let pinResetMode = false; // toggled by "Forgot PIN?"
-
-    // --- Step 1: Email/Password Sign-In ---
     emailForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      hide(emailError);
-      hide(setPinError);
-      hide(pinError);
-      show(loading);
-
+      e.preventDefault(); hide(emailError); hide(setPinError); hide(pinError); show(loading);
       try {
-        // Persist session if "remember me"
         await setPersistence(auth, browserLocalPersistence);
-
-        const email = emailEl.value.trim();
-        const password = passwordEl.value;
-
-        const cred = await signInWithEmailAndPassword(auth, email, password);
-
-        // Fetch user doc to see if a pinHash exists
+        const cred = await signInWithEmailAndPassword(auth, emailEl.value.trim(), passwordEl.value);
         const userRef = doc(db, 'users', cred.user.uid);
         const snap = await getDoc(userRef);
-
-        hide(loading);
-        hide(emailForm);
-
-        if (!snap.exists() || !snap.data().pinHash) {
-          // No PIN yet → ask them to set one
-          pinResetMode = false;
-          hide(pinForm);
-          hide(reauthBlock);
-          show(setPinForm);
-        } else {
-          // Has PIN → verify flow
-          show(pinForm);
-          pinInput.focus();
-        }
+        hide(loading); hide(emailForm);
+        if (!snap.exists() || !snap.data().pinHash) { pinResetMode=false; hide(pinForm); hide(reauthBlock); show(setPinForm); }
+        else { show(pinForm); pinInput.focus(); }
       } catch (err) {
-        console.error(err);
-        emailError.textContent = err?.message || 'Login failed.';
-        show(emailError);
-        hide(loading);
+        emailError.textContent = err?.message || 'Login failed.'; show(emailError); hide(loading);
       }
     });
 
-    // --- Step 2a: Verify PIN ---
     pinForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      hide(pinError);
-
+      e.preventDefault(); hide(pinError);
       const pin = pinInput.value;
-      if (!isFourDigitPin(pin)) {
-        pinError.textContent = 'Please enter a 4‑digit PIN.';
-        show(pinError);
-        return;
-      }
-
+      if (!isFourDigitPin(pin)) { pinError.textContent='Please enter a 4‑digit PIN.'; show(pinError); return; }
       try {
         const user = auth.currentUser;
-        const userRef = doc(db, 'users', user.uid);
-        const snap = await getDoc(userRef);
-
-        if (!snap.exists() || !snap.data().pinHash) {
-          // Somehow missing → go to set flow
-          hide(pinForm);
-          show(setPinForm);
-          return;
-        }
-
+        const snap = await getDoc(doc(db,'users',user.uid));
+        if (!snap.exists() || !snap.data().pinHash){ hide(pinForm); show(setPinForm); return; }
         const pinHash = await sha256Hex(pin);
-        if (pinHash !== snap.data().pinHash) {
-          attemptsLeft -= 1;
-          if (attemptsLeft <= 0) {
-            pinError.textContent = 'Too many attempts. Please try again later or reset your PIN.';
-          } else {
-            pinError.textContent = `Incorrect PIN. ${attemptsLeft} attempt(s) left.`;
-          }
-          show(pinError);
-          return;
+        if (pinHash !== snap.data().pinHash){
+          attemptsLeft--;
+          pinError.textContent = attemptsLeft<=0 ? 'Too many attempts. Try again later or reset your PIN.' : `Incorrect PIN. ${attemptsLeft} attempt(s) left.`;
+          show(pinError); return;
         }
-
-        // PIN OK → mark session and redirect
-        localStorage.setItem('isAuthenticated', 'true');
-        // You can load tier from Firestore if stored: snap.data().tier
-        // localStorage.setItem('membershipTier', snap.data().tier || 'basic');
-
-        window.location.href = 'index.html';
-      } catch (err) {
-        console.error(err);
-        pinError.textContent = 'Unable to verify PIN.';
-        show(pinError);
+        localStorage.setItem('isAuthenticated','true');
+        window.location.href = nextUrl;   // <-- honor ?next=
+      } catch {
+        pinError.textContent='Unable to verify PIN.'; show(pinError);
       }
     });
 
-    // --- Forgot PIN: switch to reset mode (requires reauth) ---
-    btnForgotPin.addEventListener('click', () => {
-      pinResetMode = true;
-      hide(pinForm);
-      show(setPinForm);
-      show(reauthBlock);
-    });
+    btnForgotPin.addEventListener('click', () => { pinResetMode=true; hide(pinForm); show(setPinForm); show(reauthBlock); });
 
-    // --- Step 2b: Set/Reset PIN ---
     setPinForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      hide(setPinError);
-
-      const a = newPinEl.value;
-      const b = confirmPinEl.value;
-      if (!isFourDigitPin(a) || !isFourDigitPin(b) || a !== b) {
-        setPinError.textContent = 'PINs must match and be exactly 4 digits.';
-        show(setPinError);
-        return;
-      }
-
+      e.preventDefault(); hide(setPinError);
+      const a=newPinEl.value, b=confirmPinEl.value;
+      if (!isFourDigitPin(a) || a!==b){ setPinError.textContent='PINs must match and be exactly 4 digits.'; show(setPinError); return; }
       try {
-        const user = auth.currentUser;
-        if (!user) throw new Error('Not signed in');
-
-        // If resetting, require reauth (password)
-        if (pinResetMode) {
-          const pw = reauthPasswordEl.value;
-          if (!pw) {
-            setPinError.textContent = 'Please enter your password to reset your PIN.';
-            show(setPinError);
-            return;
-          }
-          const credential = EmailAuthProvider.credential(user.email, pw);
-          await reauthenticateWithCredential(user, credential);
+        const user = auth.currentUser; if (!user) throw new Error('Not signed in');
+        if (pinResetMode){
+          const pw = reauthPasswordEl.value; if (!pw){ setPinError.textContent='Enter your password to reset PIN.'; show(setPinError); return; }
+          const cred = EmailAuthProvider.credential(user.email, pw);
+          await reauthenticateWithCredential(user, cred);
         }
-
-        const userRef = doc(db, 'users', user.uid);
-        const hashed = await sha256Hex(a);
-
-        // Create or update user profile with pinHash
+        const userRef = doc(db,'users',user.uid);
         const baseProfile = {
           email: user.email,
-          pinHash: hashed,
-          tier: 'basic',         // default; update after Stripe webhook/upgrade
+          pinHash: await sha256Hex(a),
+          tier: 'basic',
           updatedAt: serverTimestamp()
         };
-
         const snap = await getDoc(userRef);
-        if (!snap.exists()) {
+        if (!snap.exists()){
           baseProfile.createdAt = serverTimestamp();
           await setDoc(userRef, baseProfile);
         } else {
           await updateDoc(userRef, baseProfile);
         }
-
-        // Done — consider this a successful login
-        localStorage.setItem('isAuthenticated', 'true');
-        // localStorage.setItem('membershipTier', baseProfile.tier);
-
-        window.location.href = 'index.html';
-      } catch (err) {
-        console.error(err);
-        setPinError.textContent = err?.message || 'Could not save PIN.';
-        show(setPinError);
+        localStorage.setItem('isAuthenticated','true');
+        window.location.href = nextUrl;   // <-- honor ?next=
+      } catch (err){
+        setPinError.textContent = err?.message || 'Could not save PIN.'; show(setPinError);
       }
     });
 
     document.getElementById('btnCancelSet').addEventListener('click', () => {
-      // go back to PIN entry if we were verifying, else back to email form
-      if (pinResetMode) {
-        pinResetMode = false;
-        hide(setPinForm);
-        show(pinForm);
-      } else {
-        hide(setPinForm);
-        show(emailForm);
-      }
+      if (pinResetMode){ pinResetMode=false; hide(setPinForm); show(pinForm); }
+      else { hide(setPinForm); location.reload(); }
     });
   </script>
 </body>
