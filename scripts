@@ -1,0 +1,12 @@
+<!-- /scripts/auth-redirect.js -->
+<script>
+(() => {
+  const isAuth = localStorage.getItem('isAuthenticated') === 'true';
+  if (!isAuth) return;
+
+  const params = new URLSearchParams(location.search);
+  const next = params.get('next') || 'index.html';
+  // replace avoids landing back on login if user clicks Back
+  location.replace(next);
+})();
+</script>
