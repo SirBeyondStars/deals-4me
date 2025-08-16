@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Deals-4Me | Wallet</title>
+  <link rel="stylesheet" href="wallet.css">
+</head>
+<body>
+  <header>
+    <h1>My Wallet</h1>
+  </header>
+  <main>
+    <div class="wallet-summary">
+      <h2>Wallet Overview</h2>
+      <p>Total Saved: <strong>$87.50</strong></p>
+      <p>Weekly Contributions: <strong>$10.00</strong></p>
+    </div>
+
+    <div class="goal-form">
+      <h3>New Savings Goal</h3>
+      <form id="goal-form">
+        <label for="goalName">Goal Name:</label>
+        <input type="text" id="goalName" name="goalName" placeholder="e.g. Birthday Gift">
+
+        <label for="goalAmount">Goal Amount ($):</label>
+        <input type="number" id="goalAmount" name="goalAmount" placeholder="e.g. 50">
+
+        <label for="weeks">Weeks to Save:</label>
+        <input type="number" id="weeks" name="weeks" placeholder="e.g. 5">
+
+        <button type="submit">Calculate Goal</button>
+      </form>
+      <div id="goal-results" style="margin-top:1rem;"></div>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('goal-form');
+    const results = document.getElementById('goal-results');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const goal = form.goalName.value;
+      const amount = parseFloat(form.goalAmount.value);
+      const weeks = parseInt(form.weeks.value);
+      const perWeek = (amount / weeks).toFixed(2);
+      results.innerHTML = `
+        <h4>Goal: ${goal}</h4>
+        <p>You need to save <strong>$${perWeek}</strong> per week for ${weeks} weeks.</p>
+        <progress value="0" max="${amount}" id="progressBar"></progress>
+      `;
+    });
+  </script>
+</body>
+</html>

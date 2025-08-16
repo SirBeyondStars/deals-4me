@@ -3,51 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Deals-4Me</title>
-  <link rel="stylesheet" href="styles/main.css">
-  <script type="module" src="firebase-config.js"></script>
-  <script defer src="scripts/auth.js"></script>
+  <title>Deals-4Me Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
-    <h1>Welcome to <span style="color:#f39c12;">Deals-4Me</span></h1>
-    <p>This is a live prototype version of the app. More features coming soon.</p>
-    <nav>
-      <ul>
-        <li><a href="login.html">Login</a></li>
-        <li><a href="signup.html">Sign Up</a></li>
-        <li><a href="#tiers">Pricing Tiers</a></li>
-        <li><a href="#flyers">Smart Shopping</a></li>
-      </ul>
-    </nav>
+    <h1>Welcome to Deals-4Me</h1>
+    <p>Your hub for smart shopping & saving</p>
   </header>
-
+  <nav>
+    <a href="#">Wallet</a>
+    <a href="#">Circulars</a>
+    <a href="#">Games</a>
+    <a href="#">Chat</a>
+    <a href="#">Family</a>
+    <a href="#">Upgrade</a>
+    <a href="#">Profile</a>
+  </nav>
   <main>
-    <section id="welcome">
-      <h2>Start Saving Today</h2>
-      <p>Sign up to track your favorite items and get alerts when deals go live. Choose the plan that fits your family and start comparing flyers nearby.</p>
-      <button onclick="window.location.href='signup.html'">Get Started</button>
-    </section>
-
-    <section id="tiers">
-      <h2>Our Plans</h2>
-      <ul>
-        <li><strong>Basic</strong> - Free with ads, 30 saved items, access to public chats</li>
-        <li><strong>Gold</strong> - $0.99/month, add one family member, 50 saved items, access to community chat</li>
-        <li><strong>Platinum</strong> - $4.99/month, full access, unlimited saved items, private chat, smart shopping features</li>
-      </ul>
-    </section>
-
-    <section id="flyers">
-      <h2>Live Flyers</h2>
-      <p>View dynamic flyers from stores like Walmart, Costco, Trader Joe's, and more!</p>
-      <!-- Embedded flyer views here -->
-      <iframe src="https://www.walmart.com/store/flyer" width="100%" height="400px" title="Walmart Flyer"></iframe>
-    </section>
+    <h2>Explore Features</h2>
+    <div class="card-container">
+      <div class="card"><h3>Smart Wallet</h3><p>Track savings, budget goals, and rewards.</p></div>
+      <div class="card"><h3>Local Circulars</h3><p>Browse weekly deals from stores near you.</p></div>
+      <div class="card"><h3>Life Games</h3><p>Fun ways to earn points and save more.</p></div>
+      <div class="card"><h3>Live Chat</h3><p>Ask the community questions & share tips.</p></div>
+      <div class="card"><h3>Family Dashboard</h3><p>See what everyone’s saving or tracking.</p></div>
+      <div class="card"><h3>Upgrade Tiers</h3><p>Compare Basic, Gold, and Platinum perks.</p></div>
+      <div class="card"><h3>My Profile</h3><p>Edit preferences and manage location settings.</p></div>
+    </div>
   </main>
-
   <footer>
-    <p>&copy; 2025 Deals-4Me. All rights reserved.</p>
+    <p>&copy; 2025 Deals-4Me | All rights reserved</p>
   </footer>
 </body>
 </html>

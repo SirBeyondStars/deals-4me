@@ -1,1 +1,75 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Deals-4Me - Sign Up</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    body {
+      display: flex;
+      height: 100vh;
+    }
+    .flyers {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      background: #f4f4f4;
+      padding: 10px;
+    }
+    .flyers img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .signup-panel {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 80%;
+      max-width: 300px;
+    }
+    input {
+      padding: 8px;
+      font-size: 1em;
+    }
+    button {
+      padding: 10px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="flyers">
+    <img src="assets/flyers/flyer1.jpg" alt="Flyer 1"/>
+    <img src="assets/flyers/flyer2.jpg" alt="Flyer 2"/>
+    <img src="assets/flyers/flyer3.jpg" alt="Flyer 3"/>
+    <img src="assets/flyers/flyer4.jpg" alt="Flyer 4"/>
+    <img src="assets/flyers/flyer5.jpg" alt="Flyer 5"/>
+    <img src="assets/flyers/flyer6.jpg" alt="Flyer 6"/>
+  </div>
+  <div class="signup-panel">
+    <form>
+      <h2>Deals-4Me Sign Up</h2>
+      <input type="email" placeholder="Email" required />
+      <input type="password" placeholder="Password" required />
+      <input type="password" placeholder="Confirm Password" required />
+      <input type="password" placeholder="4-digit PIN" maxlength="4" pattern="\d{4}" required />
+      <button type="submit">Sign Up</button>
+      <p>Already have an account? <a href="login.html">Login</a></p>
+    </form>
+  </div>
+</body>
+</html>

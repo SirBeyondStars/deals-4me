@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Deals-4Me - Profile</title>
+  <link rel="stylesheet" href="styles/main.css"/>
+  <script defer src="scripts/auth-redirect.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Your Profile</h1>
+    <nav>
+      <a href="index.html">Home</a> |
+      <a href="wallet.html">Wallet</a> |
+      <a href="circulars.html">Circulars</a> |
+      <a href="chat.html">Chat</a>
+    </nav>
+  </header>
+  <main style="max-width:600px;margin:2rem auto;">
+    <section style="text-align:center;">
+      <h2>Profile Picture</h2>
+      <img id="profile-pic" src="assets/default-profile.png" alt="Profile Picture" width="120" height="120" style="border-radius: 50%; border: 2px solid #ccc;" />
+      <form id="upload-form" enctype="multipart/form-data" style="margin-top:1rem;">
+        <input type="file" id="photo-upload" accept="image/*" />
+        <button type="submit">Upload</button>
+      </form>
+    </section>
+    <section style="margin-top:2rem;">
+      <h2>Edit Profile</h2>
+      <label for="username">Name:</label>
+      <input type="text" id="username" placeholder="Enter your name" /><br/><br/>
+      <label for="location">Zip Code:</label>
+      <input type="text" id="location" placeholder="Zip Code" /><br/><br/>
+      <button>Save Changes</button>
+    </section>
+  </main>
+  <footer style="text-align:center;margin-top:2rem;">
+    <p>&copy; 2025 Deals-4Me</p>
+  </footer>
+</body>
+</html>
