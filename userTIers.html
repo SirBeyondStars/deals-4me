@@ -1,0 +1,146 @@
+<section class="pricing">
+  <h2 class="title">Choose Your Plan</h2>
+  <div class="plans">
+    <!-- Basic -->
+    <div class="plan">
+      <h3>Basic</h3>
+      <p class="price">Free</p>
+      <ul>
+        <li>✔ 12 saved items (household)</li>
+        <li>✔ Ad-supported</li>
+        <li>✔ Weekly grocery flyers</li>
+        <li>✖ Family PIN extras</li>
+      </ul>
+      <button disabled>Current Plan</button>
+    </div>
+
+    <!-- Gold -->
+    <div class="plan">
+      <h3>Gold</h3>
+      <p class="price">$1.99 / month</p>
+      <ul>
+        <li>✔ 40 saved items (household)</li>
+        <li>✔ Fewer ads</li>
+        <li>✔ Weekly grocery flyers</li>
+        <li>✖ Unlimited saves</li>
+      </ul>
+      <button>Upgrade</button>
+    </div>
+
+    <!-- Platinum -->
+    <div class="plan highlight">
+      <h3>Platinum</h3>
+      <p class="price">$4.99 / month</p>
+      <ul>
+        <li>✔ Unlimited saved items</li>
+        <li>✔ No ads</li>
+        <li>✔ Family PIN logins</li>
+        <li>✔ Life Points + Rewards</li>
+        <li>✔ Delivery perks (coming soon)</li>
+      </ul>
+      <button>Upgrade</button>
+    </div>
+  </div>
+</section>
+
+<style>
+.pricing {
+  text-align: center;
+  padding: 2rem;
+}
+.pricing .title {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+.plans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+.plan {
+  background: var(--card, #fff);
+  border: 1px solid var(--line, #e5e7eb);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+.plan h3 {
+  margin-bottom: .5rem;
+}
+.plan .price {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+.plan ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+.plan ul li {<!-- partial: userTiers.html -->
+<section class="pricing" aria-labelledby="pricing-title">
+  <h2 id="pricing-title" class="title">Choose Your Plan</h2>
+  <div class="plans">
+    <!-- Basic -->
+    <article class="plan" aria-label="Basic plan">
+      <h3>Basic</h3>
+      <p class="price">Free</p>
+      <ul>
+        <li>✔ <strong>Household PIN logins</strong> (all members)</li>
+        <li>✔ Weekly grocery flyers</li>
+        <li>✔ Ad-supported</li>
+        <li>✔ <strong>Saved items cap:</strong> 12 (household) <!-- or change to 15 if you choose --></li>
+        <li>✖ Life Points / FLP pool</li>
+        <li>✖ Delivery perks</li>
+      </ul>
+      <button class="btn" disabled>Current Plan</button>
+    </article>
+
+    <!-- Gold -->
+    <article class="plan" aria-label="Gold plan">
+      <h3>Gold</h3>
+      <p class="price">$1.99 / month</p>
+      <ul>
+        <li>✔ <strong>Household PIN logins</strong> (all members)</li>
+        <li>✔ Weekly grocery flyers</li>
+        <li>✔ Fewer ads</li>
+        <li>✔ <strong>Saved items cap:</strong> 40 (household)</li>
+        <li>✖ Life Points / FLP pool</li>
+        <li>✖ Delivery perks</li>
+      </ul>
+      <a class="btn" href="#" data-plan="gold">Upgrade</a>
+    </article>
+
+    <!-- Platinum -->
+    <article class="plan highlight" aria-label="Platinum plan">
+      <h3>Platinum</h3>
+      <p class="price">$4.99 / month</p>
+      <ul>
+        <li>✔ <strong>Household PIN logins</strong> (all members)</li>
+        <li>✔ Weekly grocery flyers</li>
+        <li>✔ <strong>Unlimited</strong> saved items (household)</li>
+        <li>✔ No ads</li>
+        <li>✔ <strong>Life Points</strong> (KLP / ALP) + <strong>Family LP pool (FLP)</strong></li>
+        <li>✔ Delivery perks (coming soon)</li>
+      </ul>
+      <a class="btn" href="#" data-plan="platinum">Upgrade</a>
+      <p class="note">Billing securely via Stripe. Cancel anytime.</p>
+    </article>
+  </div>
+</section>
+
+  margin: .4rem 0;
+}
+.plan button {
+  background: var(--bg, #0f172a);
+  color: var(--fg, #fff);
+  border: none;
+  padding: .6rem 1.2rem;
+  border-radius: .5rem;
+  cursor: pointer;
+}
+.plan.highlight {
+  border: 2px solid var(--bg, #0f172a);
+  transform: scale(1.03);
+}
+</style>

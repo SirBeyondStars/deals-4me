@@ -1,263 +1,327 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Deals‑4Me — Deals Hub</title>
-  <link rel="stylesheet" href="css/toolbarTheme.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Deals Hub — Deals-4Me</title>
+
+  <!-- Your global toolbar/theme (keep these if you already have them) -->
+  <link rel="stylesheet" href="styles/toolbarTheme.css">
+
   <style>
     :root{
-      --bg:#f9fafb; --ink:#0f172a; --muted:#64748b; --border:#e5e7eb; --card:#fff; --accent:#111827;
+      --bg:#f9fafb;           /* page bg */
+      --ink:#0b1220;          /* text on dark */
+      --muted:#64748b;        /* muted text */
+      --brand:#0b1220;        /* dark ribbon */
+      --panel:#ffffff;        /* card bg */
+      --panel-border:#e5e7eb; /* card border */
+      --chip:#eef2f7;         /* filter chip bg */
+      --chip-on:#0b1220;      /* active chip bg */
+      --chip-on-ink:#fff;     /* active chip text */
+      --accent:#2563eb;       /* buttons/links */
+      --soft-shadow: 0 6px 18px rgba(0,0,0,.06);
+      --radius:16px;
     }
-    *{box-sizing:border-box}
-    body { margin: 0; font-family: system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); }
 
-    /* Shared header placeholder (your header.html will replace this) */
-    .site-header{}
+    html,body{margin:0;background:var(--bg);font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#0f172a}
 
-    /* Top sponsor ribbon */
+    /* ===== Header include host ===== */
+    #site-header { position: relative; z-index: 20; }
+
+    /* ===== Sponsor ribbon (dark) ===== */
     .sponsor-ribbon{
-      position: sticky; top: 0; z-index: 8;
-      background: #0b1220; color: #e5e7eb; border-bottom: 1px solid #1f2a44;
+      position: sticky; top:0; z-index: 10;
+      background: var(--brand); color:#e5e7eb;
+      border-bottom:1px solid #1f2937;
     }
-    .ribbon-inner{max-width:1200px;margin:0 auto;padding:8px 12px;display:flex;gap:10px;align-items:center}
+    .ribbon-inner{
+      max-width:1200px; margin:0 auto; padding:10px 12px;
+      display:grid; gap:12px; grid-template-columns:repeat(3,1fr);
+    }
     .ribbon-slot{
-      flex:1; min-height:44px; border:1px dashed #26406d; border-radius:10px; display:flex; align-items:center; justify-content:center;
-      background:#0f172a; color:#93c5fd; font-size:.95rem;
+      min-height:48px; border:1px dashed #1f3b63; border-radius:10px;
+      display:flex; align-items:center; justify-content:center;
+      background:#0f172a; color:#bfdbfe; text-decoration:none; font-weight:600;
     }
+    .ribbon-slot:hover{ background:#13233c; color:#dbeafe; }
 
-    /* Controls bar under sponsor ribbon */
+    /* ===== Controls row ===== */
     .controls{
-      max-width:1200px; margin:10px auto; padding:0 12px;
+      max-width:1200px; margin:18px auto 8px; padding:0 12px;
+      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+      <button id="geoBtn" class="btn ghost" type="button">Use my location</button>
+
     }
-    .controls-inner{
-      background:var(--card); border:1px solid var(--border); border-radius:14px; padding:10px 12px;
-      display:grid; grid-template-columns: 1.2fr auto auto; gap:10px; align-items:center;
+    .controls .group{ display:flex; gap:8px; align-items:center; }
+    .controls input[type="text"],
+    .controls select{
+      height:38px; border:1px solid var(--panel-border);
+      border-radius:8px; padding:0 10px; background:#fff;
     }
-    .row{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
-    input[type="text"], select{ padding:10px; border:1px solid #cbd5e1; border-radius:10px; background:#fff; min-width:120px }
-    .chip{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:6px 10px;cursor:pointer;font-size:.95rem}
-    .chip.active{background:#0f172a;color:#e2e8f0;border-color:#0f172a}
+    .btn{
+      height:38px; padding:0 14px; border:none; border-radius:10px;
+      background:var(--accent); color:#fff; font-weight:600; cursor:pointer;
+    }
+    .btn.ghost{ background:#fff; color:#0f172a; border:1px solid var(--panel-border); }
 
-    /* Three-column layout */
-    .layout{ display:grid; grid-template-columns: 280px 1fr 300px; gap:16px; max-width:1200px; margin:14px auto; padding:0 12px; }
-    @media (max-width:1100px){ .layout{ grid-template-columns:260px 1fr } .right{ display:none } }
-    @media (max-width:820px){ .layout{ grid-template-columns:1fr } .left{ order:2 } .center{ order:1 } }
+    .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-left:auto; }
+    .chip{
+      background:var(--chip); color:#111827; border:1px solid var(--panel-border);
+      border-radius:999px; padding:6px 12px; font-weight:600; cursor:pointer; user-select:none;
+    }
+    .chip.active{ background:var(--chip-on); color:var(--chip-on-ink); border-color:transparent; }
 
-    /* Cards */
-    .card{ background:var(--card); border:1px solid var(--border); border-radius:14px; overflow:hidden }
-    .hd{ padding:12px 14px; border-bottom:1px solid var(--border); font-weight:800 }
-    .bd{ padding:12px 14px }
-    .muted{ color:var(--muted) }
-    .btn{ padding:8px 10px; border-radius:10px; border:1px solid #334155; background:var(--accent); color:#e5e7eb; cursor:pointer }
-    .btn:hover{ background:#1f2937 }
+    /* ===== Main grid ===== */
+    .grid{
+      max-width:1200px; margin:10px auto 40px; padding:0 12px;
+      display:grid; gap:16px; grid-template-columns:280px 1fr 320px;
+    }
+    @media (max-width: 1024px){
+      .ribbon-inner{ grid-template-columns:1fr; }
+      .grid{ grid-template-columns:1fr; }
+    }
 
-    /* Left (ZIP + Stores) */
-    .store-search{ display:flex; gap:8px; align-items:center }
-    .store-list{ display:grid; gap:8px; margin-top:10px }
-    .store-item{ display:flex; justify-content:space-between; align-items:center; border:1px solid var(--border); border-radius:10px; padding:8px 10px }
-    .nm{ font-weight:600 }
+    /* ===== Panels & cards ===== */
+    .panel{
+      background:var(--panel); border:1px solid var(--panel-border);
+      border-radius:var(--radius); box-shadow:var(--soft-shadow);
+    }
+    .panel h3{
+      margin:0; padding:14px 14px 6px; font-size:1.05rem;
+    }
+    .panel .content{ padding:8px 14px 14px; }
 
-    /* Center (Flyers/Deals/Trip Savings) */
-    .section{ margin-bottom:16px }
-    .deal-row{ display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; border-bottom:1px dashed var(--border); padding:8px 0 }
-    .deal-row:last-child{ border-bottom:0 }
-    .price{ font-weight:800 }
+    .store{
+      display:flex; justify-content:space-between; align-items:center;
+      gap:10px; padding:10px 0; border-bottom:1px dashed var(--panel-border);
+    }
+    .store:last-child{ border-bottom:none; }
+    .store .meta{ color:var(--muted); font-size:.9rem; }
+    .store .select{ white-space:nowrap; }
 
-    /* Right (Savings tally) */
-    .kpis{ display:grid; grid-template-columns:1fr 1fr; gap:10px }
-    .kpi{ background:#0f172a; color:#e5e7eb; border-radius:12px; padding:12px }
-    .kpi .v{ font-size:24px; font-weight:800 }
-    .kpi .l{ font-size:.9rem; color:#cbd5e1 }
+    .deal-row{
+      display:flex; justify-content:space-between; align-items:center; gap:12px;
+      padding:10px 0; border-bottom:1px dashed var(--panel-border);
+    }
+    .deal-row:last-child{ border-bottom:none; }
+    .deal-row .price{ font-weight:800; }
+
+    /* KPI cards */
+    .kpis{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:12px; }
+    .kpi{
+      background:#0f172a; color:#fff; border-radius:14px; padding:14px 12px;
+      display:flex; flex-direction:column; gap:4px; box-shadow:var(--soft-shadow);
+    }
+    .kpi .big{ font-size:1.6rem; font-weight:900; }
+    .note{ color:#475569; font-size:.9rem; padding:0 12px 12px; }
+
+    /* Small helpers */
+    .muted{ color:var(--muted); }
+    .divider{ height:1px; background:var(--panel-border); margin:8px 0; }
   </style>
 </head>
 <body>
-  <!-- Load your shared header toolbar -->
-  <div id="site-header" class="site-header"></div>
-  <script>
-    fetch('header.html').then(r => r.text()).then(html => {
-      document.getElementById('site-header').innerHTML = html;
-      window.initDealsHeader && window.initDealsHeader();
-    }).catch(()=>{});
-  </script>
 
-  <!-- Sponsor ribbon (top strip below header) -->
-  <div class="sponsor-ribbon" role="region" aria-label="Sponsor ribbon">
+  <!-- Shared header (toolbar) -->
+  <div id="site-header"></div>
+
+  <!-- Dark sponsor ribbon -->
+  <div class="sponsor-ribbon">
     <div class="ribbon-inner">
-      <div class="ribbon-slot">Sponsor A</div>
-      <div class="ribbon-slot">Sponsor B</div>
-      <div class="ribbon-slot">Sponsor C</div>
+      <a class="ribbon-slot" href="#" aria-label="Sponsor A">Sponsor A</a>
+      <a class="ribbon-slot" href="#" aria-label="Sponsor B">Sponsor B</a>
+      <a class="ribbon-slot" href="#" aria-label="Sponsor C">Sponsor C</a>
     </div>
   </div>
 
-  <!-- Controls: ZIP now grouped with Stores (left), timeframe dropdown stays here but drives Right KPI -->
+  <!-- Controls -->
   <div class="controls">
-    <div class="controls-inner">
-      <div class="row" id="zipRow">
-        <input id="zipInput" type="text" placeholder="ZIP code" value="" />
-        <select id="radius">
-          <option value="5">5 mi</option>
-          <option value="10" selected>10 mi</option>
-          <option value="25">25 mi</option>
-        </select>
-        <button class="btn" id="applyZip">Update</button>
-        <span class="muted">Area settings</span>
-      </div>
-      <div class="row" id="timeRow">
-        <label class="muted" for="timeframe">Savings view:</label>
-        <select id="timeframe">
-          <option value="weekly" selected>Weekly</option>
-          <option value="monthly">Monthly</option>
-          <option value="quarterly">Quarterly</option>
-          <option value="yearly">Yearly</option>
-        </select>
-      </div>
-      <div class="row" role="group" aria-label="Quick filters">
-        <button class="chip active">All</button>
-        <button class="chip">Produce</button>
-        <button class="chip">Meat</button>
-        <button class="chip">Pantry</button>
-        <button class="chip">Household</button>
-      </div>
+    <div class="group">
+      <label class="muted" for="zip">ZIP code</label>
+      <input id="zip" type="text" inputmode="numeric" maxlength="5" placeholder="e.g., 02125">
+      <select id="radius">
+        <option>5 mi</option><option selected>10 mi</option><option>15 mi</option><option>25 mi</option>
+      </select>
+      <button id="updateBtn" class="btn">Update</button>
+      <button class="btn ghost">Area settings</button>
+    </div>
+
+    <div class="chips" role="tablist" aria-label="Categories">
+      <div class="chip active" data-cat="all">All</div>
+      <div class="chip" data-cat="produce">Produce</div>
+      <div class="chip" data-cat="meat">Meat</div>
+      <div class="chip" data-cat="pantry">Pantry</div>
+      <div class="chip" data-cat="household">Household</div>
+    </div>
+
+    <div class="chips" role="tablist" aria-label="Savings timeframe">
+      <div class="chip active" data-range="weekly">Weekly</div>
+      <div class="chip" data-range="monthly">Monthly</div>
+      <div class="chip" data-range="quarterly">Quarterly</div>
     </div>
   </div>
 
-  <!-- Three column layout -->
-  <div class="layout">
-    <!-- Left: ZIP + Stores -->
-    <aside class="left card" aria-label="Stores">
-      <div class="hd">Stores near <span id="zipEcho" class="muted">—</span></div>
-      <div class="bd">
-        <div class="store-search">
-          <input type="text" placeholder="Search stores…" aria-label="Search stores" style="flex:1; padding:10px; border:1px solid #cbd5e1; border-radius:10px">
+  <!-- 3-column grid -->
+  <main class="grid">
+    <!-- Left: stores list -->
+    <section class="panel" aria-labelledby="stores-title">
+      <h3 id="stores-title">Stores near…</h3>
+      <div class="content">
+        <div class="group" style="margin-bottom:10px;">
+          <input id="storeSearch" type="text" placeholder="Search stores…">
           <button class="btn">Find</button>
         </div>
-        <p class="muted" style="margin:8px 0 0">Pick a store to load its weekly flyer.</p>
 
-        <div class="store-list" style="margin-top:10px">
-          <div class="store-item">
-            <div><div class="nm">Market Basket — Somerville</div><div class="muted">02143 • 1.2 mi</div></div>
-            <button class="btn">Select</button>
+        <div class="store">
+          <div>
+            <div>Market Basket — Somerville</div>
+            <div class="meta">02143 • 1.2 mi</div>
           </div>
-          <div class="store-item">
-            <div><div class="nm">Shaw’s — Boylston St</div><div class="muted">02116 • 3.1 mi</div></div>
-            <button class="btn">Select</button>
+          <div class="select"><button class="btn ghost">Select</button></div>
+        </div>
+
+        <div class="store">
+          <div>
+            <div>Shaw’s — Boylston St</div>
+            <div class="meta">02116 • 3.1 mi</div>
           </div>
-          <div class="store-item">
-            <div><div class="nm">Stop & Shop — Quincy</div><div class="muted">02169 • 7.4 mi</div></div>
-            <button class="btn">Select</button>
+          <div class="select"><button class="btn ghost">Select</button></div>
+        </div>
+
+        <div class="store">
+          <div>
+            <div>Stop & Shop — Quincy</div>
+            <div class="meta">02169 • 7.4 mi</div>
           </div>
+          <div class="select"><button class="btn ghost">Select</button></div>
         </div>
       </div>
-    </aside>
-
-    <!-- Center: Flyers & Deals -->
-    <section class="center">
-      <article class="card section" aria-label="Flyer">
-        <div class="hd">Flyer (Week of …)</div>
-        <div class="bd">
-          <p class="muted">Flyer metadata and highlights go here (valid dates, store name, top picks).</p>
-          <div class="deal-row">
-            <div><strong>Large Eggs 12ct</strong><div class="muted">dozen • pantry</div></div>
-            <div class="price">$2.49</div>
-          </div>
-          <div class="deal-row">
-            <div><strong>Chicken Breast</strong><div class="muted">lb • meat</div></div>
-            <div class="price">$2.99</div>
-          </div>
-        </div>
-      </article>
-
-      <article class="card section" aria-label="Deals">
-        <div class="hd">Deals</div>
-        <div class="bd">
-          <div class="deal-row">
-            <div><strong>Romaine Lettuce</strong><div class="muted">each • produce</div></div>
-            <div class="price">$1.29</div>
-          </div>
-          <div class="deal-row">
-            <div><strong>Pasta 16oz</strong><div class="muted">box • pantry</div></div>
-            <div class="price">$0.99</div>
-          </div>
-        </div>
-      </article>
     </section>
 
-    <!-- Right: Savings tally -->
-    <aside class="right card" aria-label="Savings">
-      <div class="hd">
-        Savings — <span id="tfEcho">Weekly</span>
-      </div>
-      <div class="bd">
-        <div class="kpis">
-          <div class="kpi"><div class="v" id="kpiTotal">$18.40</div><div class="l">Total saved</div></div>
-          <div class="kpi"><div class="v" id="kpiItems">7</div><div class="l">Items saved on</div></div>
-          <div class="kpi"><div class="v" id="kpiTrips">2</div><div class="l">Trips</div></div>
-          <div class="kpi"><div class="v" id="kpiBest">$5.00</div><div class="l">Best single deal</div></div>
+    <!-- Middle: flyer & deals -->
+    <section class="panel" aria-labelledby="flyer-title">
+      <h3 id="flyer-title">Flyer (Week of …)</h3>
+      <div class="content">
+        <div class="muted" style="margin-bottom:10px;">
+          Flyer metadata and highlights go here (valid dates, store name, top picks).
         </div>
-        <p class="muted" style="margin-top:10px">These are demo numbers. When wired, this will pull from your LP/deals DB and change with the timeframe.</p>
+
+        <!-- Highlights -->
+        <div class="deal-row">
+          <div>
+            <div><strong>Large Eggs 12ct</strong></div>
+            <div class="muted">dozen • pantry</div>
+          </div>
+          <div class="price">$2.49</div>
+        </div>
+
+        <div class="deal-row">
+          <div>
+            <div><strong>Chicken Breast</strong></div>
+            <div class="muted">lb • meat</div>
+          </div>
+          <div class="price">$2.99</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3 style="padding-top:6px;">Deals</h3>
+
+        <div class="deal-row" data-cat="produce">
+          <div>
+            <div><strong>Romaine Lettuce</strong></div>
+            <div class="muted">each • produce</div>
+          </div>
+          <div class="price">$1.29</div>
+        </div>
+
+        <div class="deal-row" data-cat="pantry">
+          <div>
+            <div><strong>Pasta 16oz</strong></div>
+            <div class="muted">box • pantry</div>
+          </div>
+          <div class="price">$0.99</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right: savings KPIs -->
+    <aside class="panel" aria-labelledby="savings-title">
+      <h3 id="savings-title">Savings — <span id="rangeLabel">Weekly</span></h3>
+      <div class="kpis">
+        <div class="kpi">
+          <div class="big" id="kpiTotal">$18.40</div>
+          <div>Total saved</div>
+        </div>
+        <div class="kpi">
+          <div class="big" id="kpiItems">7</div>
+          <div>Items saved on</div>
+        </div>
+        <div class="kpi">
+          <div class="big" id="kpiTrips">2</div>
+          <div>Trips</div>
+        </div>
+        <div class="kpi">
+          <div class="big" id="kpiBest">$5.00</div>
+          <div>Best single deal</div>
+        </div>
+      </div>
+      <div class="note">
+        Demo numbers. Once wired, these pull from your LP/Deals DB and change when you switch timeframe.
       </div>
     </aside>
-  </div>
+  </main>
 
+  <!-- Load shared header, then init -->
   <script>
-    // Echo ZIP into the Stores card
-    const zipInput = document.getElementById('zipInput');
-    const zipEcho = document.getElementById('zipEcho');
-    const applyZip = document.getElementById('applyZip');
-    function setZipEcho(){
-      zipEcho.textContent = zipInput.value ? zipInput.value : '—';
-    }
-    applyZip.addEventListener('click', setZipEcho);
-    setZipEcho();
+    // Pull in your shared header (toolbar) if you have header.html in the root:
+    fetch('header.html').then(r=>r.text()).then(h=>{
+      const host = document.getElementById('site-header');
+      host.innerHTML = h;
+      (window.initDealsHeader && typeof window.initDealsHeader === 'function') && window.initDealsHeader();
+    }).catch(()=>console.warn('Header include not found (header.html).'));
 
-    // Timeframe -> update Savings header (demo only)
-    const timeframe = document.getElementById('timeframe');
-    const tfEcho = document.getElementById('tfEcho');
-    timeframe.addEventListener('change', () => {
-      const map = { weekly:'Weekly', monthly:'Monthly', quarterly:'Quarterly', yearly:'Yearly' };
-      tfEcho.textContent = map[timeframe.value] || 'Weekly';
-      // (Later: query and recompute KPIs here)
-    });
+    // Chips behavior + demo KPI swap
+    (function(){
+      const chips = document.querySelectorAll('.chip[data-range]');
+      const rangeLabel = document.getElementById('rangeLabel');
+      const demo = {
+        weekly:  { total:'$18.40', items:'7', trips:'2', best:'$5.00' },
+        monthly: { total:'$66.10', items:'21', trips:'6', best:'$9.50' },
+        quarterly:{ total:'$182.70', items:'63', trips:'18', best:'$14.00' }
+      };
+      function setRange(r){
+        rangeLabel.textContent = r.charAt(0).toUpperCase()+r.slice(1);
+        const k = demo[r] || demo.weekly;
+        document.getElementById('kpiTotal').textContent = k.total;
+        document.getElementById('kpiItems').textContent = k.items;
+        document.getElementById('kpiTrips').textContent = k.trips;
+        document.getElementById('kpiBest').textContent  = k.best;
+      }
+      chips.forEach(c=>{
+        c.addEventListener('click', ()=>{
+          chips.forEach(x=>x.classList.remove('active'));
+          c.classList.add('active');
+          setRange(c.dataset.range);
+        });
+      });
+
+      // Category chips demo filter
+      const catChips = document.querySelectorAll('.chip[data-cat]');
+      const dealRows = document.querySelectorAll('.deal-row[data-cat]');
+      catChips.forEach(ch=>{
+        ch.addEventListener('click', ()=>{
+          catChips.forEach(x=>x.classList.remove('active'));
+          ch.classList.add('active');
+          const cat = ch.dataset.cat;
+          dealRows.forEach(row=>{
+            if (cat==='all' || row.dataset.cat===cat) row.style.display='';
+            else row.style.display='none';
+          });
+        });
+      });
+    })();
   </script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
 </body>
 </html>
