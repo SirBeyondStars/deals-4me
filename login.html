@@ -3,74 +3,243 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Deals-4Me - Login</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <title>Deals-4Me — Login</title>
+
+  <!-- Cache-bust in case your browser is holding onto old CSS -->
+  <link rel="stylesheet" href="styles.css?v=2025-08-19-2"/>
+
   <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      display: flex;
-      height: 100vh;
+    /* ===== Base theme ===== */
+    :root{
+      --ink:#111827;
+      --muted:#6b7280;
+      --brand:#10b981;          /* green for buttons/pill */
+      --ring:rgba(16,185,129,.3);
+      --header-bg:#0f172a;      /* dark header */
+      --footer-bg:#0f172a;      /* dark footer */
+      --footer-ink:#e5e7eb;
+      --card:#ffffff;
+      --bg:#f7f7f8;
+      --radius:14px;
     }
-    .flyers {
-      flex: 1;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      background: #f4f4f4;
-      padding: 10px;
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      color:var(--ink);
+      background:var(--bg);
+      display:flex;flex-direction:column;min-height:100vh;
     }
-    .flyers img {
-      width: 100%;
-      height: auto;
-      border-radius: 6px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+
+    /* ===== Header / Nav (dark, to match footer) ===== */
+    .site-header{background:var(--header-bg); border-bottom:none}
+    .nav-container{
+      max-width:1200px; margin:0 auto; padding:12px 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
     }
-    .login-panel {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #fff;
+    .brand{
+      font-weight:800; font-size:1.1rem; letter-spacing:.5px;
+      color:var(--footer-ink); text-decoration:none; white-space:nowrap;
     }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      width: 80%;
-      max-width: 300px;
+    nav ul{margin:0; padding:0; list-style:none; display:flex; align-items:center; gap:16px}
+    nav a{
+      display:inline-block; text-decoration:none; color:var(--footer-ink);
+      padding:8px 10px; border-radius:10px; font-weight:500;
     }
-    input {
-      padding: 8px;
-      font-size: 1em;
+    nav a:hover, nav a[aria-current="page"]{ background:rgba(255,255,255,.08) }
+    .nav-pill{ padding:8px 12px; border-radius:999px; background:var(--brand); color:#fff !important; font-weight:700 }
+    .nav-pill:hover{ filter:brightness(.95) }
+
+    /* ===== Main ===== */
+    main{flex:1}
+    .auth-wrap{
+      max-width:1200px; margin:24px auto; padding:0 16px;
+      display:grid; grid-template-columns:1.1fr .9fr; gap:20px;
     }
-    button {
-      padding: 10px;
-      background-color: #0077cc;
-      color: white;
-      border: none;
-      cursor: pointer;
+
+    .flyers{
+      display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px; align-content:start;
     }
+    .flyers img{
+      width:100%; height:auto; border-radius:10px;
+      box-shadow:0 2px 8px rgba(0,0,0,.10); background:#e5e7eb;
+    }
+
+    .login-card{
+      background:var(--card); border:1px solid #e5e7eb; border-radius:var(--radius);
+      padding:22px; align-self:start; box-shadow:0 6px 18px rgba(0,0,0,.06);
+    }
+    .login-card h1{ margin:0 0 6px; font-size:1.4rem; line-height:1.2 }
+    .login-card p.sub{ margin:0 0 18px; color:var(--muted); font-size:.95rem }
+    form.auth-form{ display:grid; gap:12px }
+    .field{ display:grid; gap:6px }
+    label{ font-size:.92rem; font-weight:600 }
+    input[type="email"], input[type="password"], input[type="text"]{
+      width:100%; padding:12px; border:1px solid #d1d5db; border-radius:10px;
+      font-size:1rem; background:#fff; outline:none;
+    }
+    input:focus{ border-color:var(--brand); box-shadow:0 0 0 3px var(--ring) }
+    .row{ display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:.92rem }
+    .row a{ color:#0b74da; text-decoration:none }
+    .row a:hover{ text-decoration:underline }
+    button[type="submit"]{
+      appearance:none; border:none; border-radius:12px; padding:12px 14px;
+      font-weight:700; font-size:1rem; background:var(--brand); color:#fff; cursor:pointer;
+    }
+    button[type="submit"]:hover{ filter:brightness(.95) }
+    .small{ margin-top:6px; font-size:.92rem; color:var(--muted) }
+    .small a{ color:#0b74da; text-decoration:none }
+    .small a:hover{ text-decoration:underline }
+
+    /* ===== Footer (dark) ===== */
+    .site-footer{ background:var(--footer-bg); color:var(--footer-ink); border-top:none }
+    .footer-container{
+      max-width:1200px; margin:0 auto; padding:16px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    }
+    .site-footer a{ color:var(--footer-ink) }
+    .site-footer a:hover{ color:#fff; text-decoration:underline }
+
+    /* ===== Responsive ===== */
+    @media (max-width:960px){
+      .auth-wrap{ grid-template-columns:1fr }
+      .flyers{ order:2 }
+      .login-card{ order:1 }
+    }
+    /* === Flyer Slideshow === */
+.flyer-slideshow{
+  position:relative;
+  max-width:100%;
+  height:clamp(220px, 32vw, 360px); /* responsive height */
+  overflow:hidden;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+  background:#e5e7eb; /* nice gray while loading */
+}
+.flyer-slideshow img{
+  position:absolute; inset:0;
+  width:100%; height:100%; object-fit:cover;
+  opacity:0; transition:opacity 1s ease-in-out;
+}
+.flyer-slideshow img.active{ opacity:1; }
+
+@media (prefers-reduced-motion: reduce){
+  .flyer-slideshow img{ transition:none; }
+}
+
   </style>
 </head>
 <body>
-  <div class="flyers">
-    <img src="assets/flyers/flyer1.jpg" alt="Flyer 1"/>
-    <img src="assets/flyers/flyer2.jpg" alt="Flyer 2"/>
-    <img src="assets/flyers/flyer3.jpg" alt="Flyer 3"/>
-    <img src="assets/flyers/flyer4.jpg" alt="Flyer 4"/>
-    <img src="assets/flyers/flyer5.jpg" alt="Flyer 5"/>
-    <img src="assets/flyers/flyer6.jpg" alt="Flyer 6"/>
-  </div>
-  <div class="login-panel">
-    <form>
-      <h2>Deals-4Me Login</h2>
-      <input type="email" placeholder="Email" required />
-      <input type="password" placeholder="Password" required />
-      <input type="password" placeholder="4-digit PIN" maxlength="4" required />
-      <button type="submit">Login</button>
-      <p>Don't have an account? <a href="signup.html">Sign up</a></p>
-    </form>
-  </div>
+  <!-- Header / Nav -->
+  <header class="site-header">
+    <div class="nav-container">
+      <!-- Text brand (no missing logo file) -->
+      <a class="brand" href="index.html">Deals-4Me</a>
+
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="flyers.html">Flyers</a></li>
+          <li><a href="recipes.html">Recipes</a></li>
+          <li><a href="games.html">Games</a></li>
+          <li><a href="research.html">Research</a></li>
+          <li><a href="account.html">Account</a></li>
+          <li><a href="sponsors.html">Sponsors / Partners</a></li>
+          <li><a href="pricing.html" class="nav-pill">Pricing</a></li>
+          <li><a href="signup.html">Sign up</a></li>
+          <li><a href="login.html" aria-current="page">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main>
+    <div class="auth-wrap">
+      <!-- Slideshow replaces the grid -->
+        <section class="flyer-slideshow" aria-label="Featured store flyers">
+          <img src="assets/flyers/flyer1.jpg" alt="Grocery flyer — produce and pantry deals" class="active">
+          <img src="assets/flyers/flyer2.jpg" alt="Household supplies weekly specials">
+          <img src="assets/flyers/flyer3.jpg" alt="Dairy and bakery discounts">
+          <img src="assets/flyers/flyer4.jpg" alt="Meat and seafood offers">
+          <img src="assets/flyers/flyer5.jpg" alt="Snacks and beverages promotions">
+          <img src="assets/flyers/flyer6.jpg" alt="Frozen foods and essentials">
+</section>
+
+      <section class="login-card" aria-labelledby="login-title">
+        <h1 id="login-title">Welcome back</h1>
+        <p class="sub">Log in to track prices, manage lists, and access member deals.</p>
+
+        <form class="auth-form" id="loginForm" novalidate>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required />
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required minlength="6" />
+          </div>
+
+          <div class="field">
+            <label for="pin">4-digit PIN</label>
+            <input id="pin" name="pin" type="text" inputmode="numeric" pattern="\d{4}" maxlength="4" autocomplete="one-time-code" placeholder="1234" required />
+          </div>
+
+          <div class="row">
+            <label style="display:flex; align-items:center; gap:8px;">
+              <input type="checkbox" name="remember" />
+              Remember me
+            </label>
+            <a href="forgot.html">Forgot password?</a>
+          </div>
+
+          <button type="submit">Login</button>
+          <p class="small">Don’t have an account? <a href="signup.html">Create one</a>.</p>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <p>&copy; 2025 Deals-4Me. All rights reserved.</p>
+      </div>
+      <div class="footer-right">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="tos.html">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // PIN check
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      const pin = document.getElementById('pin').value.trim();
+      if (!/^\d{4}$/.test(pin)) {
+        e.preventDefault();
+        alert('Please enter a valid 4-digit PIN.');
+      }
+    });
+  </script>
+  <script>
+(function(){
+  const slides = document.querySelectorAll('.flyer-slideshow img');
+  if (!slides.length) return;
+  let i = 0;
+  setInterval(() => {
+    slides[i].classList.remove('active');
+    i = (i + 1) % slides.length;
+    slides[i].classList.add('active');
+  }, 4000); // change every 4s
+})();
+</script>
+
 </body>
 </html>

@@ -1,28 +1,33 @@
-// includes.js — handles all shared includes on every page
+// includes.js (debug version)
+function inject(id, file) {
+  let host = document.getElementById(id);
+  if (!host) {
+    host = document.createElement("div");
+    host.id = id;
+    document.body.insertAdjacentElement(
+      id === "site-toolbar" ? "afterbegin" : "beforeend",
+      host
+    );
+    console.log(`[includes] created placeholder #${id}`);
+  } else {
+    console.log(`[includes] found placeholder #${id}`);
+  }
 
-function loadInclude(targetId, file, afterLoad) {
-  const el = document.getElementById(targetId);
-  if (!el) return;
-  fetch(file, { cache: 'no-cache' })
-    .then(r => r.text())
-    .then(html => {
-      el.innerHTML = html;
-      if (typeof afterLoad === 'function') afterLoad();
+  console.log(`[includes] fetching ${file}…`);
+  fetch(file, { cache: "no-cache" })
+    .then(r => {
+      console.log(`[includes] ${file} status:`, r.status);
+      if (!r.ok) throw new Error(`${file} ${r.status}`);
+      return r.text();
     })
-    .catch(err => console.error(`Error loading ${file}:`, err));
+    .then(html => {
+      host.innerHTML = html;
+      console.log(`[includes] injected ${file} into #${id}`);
+    })
+    .catch(err => console.warn("[includes] ERROR:", err.message));
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Toolbar + Footer (present on most pages)
-  loadInclude("site-toolbar", "toolbar.html");
-  loadInclude("site-footer", "footer.html");
-
-  // Pricing partial (only present on pricing.html)
-  loadInclude("pricing-block", "userTiers.html", () => {
-    // Wire Stripe links here (once you have them)
-    const goldLink = "https://buy.stripe.com/your-gold-link";         // TODO
-    const platinumLink = "https://buy.stripe.com/your-platinum-link"; // TODO
-    document.querySelectorAll('[data-plan="gold"]').forEach(a => a.href = goldLink);
-    document.querySelectorAll('[data-plan="platinum"]').forEach(a => a.href = platinumLink);
-  });
+  inject("site-toolbar", "toolbar.html");
+  inject("site-footer",  "footer.html");
 });

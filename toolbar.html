@@ -1,6 +1,8 @@
-<!-- partial: toolbar.html -->
+<!-- toolbar.html (full replacement) -->
 <header class="navbar">
-  <div class="brand"><a href="dealsHub.html" style="color:inherit;text-decoration:none;">Deals-4Me</a></div>
+  <div class="brand">
+    <a href="dealsHub.html" style="color:inherit;text-decoration:none;">Deals-4Me</a>
+  </div>
 
   <!-- Mobile menu toggle -->
   <input type="checkbox" id="nav-toggle" aria-label="Toggle menu" hidden>
@@ -69,60 +71,79 @@
 
 <style>
 /* ===== Toolbar (scoped to header.navbar) ===== */
-header.navbar { position: sticky; top: 0; z-index: 50; }
-header.navbar .burger { display:none; cursor:pointer; padding:6px; margin-left:auto; }
-header.navbar .burger span {
+/* Base bar (visible + on top) */
+header.navbar{
+  position:sticky; top:0; z-index:1000;
+  display:flex; align-items:center; gap:16px;
+  padding:10px 16px;
+  background: var(--bg, #0f172a);
+  color: var(--fg, #fff);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+header.navbar .brand{ font-weight:800; letter-spacing:.2px; margin-right:auto; }
+
+/* Burger (mobile) */
+header.navbar .burger{ display:none; cursor:pointer; padding:6px; margin-left:auto; }
+header.navbar .burger span{
   display:block; width:22px; height:2px; background: var(--fg, #fff);
   margin:5px 0; transition: transform .2s ease, opacity .2s ease;
 }
 
-header.navbar .nav { margin-left: 16px; }
-header.navbar .menu { list-style:none; display:flex; align-items:center; gap: 8px; }
-header.navbar .menu > li > a {
-  color: var(--fg, #fff); padding: 8px 10px; border-radius: 8px; display:block;
+/* Menu (desktop) */
+header.navbar .nav{ margin-left:8px; }
+header.navbar .menu{ list-style:none; display:flex; align-items:center; gap:8px; margin:0; padding:0; }
+header.navbar .menu>li>a{
+  color: var(--fg, #fff); padding:8px 10px; border-radius:8px; display:block; text-decoration:none;
 }
-header.navbar .menu > li > a:hover { background: rgba(255,255,255,.08); }
+header.navbar .menu>li>a:hover{ background: rgba(255,255,255,.08); }
 
-header.navbar .has-sub { position: relative; }
-header.navbar .submenu {
-  position:absolute; top: 100%; left: 0; min-width: 210px;
-  background: var(--card, #fff); color:#0f172a; border: 1px solid var(--line,#e5e7eb);
-  border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,.08);
-  padding: 8px; display:none;
+/* Submenus */
+header.navbar .has-sub{ position:relative; }
+header.navbar .submenu{
+  position:absolute; top:100%; left:0; min-width:210px;
+  background:#fff; color:#0f172a;
+  border:1px solid #e5e7eb; border-radius:12px;
+  box-shadow:0 8px 24px rgba(0,0,0,.08);
+  padding:8px; display:none; z-index:2000; /* ensure above page content */
 }
-header.navbar .submenu li { list-style:none; }
-header.navbar .submenu a {
-  color: inherit; display:block; padding:8px 10px; border-radius: 8px;
+header.navbar .submenu li{ list-style:none; }
+header.navbar .submenu a{
+  display:block; text-decoration:none;
+  color:#0f172a !important;              /* force dark text in dropdown */
+  font-size:14px; line-height:1.25;
+  padding:8px 10px; border-radius:8px;
 }
-header.navbar .submenu a:hover { background: #f1f5f9; }
-header.navbar .submenu .divider { height:1px; margin:6px 4px; background: var(--line,#e5e7eb); }
+header.navbar .submenu a:hover{ background:#f1f5f9; }
+header.navbar .submenu .divider{ height:1px; margin:6px 4px; background:#e5e7eb; }
 
-header.navbar .has-sub:hover > .submenu { display:block; }
+/* Show submenu on hover (desktop) */
+header.navbar .has-sub:hover>.submenu{ display:block; }
 
-/* CTA button */
-header.navbar .cta a {
-  background: #22c55e; color: #0b1b2b !important; font-weight:600; padding:8px 12px; border-radius:10px;
+/* CTA */
+header.navbar .cta a{
+  background:#22c55e; color:#0b1b2b !important; font-weight:600; padding:8px 12px; border-radius:10px;
 }
-header.navbar .cta a:hover { filter: brightness(0.95); }
+header.navbar .cta a:hover{ filter:brightness(.95); }
 
 /* --- Mobile --- */
-@media (max-width: 900px) {
-  header.navbar { align-items: center; }
-  header.navbar .burger { display:block; }
-  header.navbar .nav { width:100%; }
-  header.navbar .menu {
-    position: absolute; left:0; right:0; top: 56px;
-    background: var(--bg, #0f172a); border-top: 1px solid rgba(255,255,255,.06);
-    flex-direction: column; align-items: stretch; gap:0; display:none; padding: 6px 0;
+@media (max-width: 900px){
+  header.navbar .burger{ display:block; }
+  header.navbar .nav{ width:100%; }
+  header.navbar .menu{
+    position:absolute; left:0; right:0; top:56px;
+    background: var(--bg, #0f172a);
+    border-top:1px solid rgba(255,255,255,.06);
+    flex-direction:column; align-items:stretch; gap:0; display:none; padding:6px 0;
   }
-  #nav-toggle:checked ~ .nav .menu { display:flex; }
-  header.navbar .menu > li > a { padding:12px 16px; border-radius:0; }
-  header.navbar .has-sub .submenu {
-    position: static; display:none; background: rgba(255,255,255,.05);
-    border:none; border-radius:0; box-shadow:none; margin: 0 0 6px 0; padding: 0;
+  #nav-toggle:checked ~ .nav .menu{ display:flex; }
+  header.navbar .menu>li>a{ padding:12px 16px; border-radius:0; }
+
+  /* Submenus in mobile: inline expandable */
+  header.navbar .has-sub .submenu{
+    position:static; display:none; background: rgba(255,255,255,.05);
+    border:none; border-radius:0; box-shadow:none; margin:0 0 6px 0; padding:0;
   }
-  /* tap to open submenus on mobile: expand when parent link is focused */
   header.navbar .has-sub > a:focus + .submenu,
-  header.navbar .has-sub:hover > .submenu { display:block; }
+  header.navbar .has-sub:hover > .submenu{ display:block; }
 }
 </style>
