@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <title>Deals-4Me — Pricing</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Global theme -->
   <link rel="stylesheet" href="theme.css" />
   <style>
     .page { max-width: 1100px; margin: 0 auto; padding: 1.25rem; }
@@ -13,17 +12,17 @@
     .faq-item { margin-bottom: 1rem; }
     .faq-item h3 { font-size: 1.1rem; margin-bottom: .25rem; }
     .faq-item p { margin: 0; font-size: .95rem; line-height: 1.4; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
   </style>
 </head>
 <body>
-
-  <!-- Toolbar gets injected here -->
+  <!-- Header injected -->
   <header id="site-toolbar"></header>
 
   <main class="page">
     <h1 class="sr-only">Pricing</h1>
 
-    <!-- Pricing block (userTiers.html) gets injected here -->
+    <!-- Pricing cards injected from userTiers.html -->
     <div id="pricing-block" role="region" aria-label="Subscription plans">
       <noscript>Please enable JavaScript to view pricing.</noscript>
     </div>
@@ -31,22 +30,18 @@
     <!-- FAQ -->
     <section class="faq" aria-labelledby="faq-title">
       <h2 id="faq-title">Frequently Asked Questions</h2>
-
       <div class="faq-item">
         <h3>Can I cancel anytime?</h3>
         <p>Yes. Subscriptions are billed monthly and you can cancel whenever you like. Your plan remains active until the end of the billing cycle.</p>
       </div>
-
       <div class="faq-item">
         <h3>How secure are payments?</h3>
-        <p>All payments are handled through Stripe. Deals-4Me never stores your credit card information.</p>
+        <p>All payments are handled through Stripe. Deals‑4Me never stores your credit card information.</p>
       </div>
-
       <div class="faq-item">
         <h3>Do saved item limits apply per person?</h3>
-        <p>No. Limits are at the household level. For example, Gold includes 40 total saved items shared across family members using their PINs.</p>
+        <p>No. Limits are at the household level. For example, Gold includes 50 total saved items shared across family members using their PINs.</p>
       </div>
-
       <div class="faq-item">
         <h3>What if I hit my save limit?</h3>
         <p>Delete older saved items to free space, or upgrade to a higher plan for more room.</p>
@@ -54,10 +49,131 @@
     </section>
   </main>
 
-  <!-- Footer gets injected here -->
+  <!-- Footer injected -->
   <footer id="site-footer"></footer>
 
-  <!-- Single loader for all shared includes -->
-  <script src="includes.js"></script>
+  <!-- Loader script (ensure this is a separate file named includes.js) -->
+  <script src="includes.js" defer></script>
 </body>
 </html>
+
+<!-- =====================
+  FILE: userTiers.html
+  Description: Pricing cards injected into #pricing-block (with Monthly/Yearly toggle)
+====================== -->
+<!-- Save the following as userTiers.html next to pricing.html -->
+<section class="pricing" aria-label="Plans">
+  <style>
+    /* Scoped styles for pricing block */
+    .pricing{ text-align:center; padding:1rem 0 2rem }
+    .pricing h2{ margin:0 0 .25rem }
+    .pricing .sub{ color:#6b7280; margin:0 0 1.25rem }
+    .billing-toggle{ display:inline-flex; gap:6px; padding:6px; border:1px solid #e5e7eb; border-radius:999px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.05); margin-bottom:1rem }
+    .billing-toggle button{ border:0; background:transparent; padding:.5rem .9rem; border-radius:999px; cursor:pointer; font-weight:600; color:#334155 }
+    .billing-toggle button.active{ background:#1d4ed8; color:#fff }
+
+    .tiers{ display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+    .tier{ background:#fff; color:#0f172a; border:1px solid #e5e7eb; border-radius:14px; padding:1.25rem; box-shadow:0 4px 12px rgba(0,0,0,.05) }
+    .tier.featured{ border-color:#1d4ed8; box-shadow:0 8px 20px rgba(29,78,216,.15) }
+    .badge{ display:inline-block; margin-bottom:.35rem; background:#1d4ed8; color:#fff; border-radius:999px; padding:.2rem .6rem; font-size:.75rem; font-weight:700 }
+    .price{ font-size:1.75rem; font-weight:800; margin:.25rem 0 .75rem }
+    .price span{ font-size:.9rem; color:#6b7280; font-weight:600 }
+    .save{ display:block; font-size:.85rem; color:#0f766e; margin-top:-.5rem; margin-bottom:.4rem }
+    .tier ul{ list-style:none; padding:0; margin:0 0 1rem; text-align:left }
+    .tier li{ margin:.4rem 0 }
+    .btn{ display:inline-block; padding:.6rem 1rem; background:#1d4ed8; color:#fff; text-decoration:none; border-radius:10px; font-weight:700 }
+    .btn.alt{ background:#0f172a; color:#fff }
+  </style>
+
+  <h2>Choose Your Plan</h2>
+  <p class="sub">Get the best grocery savings with the plan that fits your lifestyle.</p>
+
+  <!-- Toggle -->
+  <div class="billing-toggle" role="tablist" aria-label="Billing period">
+    <button id="bill-monthly" class="active" aria-selected="true">Monthly</button>
+    <button id="bill-yearly" aria-selected="false">Yearly <span style="opacity:.7">(save 20%)</span></button>
+  </div>
+
+  <div class="tiers" data-billing="monthly">
+    <!-- Basic -->
+    <article class="tier" aria-labelledby="tier-basic">
+      <h3 id="tier-basic">Basic</h3>
+      <div class="price" data-monthly="Free / forever" data-yearly="Free / forever">Free <span>/ forever</span></div>
+      <ul>
+        <li>30 saved items</li>
+        <li>Weekly grocery flyers</li>
+        <li>Ad‑supported</li>
+      </ul>
+      <a class="btn alt" href="#">Get Started</a>
+    </article>
+
+    <!-- Gold -->
+    <article class="tier featured" aria-labelledby="tier-gold">
+      <span class="badge">Best Value</span>
+      <h3 id="tier-gold">Gold</h3>
+      <!-- Monthly: $1.99; Yearly: 20% off → $19.99/yr (rounded) -->
+      <div class="price" data-monthly="$1.99 / month" data-yearly="$19.99 / year">$1.99 <span>/ month</span></div>
+      <span class="save" data-show-on="yearly">You save ~20% with yearly billing</span>
+      <ul>
+        <li>50 saved items</li>
+        <li>No ads + budget tools</li>
+        <li>Price alerts & history</li>
+      </ul>
+      <a class="btn" href="#">Upgrade</a>
+    </article>
+
+    <!-- Platinum -->
+    <article class="tier" aria-labelledby="tier-plat">
+      <h3 id="tier-plat">Platinum</h3>
+      <!-- Monthly: $4.99; Yearly: 20% off → $47.99/yr (rounded) -->
+      <div class="price" data-monthly="$4.99 / month" data-yearly="$47.99 / year">$4.99 <span>/ month</span></div>
+      <span class="save" data-show-on="yearly">You save ~20% with yearly billing</span>
+      <ul>
+        <li>Unlimited saved items</li>
+        <li>Family lists & sharing</li>
+        <li>All premium features</li>
+        <li>Early access & perks</li>
+      </ul>
+      <a class="btn" href="#">Go Platinum</a>
+    </article>
+  </div>
+
+  <script>
+    // Monthly / Yearly toggle
+    (function(){
+      const grid = document.currentScript.previousElementSibling; // .tiers
+      const btnM = document.getElementById('bill-monthly');
+      const btnY = document.getElementById('bill-yearly');
+
+      function setMode(mode){
+        grid.dataset.billing = mode;
+        // Swap price text via data attributes
+        grid.querySelectorAll('.price').forEach(p=>{
+          const m = p.getAttribute('data-monthly');
+          const y = p.getAttribute('data-yearly');
+          if(mode==='yearly' && y){
+            const parts = y.split(' / ');
+            p.innerHTML = parts[0] + ' <span>/ ' + parts[1] + '</span>';
+          } else if (m){
+            const parts = m.split(' / ');
+            p.innerHTML = parts[0] + ' <span>/ ' + parts[1] + '</span>';
+          }
+        });
+        // Show/hide "save" note
+        grid.querySelectorAll('.save').forEach(s=>{
+          const showOn = s.getAttribute('data-show-on');
+          s.style.display = (mode===showOn)?'block':'none';
+        });
+        // Button state
+        btnM.classList.toggle('active', mode==='monthly');
+        btnM.setAttribute('aria-selected', mode==='monthly');
+        btnY.classList.toggle('active', mode==='yearly');
+        btnY.setAttribute('aria-selected', mode==='yearly');
+      }
+
+      btnM.addEventListener('click', ()=>setMode('monthly'));
+      btnY.addEventListener('click', ()=>setMode('yearly'));
+      setMode('monthly'); // default
+    })();
+  </script>
+</section>

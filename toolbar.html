@@ -1,149 +1,88 @@
-<!-- toolbar.html (full replacement) -->
-<header class="navbar">
-  <div class="brand">
+<!-- partial: toolbar.html -->
+<header class="navbar" style="position:sticky;top:0;z-index:50;background:var(--bg);color:var(--fg);padding:10px 12px;display:flex;align-items:center;">
+  <div class="brand" style="font-weight:800;font-size:1.1rem;">
     <a href="dealsHub.html" style="color:inherit;text-decoration:none;">Deals-4Me</a>
   </div>
 
-  <!-- Mobile menu toggle -->
   <input type="checkbox" id="nav-toggle" aria-label="Toggle menu" hidden>
-  <label for="nav-toggle" class="burger" aria-hidden="true">
-    <span></span><span></span><span></span>
+  <label for="nav-toggle" class="burger" aria-hidden="true" style="display:none;cursor:pointer;padding:6px;margin-left:auto;">
+    <span style="display:block;width:22px;height:2px;background:var(--fg);margin:5px 0;"></span>
+    <span style="display:block;width:22px;height:2px;background:var(--fg);margin:5px 0;"></span>
+    <span style="display:block;width:22px;height:2px;background:var(--fg);margin:5px 0;"></span>
   </label>
 
-  <nav class="nav">
-    <ul class="menu">
-      <li><a href="dealsHub.html">Home</a></li>
+  <nav class="nav" style="margin-left:16px;">
+    <ul class="menu" style="list-style:none;display:flex;align-items:center;gap:8px;margin:0;padding:0;">
+      <li><a href="dealsHub.html" style="color:var(--fg);padding:8px 10px;border-radius:8px;display:block;">Home</a></li>
+      <li><a href="dealsHub.html#hub" style="color:var(--fg);padding:8px 10px;border-radius:8px;display:block;">Deals Hub</a></li>
 
-      <li class="has-sub">
-        <a href="flyers.html">Flyers</a>
-        <ul class="submenu">
-          <li><a href="flyers.html?type=groceries">Groceries</a></li>
-          <li><a href="flyers.html?type=electronics">Electronics</a></li>
-          <li><a href="flyers.html?type=household">Household</a></li>
-          <li><a href="flyers.html?type=local">Local Stores</a></li>
-          <li class="divider"></li>
-          <li><a href="delivery.html">Delivery Options</a></li>
+      <li class="has-sub" style="position:relative;">
+        <a href="flyers.html" style="color:var(--fg);padding:8px 10px;border-radius:8px;display:block;">Flyers</a>
+        <ul class="submenu" style="position:absolute;top:100%;left:0;min-width:210px;background:#fff;color:#0f172a;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:8px;display:none;">
+          <li><a href="flyers.html?type=groceries" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">Groceries</a></li>
+          <li><a href="flyers.html?type=electronics" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">Electronics</a></li>
+          <li><a href="flyers.html?type=household" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">Household</a></li>
+          <li><a href="flyers.html?type=local" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">Local Stores</a></li>
+          <li class="divider" style="height:1px;margin:6px 4px;background:var(--line);"></li>
+          <li><a href="delivery.html" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">Delivery Options</a></li>
         </ul>
       </li>
 
-      <li class="has-sub">
-        <a href="games.html">Games</a>
-        <ul class="submenu">
-          <li><a href="games.html#hacks">The Hacks of Life</a></li>
-          <li><a href="games.html#stem">STEM / EDU</a></li>
-          <li><a href="games.html#kids">Kids Corner</a></li>
+      <li class="has-sub" style="position:relative;">
+        <a href="games.html" style="color:var(--fg);padding:8px 10px;border-radius:8px;display:block;">Games</a>
+        <ul class="submenu" style="position:absolute;top:100%;left:0;min-width:210px;background:#fff;color:#0f172a;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:8px;display:none;">
+          <li><a href="games.html#hacks" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">The Hacks of Life</a></li>
+          <li><a href="games.html#stem" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">STEM / EDU</a></li>
+          <li><a href="games.html#kids" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">Kids Corner</a></li>
         </ul>
       </li>
 
-      <li class="has-sub">
-        <a href="recipes.html">Recipes</a>
-        <ul class="submenu">
-          <li><a href="recipes.html#browse">Browse Recipes</a></li>
-          <li><a href="recipes.html#saved">Saved Recipes</a></li>
-          <li><a href="recipes.html#share">Share a Recipe</a></li>
+      <li class="has-sub" style="position:relative;">
+        <a href="recipes.html" style="color:var(--fg);padding:8px 10px;border-radius:8px;display:block;">Recipes</a>
+        <ul class="submenu" style="position:absolute;top:100%;left:0;min-width:210px;background:#fff;color:#0f172a;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:8px;display:none;">
+          <li><a href="recipes.html#browse" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">Browse Recipes</a></li>
+          <li><a href="recipes.html#saved" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">Saved Recipes</a></li>
+          <li><a href="recipes.html#share" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">Share a Recipe</a></li>
         </ul>
       </li>
 
-      <li class="has-sub">
-        <a href="account.html">Account</a>
-        <ul class="submenu">
-          <li><a href="signup.html">Sign Up / Log In</a></li>
-          <li><a href="account.html#pin">Profile &amp; PIN</a></li>
-          <li><a href="pricing.html">Subscription Plans</a></li>
-          <li><a href="family.html">Family Settings</a></li>
+      <li class="has-sub" style="position:relative;">
+        <a href="account.html" style="color:var(--fg);padding:8px 10px;border-radius:8px;display:block;">Account</a>
+        <ul class="submenu" style="position:absolute;top:100%;left:0;min-width:210px;background:#fff;color:#0f172a;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:8px;display:none;">
+          <li><a href="signup.html" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">Sign Up / Log In</a></li>
+          <li><a href="account.html#pin" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">Profile &amp; PIN</a></li>
+          <li><a href="family.html" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">Family Settings</a></li>
         </ul>
       </li>
 
-      <li class="has-sub">
-        <a href="partners.html">Sponsors / Partners</a>
-        <ul class="submenu">
-          <li><a href="partners.html#signup">Partner Sign-Up</a></li>
-          <li><a href="ad-packages.html">Ad Packages</a></li>
-          <li><a href="affiliate.html">Affiliate / Referral</a></li>
-          <li><a href="contact.html">Contact Support</a></li>
+      <li class="has-sub" style="position:relative;">
+        <a href="partners.html" style="color:var(--fg);padding:8px 10px;border-radius:8px;display:block;">Sponsors / Partners</a>
+        <ul class="submenu" style="position:absolute;top:100%;left:0;min-width:210px;background:#fff;color:#0f172a;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:8px;display:none;">
+          <li><a href="partners.html#signup" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">Partner Sign-Up</a></li>
+          <li><a href="ad-packages.html" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">Ad Packages</a></li>
+          <li><a href="affiliate.html" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">Affiliate / Referral</a></li>
+          <li><a href="contact.html" style="display:block;padding:8px 10px;border-radius:8px;color:inherit;">Contact Support</a></li>
         </ul>
       </li>
 
-      <li class="cta"><a href="pricing.html">Pricing</a></li>
+      <li class="cta"><a href="pricing.html" style="background:#22c55e;color:#0b1b2b;padding:8px 12px;border-radius:10px;display:block;font-weight:600;">Pricing</a></li>
     </ul>
   </nav>
 </header>
 
 <style>
-/* ===== Toolbar (scoped to header.navbar) ===== */
-/* Base bar (visible + on top) */
-header.navbar{
-  position:sticky; top:0; z-index:1000;
-  display:flex; align-items:center; gap:16px;
-  padding:10px 16px;
-  background: var(--bg, #0f172a);
-  color: var(--fg, #fff);
-  border-bottom:1px solid rgba(255,255,255,.06);
-}
-header.navbar .brand{ font-weight:800; letter-spacing:.2px; margin-right:auto; }
-
-/* Burger (mobile) */
-header.navbar .burger{ display:none; cursor:pointer; padding:6px; margin-left:auto; }
-header.navbar .burger span{
-  display:block; width:22px; height:2px; background: var(--fg, #fff);
-  margin:5px 0; transition: transform .2s ease, opacity .2s ease;
-}
-
-/* Menu (desktop) */
-header.navbar .nav{ margin-left:8px; }
-header.navbar .menu{ list-style:none; display:flex; align-items:center; gap:8px; margin:0; padding:0; }
-header.navbar .menu>li>a{
-  color: var(--fg, #fff); padding:8px 10px; border-radius:8px; display:block; text-decoration:none;
-}
-header.navbar .menu>li>a:hover{ background: rgba(255,255,255,.08); }
-
-/* Submenus */
-header.navbar .has-sub{ position:relative; }
-header.navbar .submenu{
-  position:absolute; top:100%; left:0; min-width:210px;
-  background:#fff; color:#0f172a;
-  border:1px solid #e5e7eb; border-radius:12px;
-  box-shadow:0 8px 24px rgba(0,0,0,.08);
-  padding:8px; display:none; z-index:2000; /* ensure above page content */
-}
-header.navbar .submenu li{ list-style:none; }
-header.navbar .submenu a{
-  display:block; text-decoration:none;
-  color:#0f172a !important;              /* force dark text in dropdown */
-  font-size:14px; line-height:1.25;
-  padding:8px 10px; border-radius:8px;
-}
-header.navbar .submenu a:hover{ background:#f1f5f9; }
-header.navbar .submenu .divider{ height:1px; margin:6px 4px; background:#e5e7eb; }
-
-/* Show submenu on hover (desktop) */
-header.navbar .has-sub:hover>.submenu{ display:block; }
-
-/* CTA */
-header.navbar .cta a{
-  background:#22c55e; color:#0b1b2b !important; font-weight:600; padding:8px 12px; border-radius:10px;
-}
-header.navbar .cta a:hover{ filter:brightness(.95); }
-
-/* --- Mobile --- */
-@media (max-width: 900px){
-  header.navbar .burger{ display:block; }
-  header.navbar .nav{ width:100%; }
-  header.navbar .menu{
+/* submenu show on hover (desktop) */
+header.navbar .has-sub:hover > .submenu { display: block; }
+/* mobile basics */
+@media (max-width: 900px) {
+  header.navbar .burger { display:block !important; }
+  header.navbar .menu {
     position:absolute; left:0; right:0; top:56px;
-    background: var(--bg, #0f172a);
-    border-top:1px solid rgba(255,255,255,.06);
-    flex-direction:column; align-items:stretch; gap:0; display:none; padding:6px 0;
+    background: var(--bg); border-top: 1px solid rgba(255,255,255,.06);
+    flex-direction: column; align-items: stretch; gap:0; display:none; padding:6px 0;
   }
-  #nav-toggle:checked ~ .nav .menu{ display:flex; }
-  header.navbar .menu>li>a{ padding:12px 16px; border-radius:0; }
-
-  /* Submenus in mobile: inline expandable */
-  header.navbar .has-sub .submenu{
-    position:static; display:none; background: rgba(255,255,255,.05);
-    border:none; border-radius:0; box-shadow:none; margin:0 0 6px 0; padding:0;
-  }
-  header.navbar .has-sub > a:focus + .submenu,
-  header.navbar .has-sub:hover > .submenu{ display:block; }
+  #nav-toggle:checked ~ .nav .menu { display:flex; }
+  .submenu { position: static !important; display:none; background: rgba(255,255,255,.06) !important; border:none !important; box-shadow:none !important; }
+  .has-sub > a:focus + .submenu, .has-sub:hover > .submenu { display:block; }
 }
 </style>

@@ -2,162 +2,104 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Deals-4Me — Sign Up</title>
-
-  <!-- Try to load your main theme -->
-  <link rel="stylesheet" href="theme.css" />
-
-  <!-- Fallback CSS to guarantee layout even if theme.css fails -->
-  <style>
-    :root { color-scheme: light; }
-    body{background:#f8fafc;color:#0f172a;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-    .signup-container{max-width:440px;margin:72px auto;padding:0 16px}
-    .signup-container h2{margin:0 0 10px;text-align:center;font-size:1.35rem}
-    .signup-container form{
-      display:flex;flex-direction:column;gap:10px;
-      background:#fff;border:1px solid #e5e7eb;border-radius:12px;
-      padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.05)
-    }
-    .signup-container label{font-weight:600;margin-top:2px}
-    .signup-container input[type="email"],
-    .signup-container input[type="password"],
-    .signup-container input[type="text"]{
-      width:100%;padding:.65rem .75rem;font-size:1rem;
-      border:1px solid #e5e7eb;border-radius:10px;background:#fff;outline:0;
-      transition:border-color .15s,box-shadow .15s
-    }
-    .signup-container input:focus{border-color:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,.15)}
-    .signup-container button[type="submit"]{
-      width:100%;padding:.65rem 1rem;border:0;border-radius:10px;
-      background:#22c55e;color:#0b1b2b;font-weight:700;cursor:pointer
-    }
-    .signup-container button[type="submit"]:hover{filter:brightness(.95)}
-    .muted{color:#475569;font-size:.95rem;text-align:center;margin-top:4px}
-
-    .pin-setup{margin-top:14px}
-    .pin-setup h3{margin:6px 0 4px;font-size:1rem}
-    .pin-grid{display:flex;gap:.5rem}
-    .pin-grid input{
-      width:44px;height:44px;text-align:center;font-size:1.25rem;
-      border:1px solid #e5e7eb;border-radius:10px;background:#fff;outline:0;
-      transition:border-color .15s,box-shadow .15s
-    }
-    .pin-grid input:focus{border-color:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,.15)}
-    .pin-actions{display:flex;gap:.6rem;margin-top:.6rem}
-    #savePin{background:#22c55e;color:#0b1b2b;border:0;padding:.55rem 1rem;border-radius:.5rem;font-weight:600;cursor:pointer}
-    #clearPin{background:#e2e8f0;color:#0f172a;border:0;padding:.55rem .9rem;border-radius:.5rem;cursor:pointer}
-
-    .site-footer{margin-top:40px}
-    /* Toolbar fallback so it never looks invisible even if theme.css overrides */
-    #site-toolbar .navbar{background:#0f172a;color:#fff}
-  </style>
+  <link rel="stylesheet" href="theme.css"/>
 </head>
 <body>
-  <!-- Toolbar placeholder -->
   <div id="site-toolbar"></div>
 
-  <!-- Content -->
-  <main class="signup-container">
-    <h2>Deals-4Me Sign Up</h2>
+  <main>
+    <section class="card" style="max-width:420px;margin:24px auto;">
+      <h1>Sign Up</h1>
+      <form id="signupForm" novalidate>
+        <label for="email">Email</label>
+        <input id="email" type="email" autocomplete="email" required />
 
-    <form class="signup-form">
-      <label>Email</label>
-      <input id="email" type="email" placeholder="you@example.com" required />
+        <label for="pw">Password</label>
+        <input id="pw" type="password" autocomplete="new-password" required />
 
-      <label>Password</label>
-      <input type="password" placeholder="••••••••" required />
+        <label for="pw2">Confirm Password</label>
+        <input id="pw2" type="password" autocomplete="new-password" required />
 
-      <label>Confirm Password</label>
-      <input type="password" placeholder="••••••••" required />
+        <button class="btn-primary" type="submit" style="width:100%;margin-top:10px;">Sign Up</button>
+        <p class="muted" style="text-align:center;margin-top:8px;">Already have an account? <a href="login.html">Login</a></p>
+      </form>
+    </section>
 
-      <button type="submit">Sign Up</button>
-      <p class="muted">Already have an account? <a href="login.html">Login</a></p>
-    </form>
+    <section class="card" style="max-width:520px;margin:16px auto;">
+      <h2>Create Your 4-Digit Household PIN</h2>
+      <p class="muted">After verifying your email, set a 4-digit PIN for your household. Everyone will use this PIN with their email to sign in.</p>
 
-    <!-- PIN setup (UI only for now) -->
-    <section class="pin-setup" aria-labelledby="pin-title">
-      <h3 id="pin-title">Create Your 4-Digit Household PIN</h3>
-      <p class="muted" style="margin:0 0 8px;">
-        Everyone in your household will use this PIN with their email to sign in.
-      </p>
-      <div class="pin-grid">
-        <input class="pin" inputmode="numeric" maxlength="1" pattern="[0-9]*">
-        <input class="pin" inputmode="numeric" maxlength="1" pattern="[0-9]*">
-        <input class="pin" inputmode="numeric" maxlength="1" pattern="[0-9]*">
-        <input class="pin" inputmode="numeric" maxlength="1" pattern="[0-9]*">
+      <div class="pin-grid" id="pin1" style="display:flex;gap:.5rem;margin:8px 0;">
+        <input class="pin" maxlength="1" inputmode="numeric">
+        <input class="pin" maxlength="1" inputmode="numeric">
+        <input class="pin" maxlength="1" inputmode="numeric">
+        <input class="pin" maxlength="1" inputmode="numeric">
       </div>
 
-      <label style="display:block;font-weight:600;margin:10px 0 4px;">Confirm PIN</label>
-      <div class="pin-grid">
-        <input class="pin2" inputmode="numeric" maxlength="1" pattern="[0-9]*">
-        <input class="pin2" inputmode="numeric" maxlength="1" pattern="[0-9]*">
-        <input class="pin2" inputmode="numeric" maxlength="1" pattern="[0-9]*">
-        <input class="pin2" inputmode="numeric" maxlength="1" pattern="[0-9]*">
+      <p class="muted" style="margin:8px 0 6px;">Confirm PIN</p>
+      <div class="pin-grid" id="pin2" style="display:flex;gap:.5rem;">
+        <input class="pin2" maxlength="1" inputmode="numeric">
+        <input class="pin2" maxlength="1" inputmode="numeric">
+        <input class="pin2" maxlength="1" inputmode="numeric">
+        <input class="pin2" maxlength="1" inputmode="numeric">
       </div>
 
-      <div class="pin-actions">
-        <button id="savePin" type="button">Save PIN</button>
-        <button id="clearPin" type="button">Clear</button>
+      <div class="actions" style="display:flex;gap:.5rem;margin-top:.6rem;">
+        <button class="save" id="savePin" type="button" style="background:#0f172a;color:#fff;border:none;padding:.55rem .9rem;border-radius:.6rem;cursor:pointer;">Save PIN</button>
+        <button class="clear" id="clearPin" type="button" style="background:#e2e8f0;color:#0f172a;border:none;padding:.55rem .9rem;border-radius:.6rem;cursor:pointer;">Clear</button>
       </div>
-      <p id="pinMsg" class="muted" role="status"></p>
+      <p id="pinMsg" class="muted" role="status" style="margin:.5rem 0 0;"></p>
     </section>
   </main>
 
-  <!-- Footer placeholder -->
   <div id="site-footer"></div>
-
-  <!-- Auto-load toolbar/footer -->
   <script src="includes.js"></script>
-
-  <!-- PIN demo behavior (optional; keep if you want it working tonight) -->
   <script>
-    (function () {
+    // basic form check
+    document.getElementById('signupForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const p1 = document.getElementById('pw').value;
+      const p2 = document.getElementById('pw2').value;
+      if (!email || !p1 || p1 !== p2) return alert('Please enter a valid email and matching passwords.');
+      alert('Sign-up submitted (demo).');
+    });
+
+    // PIN logic
+    (function(){
       const $ = s => document.querySelector(s);
       const $$ = s => Array.from(document.querySelectorAll(s));
-      const EMAIL_KEY = 'd4m_email';
-      function digits(sel){ return $$(sel).map(i => (i.value||'').replace(/\\D/g,'')).join(''); }
-      function clear(sel){ $$(sel).forEach(i => i.value=''); }
-      function msg(el, txt, ok){ el.textContent = txt; el.style.color = ok ? '#16a34a' : '#b91c1c'; }
+      function digits(sel){ return $$(sel).map(i => (i.value||'').replace(/\D/g,'')).join(''); }
+      function clear(sel){ $$(sel).forEach(i => i.value = ''); }
+      function setMsg(el, txt, ok){ el.textContent = txt; el.style.color = ok ? '#16a34a' : '#b91c1c'; }
 
-      // Focus/advance behavior
-      $$('.pin, .pin2').forEach(input=>{
-        input.addEventListener('input', e=>{
-          e.target.value = e.target.value.replace(/\\D/g,'').slice(0,1);
+      $$('.pin, .pin2').forEach(input => {
+        input.addEventListener('input', e => {
+          e.target.value = e.target.value.replace(/\D/g,'').slice(0,1);
           if (e.target.value && e.target.nextElementSibling) e.target.nextElementSibling.focus();
         });
-        input.addEventListener('keydown', e=>{
-          if (e.key==='Backspace' && !e.target.value && e.target.previousElementSibling) {
-            e.target.previousElementSibling.focus();
-          }
+        input.addEventListener('keydown', e => {
+          if (e.key === 'Backspace' && !e.target.value && e.target.previousElementSibling) e.target.previousElementSibling.focus();
         });
       });
 
-      // Prefill email if saved
-      try { const rem = localStorage.getItem(EMAIL_KEY); if (rem && $('#email') && !$('#email').value) $('#email').value = rem; } catch {}
-
-      // Save (demo)
       const pinMsg = $('#pinMsg');
-      $('#savePin')?.addEventListener('click', ()=>{
+      $('#savePin')?.addEventListener('click', () => {
         const email = ($('#email')?.value || '').trim().toLowerCase();
-        const p1 = digits('.pin');
-        const p2 = digits('.pin2');
-        if (!email || !email.includes('@')) return msg(pinMsg,'Enter a valid email first.', false);
-        if (p1.length!==4 || p2.length!==4) return msg(pinMsg,'PIN must be exactly 4 digits.', false);
-        if (p1!==p2) return msg(pinMsg,'PINs do not match.', false);
-        if (/^(\\d)\\1{3}$/.test(p1)) return msg(pinMsg,'Avoid simple PINs like 0000 or 1111.', false);
-        try {
-          localStorage.setItem('d4m_pin_'+email, p1);
-          localStorage.setItem(EMAIL_KEY, email);
-        } catch {}
-        msg(pinMsg,'PIN saved (demo). You can log in now.', true);
+        const p1 = digits('#pin1 .pin');
+        const p2 = digits('#pin2 .pin2');
+        if (!email || !email.includes('@')) return setMsg(pinMsg, 'Enter a valid email first.', false);
+        if (p1.length !== 4 || p2.length !== 4) return setMsg(pinMsg, 'PIN must be exactly 4 digits.', false);
+        if (p1 !== p2) return setMsg(pinMsg, 'PINs do not match.', false);
+        if (/^(\d)\1{3}$/.test(p1)) return setMsg(pinMsg, 'Avoid simple PINs like 0000 or 1111.', false);
+        try { localStorage.setItem('d4m_pin_' + email, p1); } catch {}
+        setMsg(pinMsg, 'PIN saved (demo). You can log in now.', true);
       });
-      $('#clearPin')?.addEventListener('click', ()=>{
-        clear('.pin'); clear('.pin2'); msg(pinMsg,'', true); document.querySelector('.pin')?.focus();
-      });
+
+      $('#clearPin')?.addEventListener('click', () => { clear('#pin1 .pin'); clear('#pin2 .pin2'); setMsg(pinMsg, '', true); });
     })();
   </script>
-  <div id="site-footer"></div>
-<script src="includes.js"></script>
 </body>
 </html>

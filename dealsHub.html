@@ -1,327 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Deals Hub — Deals-4Me</title>
-
-  <!-- Your global toolbar/theme (keep these if you already have them) -->
-  <link rel="stylesheet" href="styles/toolbarTheme.css">
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Deals-4Me — Hub</title>
+  <link rel="stylesheet" href="theme.css" />
   <style>
-    :root{
-      --bg:#f9fafb;           /* page bg */
-      --ink:#0b1220;          /* text on dark */
-      --muted:#64748b;        /* muted text */
-      --brand:#0b1220;        /* dark ribbon */
-      --panel:#ffffff;        /* card bg */
-      --panel-border:#e5e7eb; /* card border */
-      --chip:#eef2f7;         /* filter chip bg */
-      --chip-on:#0b1220;      /* active chip bg */
-      --chip-on-ink:#fff;     /* active chip text */
-      --accent:#2563eb;       /* buttons/links */
-      --soft-shadow: 0 6px 18px rgba(0,0,0,.06);
-      --radius:16px;
-    }
-
-    html,body{margin:0;background:var(--bg);font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#0f172a}
-
-    /* ===== Header include host ===== */
-    #site-header { position: relative; z-index: 20; }
-
-    /* ===== Sponsor ribbon (dark) ===== */
-    .sponsor-ribbon{
-      position: sticky; top:0; z-index: 10;
-      background: var(--brand); color:#e5e7eb;
-      border-bottom:1px solid #1f2937;
-    }
-    .ribbon-inner{
-      max-width:1200px; margin:0 auto; padding:10px 12px;
-      display:grid; gap:12px; grid-template-columns:repeat(3,1fr);
-    }
-    .ribbon-slot{
-      min-height:48px; border:1px dashed #1f3b63; border-radius:10px;
-      display:flex; align-items:center; justify-content:center;
-      background:#0f172a; color:#bfdbfe; text-decoration:none; font-weight:600;
-    }
-    .ribbon-slot:hover{ background:#13233c; color:#dbeafe; }
-
-    /* ===== Controls row ===== */
-    .controls{
-      max-width:1200px; margin:18px auto 8px; padding:0 12px;
-      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
-      <button id="geoBtn" class="btn ghost" type="button">Use my location</button>
-
-    }
-    .controls .group{ display:flex; gap:8px; align-items:center; }
-    .controls input[type="text"],
-    .controls select{
-      height:38px; border:1px solid var(--panel-border);
-      border-radius:8px; padding:0 10px; background:#fff;
-    }
-    .btn{
-      height:38px; padding:0 14px; border:none; border-radius:10px;
-      background:var(--accent); color:#fff; font-weight:600; cursor:pointer;
-    }
-    .btn.ghost{ background:#fff; color:#0f172a; border:1px solid var(--panel-border); }
-
-    .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-left:auto; }
-    .chip{
-      background:var(--chip); color:#111827; border:1px solid var(--panel-border);
-      border-radius:999px; padding:6px 12px; font-weight:600; cursor:pointer; user-select:none;
-    }
-    .chip.active{ background:var(--chip-on); color:var(--chip-on-ink); border-color:transparent; }
-
-    /* ===== Main grid ===== */
-    .grid{
-      max-width:1200px; margin:10px auto 40px; padding:0 12px;
-      display:grid; gap:16px; grid-template-columns:280px 1fr 320px;
-    }
-    @media (max-width: 1024px){
-      .ribbon-inner{ grid-template-columns:1fr; }
-      .grid{ grid-template-columns:1fr; }
-    }
-
-    /* ===== Panels & cards ===== */
-    .panel{
-      background:var(--panel); border:1px solid var(--panel-border);
-      border-radius:var(--radius); box-shadow:var(--soft-shadow);
-    }
-    .panel h3{
-      margin:0; padding:14px 14px 6px; font-size:1.05rem;
-    }
-    .panel .content{ padding:8px 14px 14px; }
-
-    .store{
-      display:flex; justify-content:space-between; align-items:center;
-      gap:10px; padding:10px 0; border-bottom:1px dashed var(--panel-border);
-    }
-    .store:last-child{ border-bottom:none; }
-    .store .meta{ color:var(--muted); font-size:.9rem; }
-    .store .select{ white-space:nowrap; }
-
-    .deal-row{
-      display:flex; justify-content:space-between; align-items:center; gap:12px;
-      padding:10px 0; border-bottom:1px dashed var(--panel-border);
-    }
-    .deal-row:last-child{ border-bottom:none; }
-    .deal-row .price{ font-weight:800; }
-
-    /* KPI cards */
-    .kpis{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:12px; }
-    .kpi{
-      background:#0f172a; color:#fff; border-radius:14px; padding:14px 12px;
-      display:flex; flex-direction:column; gap:4px; box-shadow:var(--soft-shadow);
-    }
-    .kpi .big{ font-size:1.6rem; font-weight:900; }
-    .note{ color:#475569; font-size:.9rem; padding:0 12px 12px; }
-
-    /* Small helpers */
-    .muted{ color:var(--muted); }
-    .divider{ height:1px; background:var(--panel-border); margin:8px 0; }
+    main { max-width: 980px; margin: 28px auto; padding: 0 16px; }
+    .search-box { display:flex; gap:8px; flex-wrap:wrap; background:#fff; border:1px solid var(--line); border-radius:14px; padding:12px; box-shadow:0 2px 10px rgba(0,0,0,.05); }
+    .search-box input, .search-box select { padding:.7rem .8rem; border:1px solid var(--line); border-radius:12px; font-size:1rem; flex:1 1 180px; }
+    .search-box button { padding:.7rem 1rem; border:none; border-radius:12px; font-weight:600; cursor:pointer; background:var(--brand); color:#0b1b2b; }
+    .results { margin-top:22px; }
+    .table-wrap { background:#fff; border:1px solid var(--line); border-radius:12px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.05); }
+    table { width:100%; border-collapse:collapse; }
+    thead th { background:#f1f5f9; text-align:left; padding:12px; }
+    tbody td { padding:12px; border-top:1px solid #f1f5f9; }
+    .muted { color: var(--muted); }
+    .url a { color:#2563eb; text-decoration:none; }
+    .url a:hover { text-decoration:underline; }
   </style>
 </head>
 <body>
+  <div id="site-toolbar"></div>
 
-  <!-- Shared header (toolbar) -->
-  <div id="site-header"></div>
-
-  <!-- Dark sponsor ribbon -->
-  <div class="sponsor-ribbon">
-    <div class="ribbon-inner">
-      <a class="ribbon-slot" href="#" aria-label="Sponsor A">Sponsor A</a>
-      <a class="ribbon-slot" href="#" aria-label="Sponsor B">Sponsor B</a>
-      <a class="ribbon-slot" href="#" aria-label="Sponsor C">Sponsor C</a>
-    </div>
-  </div>
-
-  <!-- Controls -->
-  <div class="controls">
-    <div class="group">
-      <label class="muted" for="zip">ZIP code</label>
-      <input id="zip" type="text" inputmode="numeric" maxlength="5" placeholder="e.g., 02125">
-      <select id="radius">
-        <option>5 mi</option><option selected>10 mi</option><option>15 mi</option><option>25 mi</option>
+  <main id="hub">
+    <h1>Find Deals Near You</h1>
+    <form id="searchForm" class="search-box" novalidate>
+      <input id="zipInput" type="text" inputmode="numeric" pattern="\\d{5}" placeholder="Enter ZIP (e.g., 02324)" required />
+      <select id="radiusSelect" aria-label="Search radius">
+        <option value="5">5 miles</option>
+        <option value="10" selected>10 miles</option>
+        <option value="15">15 miles</option>
+        <option value="20">20 miles</option>
       </select>
-      <button id="updateBtn" class="btn">Update</button>
-      <button class="btn ghost">Area settings</button>
+      <button type="submit">Search</button>
+    </form>
+
+    <div class="results">
+      <div class="table-wrap">
+        <table id="resultsTable">
+          <thead><tr><th>Store</th><th>City</th><th>ZIP</th><th>Website</th></tr></thead>
+          <tbody><tr><td colspan="4" class="muted" style="text-align:center;">Enter a ZIP to see nearby stores</td></tr></tbody>
+        </table>
+      </div>
+      <div id="status" class="muted" style="margin:10px 4px;"></div>
     </div>
-
-    <div class="chips" role="tablist" aria-label="Categories">
-      <div class="chip active" data-cat="all">All</div>
-      <div class="chip" data-cat="produce">Produce</div>
-      <div class="chip" data-cat="meat">Meat</div>
-      <div class="chip" data-cat="pantry">Pantry</div>
-      <div class="chip" data-cat="household">Household</div>
-    </div>
-
-    <div class="chips" role="tablist" aria-label="Savings timeframe">
-      <div class="chip active" data-range="weekly">Weekly</div>
-      <div class="chip" data-range="monthly">Monthly</div>
-      <div class="chip" data-range="quarterly">Quarterly</div>
-    </div>
-  </div>
-
-  <!-- 3-column grid -->
-  <main class="grid">
-    <!-- Left: stores list -->
-    <section class="panel" aria-labelledby="stores-title">
-      <h3 id="stores-title">Stores near…</h3>
-      <div class="content">
-        <div class="group" style="margin-bottom:10px;">
-          <input id="storeSearch" type="text" placeholder="Search stores…">
-          <button class="btn">Find</button>
-        </div>
-
-        <div class="store">
-          <div>
-            <div>Market Basket — Somerville</div>
-            <div class="meta">02143 • 1.2 mi</div>
-          </div>
-          <div class="select"><button class="btn ghost">Select</button></div>
-        </div>
-
-        <div class="store">
-          <div>
-            <div>Shaw’s — Boylston St</div>
-            <div class="meta">02116 • 3.1 mi</div>
-          </div>
-          <div class="select"><button class="btn ghost">Select</button></div>
-        </div>
-
-        <div class="store">
-          <div>
-            <div>Stop & Shop — Quincy</div>
-            <div class="meta">02169 • 7.4 mi</div>
-          </div>
-          <div class="select"><button class="btn ghost">Select</button></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Middle: flyer & deals -->
-    <section class="panel" aria-labelledby="flyer-title">
-      <h3 id="flyer-title">Flyer (Week of …)</h3>
-      <div class="content">
-        <div class="muted" style="margin-bottom:10px;">
-          Flyer metadata and highlights go here (valid dates, store name, top picks).
-        </div>
-
-        <!-- Highlights -->
-        <div class="deal-row">
-          <div>
-            <div><strong>Large Eggs 12ct</strong></div>
-            <div class="muted">dozen • pantry</div>
-          </div>
-          <div class="price">$2.49</div>
-        </div>
-
-        <div class="deal-row">
-          <div>
-            <div><strong>Chicken Breast</strong></div>
-            <div class="muted">lb • meat</div>
-          </div>
-          <div class="price">$2.99</div>
-        </div>
-
-        <div class="divider"></div>
-
-        <h3 style="padding-top:6px;">Deals</h3>
-
-        <div class="deal-row" data-cat="produce">
-          <div>
-            <div><strong>Romaine Lettuce</strong></div>
-            <div class="muted">each • produce</div>
-          </div>
-          <div class="price">$1.29</div>
-        </div>
-
-        <div class="deal-row" data-cat="pantry">
-          <div>
-            <div><strong>Pasta 16oz</strong></div>
-            <div class="muted">box • pantry</div>
-          </div>
-          <div class="price">$0.99</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Right: savings KPIs -->
-    <aside class="panel" aria-labelledby="savings-title">
-      <h3 id="savings-title">Savings — <span id="rangeLabel">Weekly</span></h3>
-      <div class="kpis">
-        <div class="kpi">
-          <div class="big" id="kpiTotal">$18.40</div>
-          <div>Total saved</div>
-        </div>
-        <div class="kpi">
-          <div class="big" id="kpiItems">7</div>
-          <div>Items saved on</div>
-        </div>
-        <div class="kpi">
-          <div class="big" id="kpiTrips">2</div>
-          <div>Trips</div>
-        </div>
-        <div class="kpi">
-          <div class="big" id="kpiBest">$5.00</div>
-          <div>Best single deal</div>
-        </div>
-      </div>
-      <div class="note">
-        Demo numbers. Once wired, these pull from your LP/Deals DB and change when you switch timeframe.
-      </div>
-    </aside>
   </main>
 
-  <!-- Load shared header, then init -->
+  <div id="site-footer"></div>
+  <script src="includes.js"></script>
   <script>
-    // Pull in your shared header (toolbar) if you have header.html in the root:
-    fetch('header.html').then(r=>r.text()).then(h=>{
-      const host = document.getElementById('site-header');
-      host.innerHTML = h;
-      (window.initDealsHeader && typeof window.initDealsHeader === 'function') && window.initDealsHeader();
-    }).catch(()=>console.warn('Header include not found (header.html).'));
+    const MOCK_STORES = [
+      { store_name: "Shaw's", city: "Bridgewater", state: "MA", zip: "02324", url: "https://www.shaws.com" },
+      { store_name: "Stop & Shop", city: "Brockton", state: "MA", zip: "02301", url: "https://stopandshop.com" },
+      { store_name: "Market Basket", city: "Raynham", state: "MA", zip: "02767", url: "https://shopmarketbasket.com" },
+      { store_name: "Target", city: "Stoughton", state: "MA", zip: "02072", url: "https://www.target.com" },
+      { store_name: "Costco", city: "Avon", state: "MA", zip: "02322", url: "https://www.costco.com" }
+    ];
 
-    // Chips behavior + demo KPI swap
-    (function(){
-      const chips = document.querySelectorAll('.chip[data-range]');
-      const rangeLabel = document.getElementById('rangeLabel');
-      const demo = {
-        weekly:  { total:'$18.40', items:'7', trips:'2', best:'$5.00' },
-        monthly: { total:'$66.10', items:'21', trips:'6', best:'$9.50' },
-        quarterly:{ total:'$182.70', items:'63', trips:'18', best:'$14.00' }
-      };
-      function setRange(r){
-        rangeLabel.textContent = r.charAt(0).toUpperCase()+r.slice(1);
-        const k = demo[r] || demo.weekly;
-        document.getElementById('kpiTotal').textContent = k.total;
-        document.getElementById('kpiItems').textContent = k.items;
-        document.getElementById('kpiTrips').textContent = k.trips;
-        document.getElementById('kpiBest').textContent  = k.best;
+    const form  = document.getElementById("searchForm");
+    const tbody = document.querySelector("#resultsTable tbody");
+    const statusEl = document.getElementById("status");
+
+    function normalizeUrl(u){ if(!u) return ""; let x=String(u).trim(); if(!/^https?:\\/\\//i.test(x)) x="https://"+x; return x; }
+    function domainFromUrl(u){ try { return new URL(normalizeUrl(u)).hostname.replace(/^www\\./,''); } catch { return ""; } }
+    function escapeHtml(s){ return (s||"").replace(/[&<>\"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+    function renderRows(rows) {
+      if (!rows.length) { tbody.innerHTML = `<tr><td colspan="4" class="muted" style="text-align:center;">No stores found.</td></tr>`; return; }
+      tbody.innerHTML = rows.map(r => `
+        <tr>
+          <td><strong>${escapeHtml(r.store_name)}</strong></td>
+          <td>${escapeHtml(r.city || "")}</td>
+          <td>${escapeHtml(r.zip || "")}</td>
+          <td class="url">${r.url ? `<a href="${normalizeUrl(r.url)}" target="_blank" rel="noopener">${escapeHtml(domainFromUrl(r.url))}</a>` : '<span class="muted">—</span>'}</td>
+        </tr>`).join("");
+    }
+
+    function zipLooksClose(a, b, radiusMiles) {
+      if (!a || !b) return false;
+      if (a === b) return true;
+      if (radiusMiles <= 5)  return a.slice(0,3) === b.slice(0,3);
+      if (radiusMiles <= 10) return a.slice(0,2) === b.slice(0,2);
+      return a.slice(0,2) === b.slice(0,2);
+    }
+
+    // remember last search
+    const LS_KEY = "d4m_search";
+    try {
+      const saved = JSON.parse(localStorage.getItem(LS_KEY)||"{}");
+      if (saved.zip) document.getElementById("zipInput").value = saved.zip;
+      if (saved.radius) document.getElementById("radiusSelect").value = String(saved.radius);
+    } catch {}
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const zip = document.getElementById("zipInput").value.trim();
+      const radius = parseInt(document.getElementById("radiusSelect").value,10)||10;
+      localStorage.setItem(LS_KEY, JSON.stringify({zip, radius}));
+
+      if (!/^\\d{5}$/.test(zip)) {
+        statusEl.textContent = "Please enter a valid 5-digit ZIP.";
+        renderRows([]); return;
       }
-      chips.forEach(c=>{
-        c.addEventListener('click', ()=>{
-          chips.forEach(x=>x.classList.remove('active'));
-          c.classList.add('active');
-          setRange(c.dataset.range);
-        });
-      });
 
-      // Category chips demo filter
-      const catChips = document.querySelectorAll('.chip[data-cat]');
-      const dealRows = document.querySelectorAll('.deal-row[data-cat]');
-      catChips.forEach(ch=>{
-        ch.addEventListener('click', ()=>{
-          catChips.forEach(x=>x.classList.remove('active'));
-          ch.classList.add('active');
-          const cat = ch.dataset.cat;
-          dealRows.forEach(row=>{
-            if (cat==='all' || row.dataset.cat===cat) row.style.display='';
-            else row.style.display='none';
-          });
-        });
-      });
-    })();
+      statusEl.textContent = `Searching for stores within ${radius} miles of ${zip}…`;
+      const matches = MOCK_STORES.filter(s => zipLooksClose(s.zip, zip, radius));
+      renderRows(matches);
+      statusEl.textContent = `Showing ${matches.length} result${matches.length===1?"":"s"} within ${radius} miles of ${zip}.`;
+    });
   </script>
 </body>
 </html>
