@@ -1,0 +1,23 @@
+[
+  {
+    "id": "fish_ne",
+    "name": "New England Fish",
+    "cards": [
+      { "key": "cod",  "label": "Atlantic Cod",  "emoji": "🐟", "fact": "Cod shaped early New England trade." },
+      { "key": "bass", "label": "Striped Bass",  "emoji": "🐠", "fact": "Striped bass migrate seasonally along the coast." },
+      { "key": "tuna", "label": "Bluefin Tuna",  "emoji": "🐟", "fact": "Bluefin tuna can hit ~40 mph." },
+      { "key": "fluke","label": "Fluke",         "emoji": "🐡", "fact": "A flatfish often called summer flounder." }
+    ]
+  },
+  {
+    "id": "owls_sw",
+    "name": "Southwest Owls",
+    "cards": [
+      { "key": "gh_owl", "label": "Great Horned Owl", "emoji": "🦉", "fact": "Can take prey larger than themselves." },
+      { "key": "elf_owl","label": "Elf Owl",          "emoji": "🦉", "fact": "One of the smallest owls; desert habitats." },
+      { "key": "pygmy",  "label": "Ferruginous Pygmy-Owl", "emoji": "🦉", "fact": "Small, fast, and bold hunters." },
+      { "key": "sa_owl", "label": "Spotted Owl",      "emoji": "🦉", "fact": "Prefers mature forests and canyons." }
+    ]
+  }
+]
+    

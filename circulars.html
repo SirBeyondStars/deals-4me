@@ -1,40 +1,68 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Deals-4Me - Circulars</title>
-  <link rel="stylesheet" href="styles/main.css" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Deals-4Me · Circulars</title>
+
+  <!-- Shared site styles & header/footer loader -->
+  <link rel="stylesheet" href="/theme.css">
+  <script defer src="/theme.js"></script>
+
+  <!-- Page-specific styles -->
+  <style>
+    .flyers-wrap{padding:30px 0}
+    .flyers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+    .flyer-card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,.05)}
+    .flyer-card img{width:100%;height:180px;object-fit:cover;display:block}
+    .flyer-card .info{padding:12px}
+    .flyer-card h3{margin:0 0 4px;font-size:16px}
+    .flyer-card p{margin:0;color:var(--muted);font-size:13px}
+    .flyer-card a{display:inline-block;margin-top:8px;font-weight:600;color:#2563eb}
+  </style>
 </head>
 <body>
-  <header>
-    <h1>🛒 Weekly Circulars</h1>
-    <nav>
-      <a href="index.html">Home</a> |
-      <a href="wallet.html">Wallet</a> |
-      <a href="profile.html">Profile</a> |
-      <a href="notifications.html">Notifications</a>
-    </nav>
-  </header>
-  <main>
-    <section id="savings-tracker">
-      <h2>📈 Your Savings Summary</h2>
-      <p>Estimated Savings This Week: <strong>$12.43</strong></p>
-      <p>Lifetime Savings: <strong>$295.67</strong></p>
-    </section>
+  <!-- Global dark header injects here -->
+  <div id="header"></div>
 
-    <section id="popular-flyers">
-      <h2>🔥 Most Popular Flyers</h2>
-      <ul>
-        <li><a href="https://www.publix.com/savings/weekly-ad" target="_blank">Publix (500 users)</a></li>
-        <li><a href="https://www.walmart.com/store/flyer" target="_blank">Walmart (430 users)</a></li>
-        <li><a href="https://www.target.com/c/weekly-ad/-/N-1vcz0" target="_blank">Target (370 users)</a></li>
-      </ul>
-    </section>
+  <main class="container flyers-wrap">
+    <h1>Weekly Circulars</h1>
+    <p class="muted">Browse the latest flyers from your favorite stores.</p>
+
+    <div class="flyers-grid">
+      <!-- Example flyer -->
+      <div class="flyer-card">
+        <img src="img/flyer-sample1.jpg" alt="Market Basket Flyer">
+        <div class="info">
+          <h3>Market Basket</h3>
+          <p>Valid Aug 25 – Aug 31</p>
+          <a href="#">View Flyer</a>
+        </div>
+      </div>
+
+      <div class="flyer-card">
+        <img src="img/flyer-sample2.jpg" alt="Stop & Shop Flyer">
+        <div class="info">
+          <h3>Stop & Shop</h3>
+          <p>Valid Aug 25 – Aug 31</p>
+          <a href="#">View Flyer</a>
+        </div>
+      </div>
+
+      <div class="flyer-card">
+        <img src="img/flyer-sample3.jpg" alt="Target Flyer">
+        <div class="info">
+          <h3>Target</h3>
+          <p>Valid Aug 25 – Aug 31</p>
+          <a href="#">View Flyer</a>
+        </div>
+      </div>
+
+      <!-- Add more flyers here -->
+    </div>
   </main>
-  <footer>
-    <p>&copy; 2025 Deals-4Me</p>
-  </footer>
+
+  <!-- Global footer injects here -->
+  <div id="footer"></div>
 </body>
 </html>

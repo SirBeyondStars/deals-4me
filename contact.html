@@ -1,18 +1,118 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>About — Deals-4Me</title>
-  <link rel="stylesheet" href="theme.css"/>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Deals-4Me · Contact</title>
+
+  <!-- Shared site styles & header/footer loader -->
+  <link rel="stylesheet" href="/theme.css">
+  <script defer src="/theme.js"></script>
+
+  <style>
+    .wrap{padding:30px 0}
+    .grid{display:grid;grid-template-columns:2fr 1.2fr;gap:16px}
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+    form{display:grid;gap:10px}
+    input, select, textarea{padding:10px;border:1px solid var(--border);border-radius:10px;background:#fff;font:inherit}
+    textarea{min-height:140px;resize:vertical}
+    .btn--primary{background:var(--nav-pill);color:var(--nav-pill-ink);border:1px solid #1e8c67}
+    .muted{color:var(--muted)}
+    .card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px}
+  </style>
 </head>
 <body>
-  <div id="site-toolbar"></div>
-  <main style="max-width:900px;margin:28px auto;padding:0 16px;">
-    <h1>About Deals-4Me</h1>
-    <p>Coming soon…</p>
+  <!-- Global dark header injects here -->
+  <div id="header"></div>
+
+  <main class="container wrap">
+    <section class="hero">
+      <h1>Contact</h1>
+      <p class="muted">Questions, ideas, or issues? Reach out below.</p>
+    </section>
+
+    <div class="grid">
+      <!-- Left: Form -->
+      <section class="panel">
+        <h2 style="margin-top:0">Send a message</h2>
+        <form id="cForm" onsubmit="event.preventDefault(); submitContact();">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div>
+              <label for="name">Name</label>
+              <input id="name" type="text" placeholder="Your name" required>
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input id="email" type="email" placeholder="you@example.com" required>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div>
+              <label for="topic">Topic</label>
+              <select id="topic" required>
+                <option>General</option>
+                <option>Support</option>
+                <option>Suggestions</option>
+                <option>Billing</option>
+                <option>Partnerships</option>
+              </select>
+            </div>
+            <div>
+              <label for="urgency">Urgency</label>
+              <select id="urgency">
+                <option>Normal</option>
+                <option>High</option>
+                <option>Low</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="message">Message</label>
+            <textarea id="message" placeholder="How can we help?" required></textarea>
+          </div>
+
+          <label style="display:inline-flex;align-items:center;gap:8px">
+            <input id="consent" type="checkbox" checked>
+            You can contact me about this request.
+          </label>
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+            <button class="btn btn--primary" type="submit">Send</button>
+            <button class="btn" type="button" onclick="document.getElementById('cForm').reset()">Clear</button>
+          </div>
+
+          <p class="muted" style="margin-top:8px">
+            Demo only — this shows a success alert. We’ll wire it to your backend with Microsoft 365 SMTP tomorrow.
+          </p>
+        </form>
+      </section>
+
+      <!-- Right: Info -->
+      <aside class="card">
+        <h3 style="margin-top:0">Other ways to reach us</h3>
+        <p class="muted">Once your mailboxes are live, list them here:</p>
+        <ul>
+          <li><strong>Email:</strong> support@deals-4me.com</li>
+          <li><strong>Suggestions:</strong> suggestions@deals-4me.com</li>
+        </ul>
+        <h4>Response time</h4>
+        <p class="muted">We aim to reply within 1–2 business days.</p>
+      </aside>
+    </div>
   </main>
-  <div id="site-footer"></div>
-  <script src="includes.js"></script>
+
+  <!-- Global footer injects here -->
+  <div id="footer"></div>
+
+  <script>
+    function submitContact(){
+      // Demo only for Phase 3
+      const name = document.getElementById('name').value.trim();
+      alert(`Thanks, ${name || 'friend'}! Your message has been sent (demo).`);
+      document.getElementById('cForm').reset();
+    }
+  </script>
 </body>
 </html>

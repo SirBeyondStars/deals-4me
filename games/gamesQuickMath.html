@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Deals-4Me · Quick Math</title>
+  <link rel="stylesheet" href="/theme.css">
+  <script defer src="/theme.js"></script>
+  <style>
+    .wrap{padding:30px 0}
+    .panel .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .problem{font:800 36px/1.2 system-ui;margin:10px 0}
+    .result{margin-top:8px;color:var(--muted)}
+    .btn--primary{background:var(--nav-pill);color:var(--nav-pill-ink);border:1px solid #1e8c67}
+    input.answer{padding:10px;border:1px solid var(--border);border-radius:10px;width:140px;font:inherit}
+  </style>
+</head>
+<body>
+  <div id="header"></div>
+
+  <main class="container wrap">
+    <section class="hero" style="margin-bottom:8px">
+      <h1>Quick Math</h1>
+      <p class="muted">Solve as many problems as you can in 60 seconds.</p>
+    </section>
+
+    <section class="panel">
+      <div class="row">
+        <label>Difficulty
+          <select id="difficulty" class="input" style="width:auto;margin-left:6px">
+            <option value="easy">Easy (1–9, +/−)</option>
+            <option value="medium">Medium (2–20, +/−/*)</option>
+            <option value="hard">Hard (5–50, +/−/*)</option>
+          </select>
+        </label>
+        <button id="start" class="btn btn--primary">Start</button>
+        <button id="reset" class="btn">Reset</button>
+        <a class="btn" href="/games/games.html" style="margin-left:auto">Back to Games</a>
+      </div>
+
+      <div class="row" style="margin-top:8px">
+        <div>Time: <strong id="time">60</strong>s</div>
+        <div>Score: <strong id="score">0</strong></div>
+        <div>Streak: <strong id="streak">0</strong></div>
+      </div>
+
+      <div class="problem" id="problem">Press Start</div>
+      <div class="row">
+        <input id="answer" class="answer" type="number" placeholder="Answer" disabled>
+        <button id="submit" class="btn">Submit</button>
+      </div>
+      <div id="result" class="result"></div>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+
+  <script>
+    const $ = id=>document.getElementById(id);
+    let time=60, timer=null, playing=false, score=0, streak=0, current=null;
+
+    function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+    function nextProblem(){
+      const diff = $('difficulty').value;
+      let min, max, ops;
+      if (diff==='easy'){ min=1; max=9; ops=['+','-']; }
+      else if (diff==='medium'){ min=2; max=20; ops=['+','-','*']; }
+      else { min=5; max=50; ops=['+','-','*']; }
+
+      const a = rand(min,max), b = rand(min,max);
+      const op = ops[rand(0,ops.length-1)];
+      let text = `${a} ${op} ${b}`;
+      let ans = eval(text);
+      // keep subtraction non-negative for easier pacing
+      if (op==='-' && ans<0){ return nextProblem(); }
+      current = { text, ans };
+      $('problem').textContent = text;
+      $('answer').value = '';
+      $('answer').focus();
+    }
+
+    function start(){
+      if (playing) return;
+      playing = true;
+      time = 60; score = 0; streak = 0;
+      $('time').textContent = time;
+      $('score').textContent = score;
+      $('streak').textContent = streak;
+      $('result').textContent = '';
+      $('answer').disabled = false;
+      nextProblem();
+      timer = setInterval(()=>{
+        time--;
+        $('time').textContent = time;
+        if (time<=0){ end(); }
+      }, 1000);
+    }
+
+    function end(){
+      playing = false;
+      clearInterval(timer); timer=null;
+      $('answer').disabled = true;
+      $('problem').textContent = `Time! Score: ${score} (Streak best: ${streak})`;
+    }
+
+    function submit(){
+      if (!playing || !current) return;
+      const val = Number($('answer').value);
+      if (val === current.ans){
+        score++; streak++;
+        $('score').textContent = score;
+        $('streak').textContent = streak;
+        $('result').textContent = '✅ Correct!';
+        nextProblem();
+      } else {
+        streak = 0;
+        $('streak').textContent = streak;
+        $('result').textContent = `❌ Nope, it was ${current.ans}`;
+        nextProblem();
+      }
+    }
+
+    $('start').addEventListener('click', start);
+    $('reset').addEventListener('click', ()=>{ playing=false; clearInterval(timer); time=60; score=0; streak=0;
+      $('time').textContent=time; $('score').textContent=score; $('streak').textContent=streak;
+      $('problem').textContent='Press Start'; $('result').textContent=''; $('answer').value=''; $('answer').disabled=true; });
+    $('submit').addEventListener('click', submit);
+    $('answer').addEventListener('keydown', (e)=>{ if (e.key==='Enter') submit(); });
+  </script>
+</body>
+</html>

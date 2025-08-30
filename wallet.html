@@ -1,55 +1,200 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Deals-4Me | Wallet</title>
-  <link rel="stylesheet" href="wallet.css">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Deals-4Me · Smart Wallet</title>
+
+  <!-- Shared site styles & header/footer loader -->
+  <link rel="stylesheet" href="/theme.css">
+  <script defer src="/theme.js"></script>
+
+  <!-- Page-specific styles -->
+  <style>
+    .wallet-wrap{padding:30px 0}
+    .stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:18px}
+    .stat{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 8px 20px rgba(0,0,0,.05)}
+    .stat h4{margin:0 0 6px}
+    .stat .val{font:800 22px/1 system-ui}
+
+    .two-col{display:grid;grid-template-columns:2fr 1.2fr;gap:16px}
+    @media (max-width: 900px){ .two-col{grid-template-columns:1fr} }
+
+    .list{display:grid;gap:10px}
+    .row{display:flex;justify-content:space-between;align-items:center;padding:10px;border:1px solid var(--border);border-radius:12px;background:#fff}
+    .row .meta{display:flex;flex-direction:column}
+    .row .meta small{color:var(--muted)}
+    .row .amt{font-weight:800}
+
+    form.add{display:grid;gap:10px}
+    input, select{padding:10px;border:1px solid var(--border);border-radius:10px;background:#fff;font:inherit}
+    .btn--primary{background:var(--nav-pill);color:var(--nav-pill-ink);border:1px solid #1e8c67}
+    .note{color:var(--muted);font-size:12px;margin-top:8px}
+  </style>
 </head>
 <body>
-  <header>
-    <h1>My Wallet</h1>
-  </header>
-  <main>
-    <div class="wallet-summary">
-      <h2>Wallet Overview</h2>
-      <p>Total Saved: <strong>$87.50</strong></p>
-      <p>Weekly Contributions: <strong>$10.00</strong></p>
-    </div>
+  <!-- Global dark header injects here -->
+  <div id="header"></div>
 
-    <div class="goal-form">
-      <h3>New Savings Goal</h3>
-      <form id="goal-form">
-        <label for="goalName">Goal Name:</label>
-        <input type="text" id="goalName" name="goalName" placeholder="e.g. Birthday Gift">
+  <main class="container wallet-wrap">
+    <h1>Smart Wallet</h1>
+    <p class="muted">Track savings, goals, and purchases. (Demo—no backend yet.)</p>
 
-        <label for="goalAmount">Goal Amount ($):</label>
-        <input type="number" id="goalAmount" name="goalAmount" placeholder="e.g. 50">
+    <!-- Top stats -->
+    <section class="stats">
+      <div class="stat">
+        <h4>Month-to-date Savings</h4>
+        <div class="val" id="stat-saved">$0.00</div>
+        <small class="muted">Coupons + deals applied</small>
+      </div>
+      <div class="stat">
+        <h4>Planned Budget</h4>
+        <div class="val" id="stat-budget">$300.00</div>
+        <small class="muted">You can change this below</small>
+      </div>
+      <div class="stat">
+        <h4>Remaining Budget</h4>
+        <div class="val" id="stat-remaining">$300.00</div>
+        <small class="muted">After tracked purchases</small>
+      </div>
+    </section>
 
-        <label for="weeks">Weeks to Save:</label>
-        <input type="number" id="weeks" name="weeks" placeholder="e.g. 5">
+    <section class="two-col">
+      <!-- Left: Transactions -->
+      <div class="panel">
+        <h2 style="margin-top:0">Recent Purchases</h2>
+        <div id="tx-list" class="list"></div>
+        <p class="note">Tip: Add purchases as you go; we’ll compute savings and budget remaining.</p>
+      </div>
 
-        <button type="submit">Calculate Goal</button>
-      </form>
-      <div id="goal-results" style="margin-top:1rem;"></div>
-    </div>
+      <!-- Right: Add form -->
+      <div class="panel">
+        <h2 style="margin-top:0">Add Purchase</h2>
+        <form class="add" id="add-form" onsubmit="event.preventDefault(); addTx();">
+          <input id="tx-name" type="text" placeholder="Item name (e.g., Milk)" required>
+          <input id="tx-store" type="text" placeholder="Store (e.g., Target)" required>
+          <div style="display:flex;gap:10px">
+            <input id="tx-price" type="number" step="0.01" placeholder="Price paid ($)" required style="flex:1">
+            <input id="tx-regular" type="number" step="0.01" placeholder="Reg. price ($)" style="flex:1">
+          </div>
+          <select id="tx-category">
+            <option value="Grocery">Grocery</option>
+            <option value="Household">Household</option>
+            <option value="Personal">Personal</option>
+            <option value="Other">Other</option>
+          </select>
+          <button class="btn btn--primary" type="submit">Add</button>
+          <button class="btn" type="button" onclick="resetWallet()">Reset (demo)</button>
+        </form>
+
+        <h3 style="margin:16px 0 6px">Budget</h3>
+        <div style="display:flex;gap:10px">
+          <input id="budget" type="number" step="1" value="300" style="flex:1">
+          <button class="btn" onclick="updateBudget()">Update</button>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <script>
-    const form = document.getElementById('goal-form');
-    const results = document.getElementById('goal-results');
+  <!-- Global footer injects here -->
+  <div id="footer"></div>
 
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const goal = form.goalName.value;
-      const amount = parseFloat(form.goalAmount.value);
-      const weeks = parseInt(form.weeks.value);
-      const perWeek = (amount / weeks).toFixed(2);
-      results.innerHTML = `
-        <h4>Goal: ${goal}</h4>
-        <p>You need to save <strong>$${perWeek}</strong> per week for ${weeks} weeks.</p>
-        <progress value="0" max="${amount}" id="progressBar"></progress>
-      `;
-    });
+  <script>
+    // Demo state in localStorage
+    const KEY = 'd4m_wallet_v1';
+    const state = JSON.parse(localStorage.getItem(KEY) || '{"budget":300,"tx":[]}');
+
+    const $ = (id) => document.getElementById(id);
+    const fmt = (n) => `$${Number(n).toFixed(2)}`;
+
+    function save(){
+      localStorage.setItem(KEY, JSON.stringify(state));
+      render();
+    }
+
+    function addTx(){
+      const name = $('tx-name').value.trim();
+      const store= $('tx-store').value.trim();
+      const price= parseFloat($('tx-price').value || 0);
+      const regular = parseFloat($('tx-regular').value || 0);
+      const category = $('tx-category').value;
+
+      if (!name || !store || isNaN(price)) return;
+
+      state.tx.unshift({
+        id: Date.now(),
+        name, store, price, regular: isNaN(regular)? null : regular,
+        category, ts: new Date().toISOString()
+      });
+
+      // clear
+      $('add-form').reset();
+      save();
+    }
+
+    function removeTx(id){
+      const i = state.tx.findIndex(t => t.id === id);
+      if (i >= 0){ state.tx.splice(i,1); save(); }
+    }
+
+    function updateBudget(){
+      const b = parseFloat($('budget').value || 0);
+      state.budget = isNaN(b) ? 0 : b;
+      save();
+    }
+
+    function resetWallet(){
+      localStorage.removeItem(KEY);
+      state.budget = 300;
+      state.tx = [];
+      render();
+    }
+
+    function computeSaved(){
+      // Sum (regular - price) when regular > price
+      return state.tx.reduce((sum,t)=>{
+        if (t.regular && t.regular > t.price) sum += (t.regular - t.price);
+        return sum;
+      }, 0);
+    }
+
+    function computeSpent(){
+      return state.tx.reduce((sum,t)=> sum + (t.price||0), 0);
+    }
+
+    function render(){
+      // Stats
+      const saved = computeSaved();
+      const spent = computeSpent();
+      $('stat-saved').textContent = fmt(saved);
+      $('stat-budget').textContent = fmt(state.budget);
+      $('stat-remaining').textContent = fmt(Math.max(0, state.budget - spent));
+      $('budget').value = state.budget;
+
+      // List
+      const list = $('tx-list');
+      list.innerHTML = '';
+      if (!state.tx.length){
+        list.innerHTML = '<p class="muted" style="margin:0">No purchases yet.</p>';
+        return;
+      }
+      state.tx.forEach(t=>{
+        const div = document.createElement('div');
+        div.className = 'row';
+        div.innerHTML = `
+          <div class="meta">
+            <strong>${t.name}</strong>
+            <small>${t.store} • ${t.category}${t.regular ? ` • Saved ${fmt(t.regular - t.price)}` : ''}</small>
+          </div>
+          <div class="amt">${fmt(t.price)}</div>
+          <button class="btn" aria-label="Remove" onclick="removeTx(${t.id})">✕</button>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    // init
+    render();
   </script>
 </body>
 </html>

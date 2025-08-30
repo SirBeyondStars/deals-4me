@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Artist’s Studio – Paint</title>
+
+  <!-- If you have a shared CSS (e.g., /styles/theme.css), include it: -->
+  <!-- <link rel="stylesheet" href="../styles/theme.css"> -->
+
+  <style>
+    /* Light defaults; your theme.css can override these */
+    body{font:14px system-ui;margin:0;background:#f6f7fb}
+    .wrap{max-width:1100px;margin:24px auto;padding:0 16px}
+    .panel{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 6px 16px rgba(0,0,0,.06);padding:16px}
+    .row{display:flex;gap:20px;align-items:flex-start}
+    .left{flex:1}.right{width:320px}
+    .palette button{width:40px;height:40px;border-radius:12px;border:1px solid #0f172a;font-weight:700;cursor:pointer}
+    .btn{padding:8px 12px;border:1px solid #0f172a;border-radius:10px;background:#fff;cursor:pointer}
+    header.site-header, footer.site-footer{background:#f1f5f9;border-bottom:1px solid #e2e8f0}
+    footer.site-footer{border-top:1px solid #e2e8f0;border-bottom:none}
+    .site-header-inner, .site-footer-inner{max-width:1100px;margin:0 auto;padding:12px 16px}
+  </style>
+</head>
+<body>
+
+  <!-- ===================== HEADER (replace with your real site header) ===================== -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <!-- Replace this block with your site-wide header/navbar markup -->
+      <strong>Deals-4-Me</strong> &nbsp;|&nbsp; <a href="../index.html">Home</a> &nbsp;|&nbsp; <a href="../studio/index.html">Artist’s Studio</a>
+    </div>
+  </header>
+  <!-- ===================== /HEADER ===================== -->
+
+  <main class="wrap">
+    <h1 id="title" style="text-align:center;margin:16px 0 10px">🎨 Paint</h1>
+
+    <div class="row">
+      <!-- LEFT: game -->
+      <section class="left panel">
+        <div id="palette" class="palette" style="display:flex;gap:8px;margin-bottom:12px"></div>
+
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+          <button id="reset" class="btn">Reset</button>
+          <a href="index.html" class="btn">← Back to Gallery</a>
+          <button id="traceToggle" class="btn">🧩 Trace Mode (polygon)</button>
+        </div>
+
+        <div style="position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb">
+          <!-- Base image in grayscale -->
+          <img id="img" alt="Painting"
+               style="width:100%;height:100%;object-fit:cover;filter:grayscale(100%) contrast(1.05)"/>
+
+          <!-- Fills UNDER outlines -->
+          <svg id="fills"
+               style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></svg>
+
+          <!-- Outlines + numbers (ALWAYS on top) -->
+          <svg id="outlines"
+               style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></svg>
+
+          <!-- Invisible click targets -->
+          <svg id="hits"
+               style="position:absolute;inset:0;width:100%;height:100%"></svg>
+        </div>
+
+        <div id="progress" style="margin-top:10px;color:#64748b"></div>
+      </section>
+
+      <!-- RIGHT: info/shop (stub) -->
+      <aside class="right panel">
+        <h3 id="infoTitle" style="margin-top:0"></h3>
+        <p style="color:#475569">Pick a palette number, then click the matching region to reveal color.</p>
+        <div style="display:grid;gap:8px;margin-top:12px">
+          <a id="etsy" href="#" target="_blank" class="btn" style="text-decoration:none;text-align:center;background:#0f172a;color:#fff">🛒 Buy on Etsy</a>
+          <button class="btn" onclick="alert('Canvas checkout placeholder')">Canvas Print</button>
+          <button class="btn" onclick="alert('Poster checkout placeholder')">Poster</button>
+          <button class="btn" onclick="alert('Tip placeholder')">💖 Tip the Artist</button>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- ===================== FOOTER (replace with your real site footer) ===================== -->
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <!-- Replace this block with your site-wide footer markup -->
+      © <span id="year"></span> Deals-4-Me · <a href="../index.html">Home</a>
+    </div>
+  </footer>
+  <!-- ===================== /FOOTER ===================== -->
+
+<script>
+(async function(){
+  // Keep footer year current
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Get painting id from URL (?id=gilPaintingTest). Default to "gilPaintingTest"
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id') || 'gilPaintingTest';
+  const STORAGE = `studio_fills_${id}`;
+  const manifestUrl = `paintings/${id}.json`;
+
+  // Fetch the JSON manifest
+  const data = await fetch(manifestUrl).then(r => {
+    if (!r.ok) throw new Error('Manifest not found: ' + manifestUrl);
+    return r.json();
+  });
+
+  // Title and image
+  document.getElementById('title').textContent = `🎨 ${data.title}`;
+  document.getElementById('infoTitle').textContent = data.title;
+  document.getElementById('img').src = data.image;
+
+  // Create SVGs with correct viewBox
+  const fillsSVG = document.getElementById('fills');
+  const outlinesSVG = document.getElementById('outlines');
+  const hitsSVG = document.getElementById('hits');
+  const progress = document.getElementById('progress');
+
+  const viewBox = data.viewBox || '0 0 1200 675';
+  [fillsSVG, outlinesSVG, hitsSVG].forEach(svg => svg.setAttribute('viewBox', viewBox));
+
+  // Build palette UI
+  const pal = document.getElementById('palette');
+  const palette = data.palette;
+  let selected = Number(Object.keys(palette)[0]); // first color by default
+
+  Object.entries(palette).forEach(([num,col])=>{
+    const b = document.createElement('button');
+    b.textContent = num; b.style.background = col;
+    if (+num === selected) b.style.outline='3px solid #0f172a';
+    b.onclick = () => {
+      selected = +num;
+      [...pal.children].forEach(c=>c.style.outline='');
+      b.style.outline='3px solid #0f172a';
+    };
+    pal.appendChild(b);
+  });
+
+  // Helpers
+  const NS = "http://www.w3.org/2000/svg";
+  function addShape(svg, r, attrs={}){
+    const el = document.createElementNS(NS, r.type);
+    if (r.points) el.setAttribute('points', r.points);
+    if (r.d)      el.setAttribute('d', r.d);
+    if (r.cx)     el.setAttribute('cx', r.cx);
+    if (r.cy)     el.setAttribute('cy', r.cy);
+    if (r.r)      el.setAttribute('r', r.r);
+    for (const [k,v] of Object.entries(attrs)) el.setAttribute(k,v);
+    svg.appendChild(el); return el;
+  }
+  function centroid(r){
+    if (r.type === 'circle') return {x:r.cx, y:r.cy};
+    if (r.points){
+      const pts=r.points.trim().split(/\s+/).map(p=>p.split(',').map(Number));
+      const c=pts.reduce((a,[x,y])=>({x:a.x+x,y:a.y+y}),{x:0,y:0});
+      return {x:c.x/pts.length, y:c.y/pts.length};
+    }
+    return {x:600,y:200}; // fallback
+  }
+
+  // Outlines, numbers, and hit targets
+  data.regions.forEach(r=>{
+    addShape(outlinesSVG, r, { fill:'transparent', stroke:'rgba(0,0,0,.35)', 'stroke-width':2 });
+    const c = centroid(r);
+    const t = document.createElementNS(NS,'text');
+    t.setAttribute('x', c.x); t.setAttribute('y', c.y);
+    t.setAttribute('text-anchor','middle'); t.setAttribute('dominant-baseline','middle');
+    t.setAttribute('style','fill:#fff;paint-order:stroke;stroke:#000;stroke-width:3');
+    t.setAttribute('font-size','28'); t.setAttribute('font-weight','800');
+    t.textContent = r.number;
+    outlinesSVG.appendChild(t);
+
+    addShape(hitsSVG, r, { fill:'transparent', 'data-id':r.id, 'data-num':r.number });
+  });
+
+  // Restore any saved fills
+  const saved = JSON.parse(localStorage.getItem(STORAGE) || '{}');
+  Object.keys(saved).forEach(key => saved[key] && drawFill(key));
+  updateProgress();
+
+  function drawFill(id){
+    const r = data.regions.find(x=>x.id===id); if(!r) return;
+    addShape(fillsSVG, r, { fill: palette[r.number], stroke:'transparent', 'data-id': id });
+  }
+  function updateProgress(){
+    const total = data.regions.length;
+    const filled = Object.values(saved).filter(Boolean).length;
+    progress.textContent = `Progress: ${Math.round(100*filled/total)}% (${filled}/${total})`;
+  }
+
+  // Clicking to fill
+  hitsSVG.addEventListener('click', e=>{
+    const t = e.target; if(!t.dataset) return;
+    const id = t.dataset.id; const need = +t.dataset.num;
+    if (!id || selected !== need) return;
+    if (!saved[id]){ saved[id]=true; localStorage.setItem(STORAGE, JSON.stringify(saved)); drawFill(id); updateProgress(); }
+  });
+
+  // Reset
+  document.getElementById('reset').onclick = ()=>{
+    localStorage.removeItem(STORAGE);
+    while (fillsSVG.firstChild) fillsSVG.removeChild(fillsSVG.firstChild);
+    for (const k of Object.keys(saved)) delete saved[k];
+    updateProgress();
+  };
+
+  // Optional Etsy per painting (add "etsy" field to JSON if you want)
+  if (data.etsy) document.getElementById('etsy').href = data.etsy;
+
+  // ---------- Trace Mode (optional helper to build polygon points) ----------
+  (function(){
+    const toggle = document.getElementById('traceToggle');
+    let tracing = false, pts = [], guide;
+
+    function drawGuide(){
+      if (!guide){
+        guide = document.createElementNS(NS,'polyline');
+        guide.setAttribute('fill','transparent');
+        guide.setAttribute('stroke','rgba(0,0,0,.6)');
+        guide.setAttribute('stroke-dasharray','4 4');
+        guide.setAttribute('stroke-width','2');
+        outlinesSVG.appendChild(guide);
+      }
+      guide.setAttribute('points', pts.map(p=>p.join(',')).join(' '));
+    }
+    function copyPoints(){
+      const str = pts.map(p=>p.join(',')).join(' ');
+      navigator.clipboard.writeText(str).then(()=>alert(
+        "Copied polygon points to clipboard:\n\n"+str+"\n\nPaste into your JSON as the region's \"points\"."
+      ));
+    }
+    toggle.addEventListener('click', ()=>{
+      tracing = !tracing; pts = [];
+      if (guide){ outlinesSVG.removeChild(guide); guide = null; }
+      toggle.textContent = tracing ? "✅ Tracing… (double-click to finish)" : "🧩 Trace Mode (polygon)";
+    });
+    outlinesSVG.addEventListener('click', e=>{
+      if (!tracing) return;
+      const pt = outlinesSVG.createSVGPoint();
+      pt.x = e.clientX; pt.y = e.clientY;
+      const m = outlinesSVG.getScreenCTM().inverse();
+      const p = pt.matrixTransform(m);
+      pts.push([Math.round(p.x), Math.round(p.y)]);
+      drawGuide();
+    });
+    outlinesSVG.addEventListener('dblclick', ()=>{
+      if (!tracing) return;
+      tracing = false; copyPoints();
+      toggle.textContent = "🧩 Trace Mode (polygon)";
+    });
+  })();
+})();
+</script>
+</body>
+</html>

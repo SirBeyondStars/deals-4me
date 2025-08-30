@@ -1,43 +1,70 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Deals-4Me - Profile</title>
-  <link rel="stylesheet" href="styles/main.css"/>
-  <script defer src="scripts/auth-redirect.js"></script>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Deals-4Me · Profile</title>
+
+  <!-- Shared site styles & header/footer loader -->
+  <link rel="stylesheet" href="/theme.css">
+  <script defer src="/theme.js"></script>
+
+  <!-- Page-specific styles -->
+  <style>
+    .profile-wrap{padding:30px 0}
+    .profile-grid{display:grid;grid-template-columns:1fr 2fr;gap:20px}
+    .panel h3{margin-top:0}
+    .avatar{width:90px;height:90px;border-radius:50%;background:#cbd5e1;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700;color:#475569}
+    .info{display:flex;flex-direction:column;gap:6px}
+    .info strong{font-size:16px}
+    .label{color:var(--muted);font-size:13px}
+    form{display:grid;gap:12px;margin-top:10px}
+    input{padding:10px;border:1px solid var(--border);border-radius:10px;font:inherit;background:#fff}
+    .btn--primary{background:var(--nav-pill);color:var(--nav-pill-ink);border:1px solid #1e8c67}
+  </style>
 </head>
 <body>
-  <header>
-    <h1>Your Profile</h1>
-    <nav>
-      <a href="index.html">Home</a> |
-      <a href="wallet.html">Wallet</a> |
-      <a href="circulars.html">Circulars</a> |
-      <a href="chat.html">Chat</a>
-    </nav>
-  </header>
-  <main style="max-width:600px;margin:2rem auto;">
-    <section style="text-align:center;">
-      <h2>Profile Picture</h2>
-      <img id="profile-pic" src="assets/default-profile.png" alt="Profile Picture" width="120" height="120" style="border-radius: 50%; border: 2px solid #ccc;" />
-      <form id="upload-form" enctype="multipart/form-data" style="margin-top:1rem;">
-        <input type="file" id="photo-upload" accept="image/*" />
-        <button type="submit">Upload</button>
-      </form>
-    </section>
-    <section style="margin-top:2rem;">
-      <h2>Edit Profile</h2>
-      <label for="username">Name:</label>
-      <input type="text" id="username" placeholder="Enter your name" /><br/><br/>
-      <label for="location">Zip Code:</label>
-      <input type="text" id="location" placeholder="Zip Code" /><br/><br/>
-      <button>Save Changes</button>
-    </section>
+  <!-- Global dark header injects here -->
+  <div id="header"></div>
+
+  <main class="container profile-wrap">
+    <h1>My Profile</h1>
+    <p class="muted">Manage your account details, preferences, and security settings.</p>
+
+    <div class="profile-grid">
+      <!-- Left panel -->
+      <section class="panel">
+        <div class="avatar">U</div>
+        <div class="info">
+          <strong>Username</strong>
+          <span class="label">you@example.com</span>
+          <span class="label">Member since Jan 2025</span>
+        </div>
+      </section>
+
+      <!-- Right panel -->
+      <section class="panel">
+        <h3>Update Account</h3>
+        <form action="#" method="post" onsubmit="event.preventDefault(); alert('Demo only');">
+          <div>
+            <label for="name">Name</label>
+            <input id="name" type="text" value="User Name">
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" type="email" value="you@example.com">
+          </div>
+          <div>
+            <label for="password">New Password</label>
+            <input id="password" type="password" placeholder="••••••••">
+          </div>
+          <button class="btn btn--primary" type="submit">Save changes</button>
+        </form>
+      </section>
+    </div>
   </main>
-  <footer style="text-align:center;margin-top:2rem;">
-    <p>&copy; 2025 Deals-4Me</p>
-  </footer>
+
+  <!-- Global footer injects here -->
+  <div id="footer"></div>
 </body>
 </html>

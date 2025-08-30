@@ -1,105 +1,87 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Deals-4Me — Sign Up</title>
-  <link rel="stylesheet" href="theme.css"/>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Deals-4Me · Sign Up</title>
+
+  <!-- Shared site styles & header/footer loader -->
+  <link rel="stylesheet" href="/theme.css">
+  <script defer src="/theme.js"></script>
+
+  <!-- Page-specific styles -->
+  <style>
+    .auth-wrap{min-height:calc(100vh - 160px);display:grid;place-items:center;padding:30px 0}
+    .auth{width:100%;max-width:420px}
+    .auth .head{margin-bottom:12px}
+    .auth .sub{color:var(--muted);margin:6px 0 0}
+
+    form{display:grid;gap:10px}
+    label{font-weight:600}
+    input[type="text"], input[type="email"], input[type="password"]{
+      padding:10px;border:1px solid var(--border);border-radius:10px;font:inherit;background:#fff
+    }
+    .actions{display:flex;gap:10px;align-items:center;margin-top:4px}
+    .btn--primary{background:var(--nav-pill);color:var(--nav-pill-ink);border:1px solid #1e8c67}
+    .btn--ghost{border-color:#22324e}
+
+    .oauth{display:grid;gap:10px;margin-top:10px}
+    .oauth .btn{display:flex;align-items:center;justify-content:center;gap:10px}
+    .sep{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--muted)}
+    .sep::before,.sep::after{content:"";flex:1;height:1px;background:var(--border)}
+    .note{color:var(--muted);font-size:12px;margin-top:8px}
+  </style>
 </head>
 <body>
-  <div id="site-toolbar"></div>
+  <!-- Global dark header injects here -->
+  <div id="header"></div>
 
-  <main>
-    <section class="card" style="max-width:420px;margin:24px auto;">
-      <h1>Sign Up</h1>
-      <form id="signupForm" novalidate>
-        <label for="email">Email</label>
-        <input id="email" type="email" autocomplete="email" required />
+  <main class="container auth-wrap">
+    <section class="panel auth">
+      <div class="head">
+        <h1 style="margin:0">Create an Account</h1>
+        <p class="sub">Sign up to start saving and playing.</p>
+      </div>
 
-        <label for="pw">Password</label>
-        <input id="pw" type="password" autocomplete="new-password" required />
+      <form action="#" method="post" onsubmit="event.preventDefault(); alert('Demo only');">
+        <div>
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" placeholder="Your name" required>
+        </div>
 
-        <label for="pw2">Confirm Password</label>
-        <input id="pw2" type="password" autocomplete="new-password" required />
+        <div>
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" required>
+        </div>
 
-        <button class="btn-primary" type="submit" style="width:100%;margin-top:10px;">Sign Up</button>
-        <p class="muted" style="text-align:center;margin-top:8px;">Already have an account? <a href="login.html">Login</a></p>
+        <div>
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" placeholder="••••••••" required>
+        </div>
+
+        <div>
+          <label for="confirm">Confirm Password</label>
+          <input id="confirm" name="confirm" type="password" placeholder="••••••••" required>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn--primary" type="submit">Sign up</button>
+          <a class="btn btn--ghost" href="/login.html">Log in</a>
+        </div>
       </form>
-    </section>
 
-    <section class="card" style="max-width:520px;margin:16px auto;">
-      <h2>Create Your 4-Digit Household PIN</h2>
-      <p class="muted">After verifying your email, set a 4-digit PIN for your household. Everyone will use this PIN with their email to sign in.</p>
+      <div class="sep">or</div>
 
-      <div class="pin-grid" id="pin1" style="display:flex;gap:.5rem;margin:8px 0;">
-        <input class="pin" maxlength="1" inputmode="numeric">
-        <input class="pin" maxlength="1" inputmode="numeric">
-        <input class="pin" maxlength="1" inputmode="numeric">
-        <input class="pin" maxlength="1" inputmode="numeric">
+      <div class="oauth">
+        <button class="btn" onclick="alert('Demo only')">Continue with Google</button>
+        <button class="btn" onclick="alert('Demo only')">Continue with Apple</button>
       </div>
 
-      <p class="muted" style="margin:8px 0 6px;">Confirm PIN</p>
-      <div class="pin-grid" id="pin2" style="display:flex;gap:.5rem;">
-        <input class="pin2" maxlength="1" inputmode="numeric">
-        <input class="pin2" maxlength="1" inputmode="numeric">
-        <input class="pin2" maxlength="1" inputmode="numeric">
-        <input class="pin2" maxlength="1" inputmode="numeric">
-      </div>
-
-      <div class="actions" style="display:flex;gap:.5rem;margin-top:.6rem;">
-        <button class="save" id="savePin" type="button" style="background:#0f172a;color:#fff;border:none;padding:.55rem .9rem;border-radius:.6rem;cursor:pointer;">Save PIN</button>
-        <button class="clear" id="clearPin" type="button" style="background:#e2e8f0;color:#0f172a;border:none;padding:.55rem .9rem;border-radius:.6rem;cursor:pointer;">Clear</button>
-      </div>
-      <p id="pinMsg" class="muted" role="status" style="margin:.5rem 0 0;"></p>
+      <p class="note">This is a demo signup. Connect to your auth provider later.</p>
     </section>
   </main>
 
-  <div id="site-footer"></div>
-  <script src="includes.js"></script>
-  <script>
-    // basic form check
-    document.getElementById('signupForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value.trim();
-      const p1 = document.getElementById('pw').value;
-      const p2 = document.getElementById('pw2').value;
-      if (!email || !p1 || p1 !== p2) return alert('Please enter a valid email and matching passwords.');
-      alert('Sign-up submitted (demo).');
-    });
-
-    // PIN logic
-    (function(){
-      const $ = s => document.querySelector(s);
-      const $$ = s => Array.from(document.querySelectorAll(s));
-      function digits(sel){ return $$(sel).map(i => (i.value||'').replace(/\D/g,'')).join(''); }
-      function clear(sel){ $$(sel).forEach(i => i.value = ''); }
-      function setMsg(el, txt, ok){ el.textContent = txt; el.style.color = ok ? '#16a34a' : '#b91c1c'; }
-
-      $$('.pin, .pin2').forEach(input => {
-        input.addEventListener('input', e => {
-          e.target.value = e.target.value.replace(/\D/g,'').slice(0,1);
-          if (e.target.value && e.target.nextElementSibling) e.target.nextElementSibling.focus();
-        });
-        input.addEventListener('keydown', e => {
-          if (e.key === 'Backspace' && !e.target.value && e.target.previousElementSibling) e.target.previousElementSibling.focus();
-        });
-      });
-
-      const pinMsg = $('#pinMsg');
-      $('#savePin')?.addEventListener('click', () => {
-        const email = ($('#email')?.value || '').trim().toLowerCase();
-        const p1 = digits('#pin1 .pin');
-        const p2 = digits('#pin2 .pin2');
-        if (!email || !email.includes('@')) return setMsg(pinMsg, 'Enter a valid email first.', false);
-        if (p1.length !== 4 || p2.length !== 4) return setMsg(pinMsg, 'PIN must be exactly 4 digits.', false);
-        if (p1 !== p2) return setMsg(pinMsg, 'PINs do not match.', false);
-        if (/^(\d)\1{3}$/.test(p1)) return setMsg(pinMsg, 'Avoid simple PINs like 0000 or 1111.', false);
-        try { localStorage.setItem('d4m_pin_' + email, p1); } catch {}
-        setMsg(pinMsg, 'PIN saved (demo). You can log in now.', true);
-      });
-
-      $('#clearPin')?.addEventListener('click', () => { clear('#pin1 .pin'); clear('#pin2 .pin2'); setMsg(pinMsg, '', true); });
-    })();
-  </script>
+  <!-- Global footer injects here -->
+  <div id="footer"></div>
 </body>
 </html>

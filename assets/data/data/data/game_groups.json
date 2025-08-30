@@ -1,0 +1,10 @@
+[
+  {
+    "id": "group-1",
+    "name": "Group 1",
+    "games": [
+      { "id": "g1", "type": "memory", "deck": "fish_ne"  },
+      { "id": "g2", "type": "memory", "deck": "owls_sw"  }
+    ]
+  }
+]

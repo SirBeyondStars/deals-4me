@@ -1,113 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Deals-4Me — Hub</title>
-  <link rel="stylesheet" href="theme.css" />
-  <style>
-    main { max-width: 980px; margin: 28px auto; padding: 0 16px; }
-    .search-box { display:flex; gap:8px; flex-wrap:wrap; background:#fff; border:1px solid var(--line); border-radius:14px; padding:12px; box-shadow:0 2px 10px rgba(0,0,0,.05); }
-    .search-box input, .search-box select { padding:.7rem .8rem; border:1px solid var(--line); border-radius:12px; font-size:1rem; flex:1 1 180px; }
-    .search-box button { padding:.7rem 1rem; border:none; border-radius:12px; font-weight:600; cursor:pointer; background:var(--brand); color:#0b1b2b; }
-    .results { margin-top:22px; }
-    .table-wrap { background:#fff; border:1px solid var(--line); border-radius:12px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.05); }
-    table { width:100%; border-collapse:collapse; }
-    thead th { background:#f1f5f9; text-align:left; padding:12px; }
-    tbody td { padding:12px; border-top:1px solid #f1f5f9; }
-    .muted { color: var(--muted); }
-    .url a { color:#2563eb; text-decoration:none; }
-    .url a:hover { text-decoration:underline; }
-  </style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Deals-4Me · Deals Hub</title>
+  <link rel="stylesheet" href="theme.css">
+  <script defer src="theme.js"></script>
 </head>
 <body>
-  <div id="site-toolbar"></div>
+  <div id="header"></div>
 
-  <main id="hub">
-    <h1>Find Deals Near You</h1>
-    <form id="searchForm" class="search-box" novalidate>
-      <input id="zipInput" type="text" inputmode="numeric" pattern="\\d{5}" placeholder="Enter ZIP (e.g., 02324)" required />
-      <select id="radiusSelect" aria-label="Search radius">
-        <option value="5">5 miles</option>
-        <option value="10" selected>10 miles</option>
-        <option value="15">15 miles</option>
-        <option value="20">20 miles</option>
-      </select>
-      <button type="submit">Search</button>
-    </form>
+  <main class="container">
+    <section class="hero">
+      <h1>Deals Hub</h1>
+      <p>Your one place for weekly circulars, trending savings, and store highlights.</p>
+    </section>
 
-    <div class="results">
-      <div class="table-wrap">
-        <table id="resultsTable">
-          <thead><tr><th>Store</th><th>City</th><th>ZIP</th><th>Website</th></tr></thead>
-          <tbody><tr><td colspan="4" class="muted" style="text-align:center;">Enter a ZIP to see nearby stores</td></tr></tbody>
-        </table>
-      </div>
-      <div id="status" class="muted" style="margin:10px 4px;"></div>
+    <h2>Get Started</h2>
+    <div class="grid">
+      <a class="card" href="circulars.html">
+        <h3>Browse Circulars</h3>
+        <p>See what’s on sale near you this week.</p>
+        <span class="chip">Flyers</span>
+      </a>
+      <a class="card" href="wallet.html">
+        <h3>Add to Wallet</h3>
+        <p>Track items and set savings goals.</p>
+        <span class="chip">Smart Wallet</span>
+      </a>
+      <a class="card" href="pricing.html">
+        <h3>Upgrade Options</h3>
+        <p>Unlock extra features and family sharing.</p>
+        <span class="chip">Plans</span>
+      </a>
     </div>
+
+    <section class="panel">
+      <h2 style="margin-top:0">This Week’s Highlights</h2>
+      <p class="muted">Tip: connect your location to personalize circulars and store picks.</p>
+    </section>
   </main>
 
-  <div id="site-footer"></div>
-  <script src="includes.js"></script>
-  <script>
-    const MOCK_STORES = [
-      { store_name: "Shaw's", city: "Bridgewater", state: "MA", zip: "02324", url: "https://www.shaws.com" },
-      { store_name: "Stop & Shop", city: "Brockton", state: "MA", zip: "02301", url: "https://stopandshop.com" },
-      { store_name: "Market Basket", city: "Raynham", state: "MA", zip: "02767", url: "https://shopmarketbasket.com" },
-      { store_name: "Target", city: "Stoughton", state: "MA", zip: "02072", url: "https://www.target.com" },
-      { store_name: "Costco", city: "Avon", state: "MA", zip: "02322", url: "https://www.costco.com" }
-    ];
-
-    const form  = document.getElementById("searchForm");
-    const tbody = document.querySelector("#resultsTable tbody");
-    const statusEl = document.getElementById("status");
-
-    function normalizeUrl(u){ if(!u) return ""; let x=String(u).trim(); if(!/^https?:\\/\\//i.test(x)) x="https://"+x; return x; }
-    function domainFromUrl(u){ try { return new URL(normalizeUrl(u)).hostname.replace(/^www\\./,''); } catch { return ""; } }
-    function escapeHtml(s){ return (s||"").replace(/[&<>\"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-    function renderRows(rows) {
-      if (!rows.length) { tbody.innerHTML = `<tr><td colspan="4" class="muted" style="text-align:center;">No stores found.</td></tr>`; return; }
-      tbody.innerHTML = rows.map(r => `
-        <tr>
-          <td><strong>${escapeHtml(r.store_name)}</strong></td>
-          <td>${escapeHtml(r.city || "")}</td>
-          <td>${escapeHtml(r.zip || "")}</td>
-          <td class="url">${r.url ? `<a href="${normalizeUrl(r.url)}" target="_blank" rel="noopener">${escapeHtml(domainFromUrl(r.url))}</a>` : '<span class="muted">—</span>'}</td>
-        </tr>`).join("");
-    }
-
-    function zipLooksClose(a, b, radiusMiles) {
-      if (!a || !b) return false;
-      if (a === b) return true;
-      if (radiusMiles <= 5)  return a.slice(0,3) === b.slice(0,3);
-      if (radiusMiles <= 10) return a.slice(0,2) === b.slice(0,2);
-      return a.slice(0,2) === b.slice(0,2);
-    }
-
-    // remember last search
-    const LS_KEY = "d4m_search";
-    try {
-      const saved = JSON.parse(localStorage.getItem(LS_KEY)||"{}");
-      if (saved.zip) document.getElementById("zipInput").value = saved.zip;
-      if (saved.radius) document.getElementById("radiusSelect").value = String(saved.radius);
-    } catch {}
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const zip = document.getElementById("zipInput").value.trim();
-      const radius = parseInt(document.getElementById("radiusSelect").value,10)||10;
-      localStorage.setItem(LS_KEY, JSON.stringify({zip, radius}));
-
-      if (!/^\\d{5}$/.test(zip)) {
-        statusEl.textContent = "Please enter a valid 5-digit ZIP.";
-        renderRows([]); return;
-      }
-
-      statusEl.textContent = `Searching for stores within ${radius} miles of ${zip}…`;
-      const matches = MOCK_STORES.filter(s => zipLooksClose(s.zip, zip, radius));
-      renderRows(matches);
-      statusEl.textContent = `Showing ${matches.length} result${matches.length===1?"":"s"} within ${radius} miles of ${zip}.`;
-    });
-  </script>
+  <div id="footer"></div>
 </body>
 </html>

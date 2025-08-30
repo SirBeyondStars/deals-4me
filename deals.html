@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stores by ZIP · Deals‑4Me</title>
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/theme.css" />
+  <script defer src="/theme.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header data-inject></header>
+  <main id="main" class="container" style="padding:1.5rem 0;">
+    <h1>Find stores near you</h1>
+    <form id="zip-form" class="card" style="margin:1rem 0;">
+      <div class="grid cols-3">
+        <div>
+          <label for="zip">ZIP code</label>
+          <input id="zip" name="zip" inputmode="numeric" pattern="\\d{5}" required placeholder="02139">
+        </div>
+        <div>
+          <label for="radius">Radius</label>
+          <select id="radius" name="radius">
+            <option value="5">5 miles</option>
+            <option value="10" selected>10 miles</option>
+            <option value="25">25 miles</option>
+          </select>
+        </div>
+        <div style="align-self:end;">
+          <button class="button" type="submit">Search</button>
+        </div>
+      </div>
+      <div id="results-status" aria-live="polite" class="sr-only"></div>
+    </form>
+    <section aria-labelledby="stores-heading">
+      <h2 id="stores-heading">Nearby Stores</h2>
+      <ul id="store-results" role="list" class="grid cols-3"></ul>
+    </section>
+  </main>
+  <footer data-inject></footer>
+  <script>
+  const f = document.getElementById('zip-form');
+  const ul = document.getElementById('store-results');
+  const status = document.getElementById('results-status');
+  f.addEventListener('submit', e => {
+    e.preventDefault();
+    status.textContent = 'Looking up stores…';
+    // TODO: Supabase query by zip/radius
+    setTimeout(()=>{
+      const demo = [
+        { name:'Market Basket', city:'Somerville', zip:'02145' },
+        { name:'Target', city:'Cambridge', zip:'02139' },
+        { name:'Stop & Shop', city:'Medford', zip:'02155' },
+      ];
+      ul.innerHTML = demo.map(s=>`<li class="card"><strong>${s.name}</strong><div class="deal-meta">${s.city} · ${s.zip}</div></li>`).join('');
+      status.textContent = demo.length + ' stores found.';
+    }, 600);
+  });
+  </script>
+</body>
+</html>

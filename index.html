@@ -1,39 +1,47 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Deals-4Me Dashboard</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Deals‑4Me · Save more on groceries</title>
+  <meta name="description" content="Deals‑4Me tracks grocery prices, weekly circulars, and recipes to save you money." />
+  <meta property="og:title" content="Deals‑4Me" />
+  <meta property="og:description" content="Track grocery prices and weekly circulars across your stores." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/theme.css" />
+  <script defer src="/theme.js"></script>
 </head>
 <body>
-  <header>
-    <h1>Welcome to Deals-4Me</h1>
-    <p>Your hub for smart shopping & saving</p>
-  </header>
-  <nav>
-    <a href="#">Wallet</a>
-    <a href="#">Circulars</a>
-    <a href="#">Games</a>
-    <a href="#">Chat</a>
-    <a href="#">Family</a>
-    <a href="#">Upgrade</a>
-    <a href="#">Profile</a>
-  </nav>
-  <main>
-    <h2>Explore Features</h2>
-    <div class="card-container">
-      <div class="card"><h3>Smart Wallet</h3><p>Track savings, budget goals, and rewards.</p></div>
-      <div class="card"><h3>Local Circulars</h3><p>Browse weekly deals from stores near you.</p></div>
-      <div class="card"><h3>Life Games</h3><p>Fun ways to earn points and save more.</p></div>
-      <div class="card"><h3>Live Chat</h3><p>Ask the community questions & share tips.</p></div>
-      <div class="card"><h3>Family Dashboard</h3><p>See what everyone’s saving or tracking.</p></div>
-      <div class="card"><h3>Upgrade Tiers</h3><p>Compare Basic, Gold, and Platinum perks.</p></div>
-      <div class="card"><h3>My Profile</h3><p>Edit preferences and manage location settings.</p></div>
-    </div>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header data-inject></header>
+  <main id="main">
+    <section class="hero">
+      <div class="container grid cols-2">
+        <div>
+          <h1>Find the best local deals — automatically</h1>
+          <p>Compare weekly flyers, track your favorites, and get notified when prices drop.</p>
+          <p>
+            <a class="button" href="/signup.html" aria-label="Get started with Deals-4Me">Get started</a>
+            <a class="button ghost" href="/deals.html">Browse deals</a>
+          </p>
+        </div>
+        <div class="card">
+          <strong>Quick search</strong>
+          <form class="form-row" action="/deals.html" method="get">
+            <label for="q">What are you shopping for?</label>
+            <input id="q" name="q" placeholder="eggs, milk, Cheerios" />
+            <button class="button" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </section>
+    <section class="container grid cols-3">
+      <div class="card"><strong>Track</strong><p>Save items and watch prices across stores.</p></div>
+      <div class="card"><strong>Compare</strong><p>Price per unit so you always pick the best value.</p></div>
+      <div class="card"><strong>Play</strong><p>Earn Life Points with daily games for small rewards.</p></div>
+    </section>
   </main>
-  <footer>
-    <p>&copy; 2025 Deals-4Me | All rights reserved</p>
-  </footer>
+  <footer data-inject></footer>
 </body>
 </html>
