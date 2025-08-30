@@ -2,61 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <title>Deals-4Me • Deals</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Stores by ZIP · Deals‑4Me</title>
-  <link rel="icon" href="/favicon.ico" />
-  <link rel="stylesheet" href="/theme.css" />
-  <script defer src="/theme.js"></script>
+  <link rel="stylesheet" href="styles/styles.css">
+  <style>
+    :root{--muted:#6b7280;--surface:#fff}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 20px 60px}
+    .center-col{max-width:920px;margin:0 auto}
+    .card{background:var(--surface);border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.06);padding:18px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  </style>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <header data-inject></header>
-  <main id="main" class="container" style="padding:1.5rem 0;">
-    <h1>Find stores near you</h1>
-    <form id="zip-form" class="card" style="margin:1rem 0;">
-      <div class="grid cols-3">
-        <div>
-          <label for="zip">ZIP code</label>
-          <input id="zip" name="zip" inputmode="numeric" pattern="\\d{5}" required placeholder="02139">
-        </div>
-        <div>
-          <label for="radius">Radius</label>
-          <select id="radius" name="radius">
-            <option value="5">5 miles</option>
-            <option value="10" selected>10 miles</option>
-            <option value="25">25 miles</option>
-          </select>
-        </div>
-        <div style="align-self:end;">
-          <button class="button" type="submit">Search</button>
-        </div>
-      </div>
-      <div id="results-status" aria-live="polite" class="sr-only"></div>
-    </form>
-    <section aria-labelledby="stores-heading">
-      <h2 id="stores-heading">Nearby Stores</h2>
-      <ul id="store-results" role="list" class="grid cols-3"></ul>
-    </section>
+  <div id="header-placeholder"></div>
+
+  <main class="wrap">
+    <div class="center-col">
+      <h1>Browse Deals</h1>
+      <p style="color:var(--muted)">Results for your quick searches and saved items.</p>
+      <section id="results" class="grid-3" style="margin-top:24px;"></section>
+    </div>
   </main>
-  <footer data-inject></footer>
+
+  <div id="footer-placeholder"></div>
+
   <script>
-  const f = document.getElementById('zip-form');
-  const ul = document.getElementById('store-results');
-  const status = document.getElementById('results-status');
-  f.addEventListener('submit', e => {
-    e.preventDefault();
-    status.textContent = 'Looking up stores…';
-    // TODO: Supabase query by zip/radius
-    setTimeout(()=>{
-      const demo = [
-        { name:'Market Basket', city:'Somerville', zip:'02145' },
-        { name:'Target', city:'Cambridge', zip:'02139' },
-        { name:'Stop & Shop', city:'Medford', zip:'02155' },
-      ];
-      ul.innerHTML = demo.map(s=>`<li class="card"><strong>${s.name}</strong><div class="deal-meta">${s.city} · ${s.zip}</div></li>`).join('');
-      status.textContent = demo.length + ' stores found.';
-    }, 600);
-  });
+    (async () => {
+      const [h,f] = await Promise.all([fetch("header.html").then(r=>r.text()), fetch("footer.html").then(r=>r.text())]);
+      header-placeholder.innerHTML = h; footer-placeholder.innerHTML = f;
+      const { supabase } = await import("./scripts/supabaseClient.js");
+      await import("./scripts/logout.js");
+      const { data:{session} } = await supabase.auth.getSession();
+      document.querySelectorAll(".show-when-logged-in").forEach(el=>el.style.display = session?.user ? "" : "none");
+      document.querySelectorAll(".show-when-logged-out").forEach(el=>el.style.display = session?.user ? "none" : "");
+      const w = document.getElementById("welcome"); if (w && session?.user?.email) w.textContent = `Welcome, ${session.user.email}`;
+
+      const params = new URLSearchParams(location.search);
+      const q = params.get("q");
+      const results = document.getElementById("results");
+      results.innerHTML = `
+        <div class="card" style="grid-column:1/-1;text-align:center">
+          <h3>${q ? `Search results for “${q}”` : "All Deals"}</h3>
+          <p style="color:var(--muted)">Placeholder for flyer data. Hook up API next.</p>
+        </div>`;
+    })();
   </script>
 </body>
 </html>

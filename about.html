@@ -1,18 +1,158 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>About — Deals-4Me</title>
-  <link rel="stylesheet" href="theme.css"/>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Deals-4Me · About & FAQ</title>
+
+  <!-- Shared site styles & header/footer loader -->
+  <link rel="stylesheet" href="/theme.css">
+  <script defer src="/theme.js"></script>
+
+  <!-- Page-specific styles -->
+  <style>
+    .wrap{padding:30px 0}
+    .lead{color:var(--muted);max-width:60ch}
+    .grid{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+    .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+    .stat{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
+    .stat .num{font:800 22px/1 system-ui}
+    .faq{display:grid;gap:10px}
+    details{background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px}
+    details > summary{cursor:pointer;list-style:none;font-weight:600}
+    details > summary::-webkit-details-marker{display:none}
+    details[open]{box-shadow:0 10px 24px rgba(0,0,0,.06)}
+    .pill{display:inline-block;background:#f1f5f9;border:1px solid var(--border);border-radius:999px;padding:4px 8px;font-size:12px}
+    .muted{color:var(--muted)}
+    .checklist{margin:8px 0 0 0;padding:0 0 0 18px}
+    .checklist li{margin:4px 0}
+  </style>
 </head>
 <body>
-  <div id="site-toolbar"></div>
-  <main style="max-width:900px;margin:28px auto;padding:0 16px;">
-    <h1>About Deals-4Me</h1>
-    <p>Coming soon…</p>
+  <!-- Global dark header injects here -->
+  <div id="header"></div>
+
+  <main class="container wrap">
+    <section class="hero">
+      <h1>About Deals-4Me</h1>
+      <p class="lead">
+        Deals-4Me helps families save money with weekly circulars, side-by-side price comparisons, a simple wallet,
+        and a few fun learning games. We’re building this openly, one “room” at a time.
+      </p>
+    </section>
+
+    <div class="grid">
+      <!-- Left column -->
+      <section class="panel">
+        <h2 style="margin-top:0">What we do</h2>
+        <ul class="checklist">
+          <li><strong>Flyers Hub:</strong> browse weekly store flyers in one place and <em>compare overlapping items</em> to spot the best price.</li>
+          <li><strong>Wallet:</strong> track purchases and see savings; Receipts live under Wallet.</li>
+          <li><strong>FLPs (Family Life Points):</strong> planned rewards for helpful actions (e.g., validated receipts).</li>
+          <li><strong>Games:</strong> quick kid-friendly learning (memory, plant builder, quick math).</li>
+          <li><strong>Studio (coming later):</strong> paint-by-numbers with real art and artist support.</li>
+        </ul>
+
+        <h3>How it works (today)</h3>
+        <p class="muted">
+          Phase 3 focuses on a fast, clean front-end. Flyers use a simple data feed; Wallet and Receipts keep data locally
+          in your browser. We’ll add secure accounts and syncing next.
+        </p>
+
+        <h3>Roadmap (next)</h3>
+        <ul class="checklist">
+          <li>Receipt OCR + FLP rewards</li>
+          <li>Store coverage expansion & better item matching</li>
+          <li>Optional accounts (sync across devices)</li>
+          <li>Artist’s Studio (levels & monetization)</li>
+        </ul>
+      </section>
+
+      <!-- Right column -->
+      <aside class="panel">
+        <h2 style="margin-top:0">Quick stats</h2>
+        <div class="stat-grid">
+          <div class="stat">
+            <div class="num">Phase 3</div>
+            <div class="muted">Current build</div>
+          </div>
+          <div class="stat">
+            <div class="num">7</div>
+            <div class="muted">Starter stores</div>
+          </div>
+          <div class="stat">
+            <div class="num">3</div>
+            <div class="muted">Live games</div>
+          </div>
+        </div>
+
+        <h3 style="margin-top:14px">Contact</h3>
+        <p class="muted">
+          For questions or ideas, visit <a href="/contact.html">Contact</a> or send feedback in <a href="/suggestions.html">Suggestions</a>.
+        </p>
+        <p><span class="pill">Open development</span> <span class="pill">Family-first</span> <span class="pill">Privacy-aware</span></p>
+      </aside>
+    </div>
+
+    <section class="panel" style="margin-top:16px">
+      <h2 style="margin-top:0">FAQ</h2>
+      <div class="faq">
+        <details>
+          <summary>Is Deals-4Me free?</summary>
+          <p class="muted">Yes for the basics (flyers, games, wallet). We may add optional paid tiers later for power features.</p>
+        </details>
+
+        <details>
+          <summary>How do the flyer comparisons work?</summary>
+          <p class="muted">
+            You can select any number of flyers. We line up items that appear in 2+ of the selected flyers and highlight the lowest price.
+            Data is demo today and will expand as we add sources.
+          </p>
+        </details>
+
+        <details>
+          <summary>What are FLPs (Family Life Points)?</summary>
+          <p class="muted">
+            FLPs are points for helpful actions (e.g., validated receipts) that unlock perks later. In Phase 3, they’re placeholders.
+          </p>
+        </details>
+
+        <details>
+          <summary>Do you scan receipts?</summary>
+          <p class="muted">
+            Receipt upload is planned. You’ll be able to submit a photo; we’ll parse store/date/items and award FLPs.
+            Everything stays private—only aggregated, anonymized pricing is used to improve comparisons.
+          </p>
+        </details>
+
+        <details>
+          <summary>Do you partner with stores?</summary>
+          <p class="muted">
+            Not required to start. We’ll grow via public flyers and community submissions, then add partnerships as the audience grows.
+          </p>
+        </details>
+
+        <details>
+          <summary>Is my data private?</summary>
+          <p class="muted">
+            Yes. Today, Wallet/Receipts data is stored locally in your browser. When accounts arrive, we’ll document exactly what’s stored and why.
+          </p>
+        </details>
+
+        <details>
+          <summary>Something’s broken—how do I report it?</summary>
+          <p class="muted">
+            Use <a href="/suggestions.html">Suggestions</a> (pick “Bug”) or <a href="/contact.html">Contact</a>. Screenshots help!
+          </p>
+        </details>
+      </div>
+    </section>
   </main>
-  <div id="site-footer"></div>
-  <script src="includes.js"></script>
+
+  <!-- Global footer injects here -->
+  <div id="footer"></div>
+  <script type="module" src="./scripts/logout.js"></script>
+
 </body>
 </html>

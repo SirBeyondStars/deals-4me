@@ -1,290 +1,46 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Deals-4Me · Learning Games</title>
-
-  <!-- Inline CSS so it just works -->
+  <meta charset="utf-8" />
+  <title>Deals-4Me • Games</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles/styles.css">
   <style>
-    :root{
-      --bg:#f6f7fb; --surface:#fff; --ink:#0f172a; --muted:#64748b;
-      --border:#e5e7eb; --brand:#0f172a;
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:14px/1.6 system-ui,-apple-system,Segoe UI,Roboto}
-    a{color:inherit;text-decoration:none}
-    .container{max-width:1100px;margin:0 auto;padding:0 16px}
-
-    /* Header / Footer (minimal; swap with your site includes if you have them) */
-    .site-header{background:#f9fafb;border-bottom:1px solid var(--border)}
-    .header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
-    .brand{font-weight:800}
-    nav a{margin-left:14px;padding:6px 8px;border-radius:8px}
-    nav a:hover{background:#fff;border:1px solid var(--border)}
-    .site-footer{border-top:1px solid var(--border);background:#f9fafb}
-    .footer-inner{padding:16px 0;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
-
-    /* Page */
-    h1{font:800 28px/1.2 system-ui;margin:18px 0}
-    .panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 8px 20px rgba(0,0,0,.05)}
-    .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px}
-    .controls label{display:flex;align-items:center;gap:6px}
-    .btn{padding:8px 12px;border:1px solid var(--brand);border-radius:10px;background:#fff;cursor:pointer}
-    .stat{font-weight:700;margin-left:6px}
-    .muted{color:var(--muted)}
-    .badg{display:inline-block;padding:3px 8px;border:1px solid var(--border);border-radius:999px;font-size:12px;background:#fafafa}
-
-    /* Board + cards */
-    #lg-board{ display:grid; gap:10px; max-width:720px; }
-    /* columns set dynamically via JS */
-
-    .lg-card{ width:90px; height:110px; perspective:800px; cursor:pointer; }
-    .lg-inner{
-      position:relative; width:100%; height:100%;
-      transform-style:preserve-3d; transition:transform .35s ease; border-radius:12px;
-    }
-    .lg-card.is-flipped .lg-inner,
-    .lg-card.is-matched .lg-inner{ transform:rotateY(180deg); }
-
-    .lg-face{
-      position:absolute; inset:0; border:1px solid var(--border); border-radius:12px;
-      display:grid; place-items:center; backface-visibility:hidden;
-    }
-    .lg-front{ background:var(--brand); color:#fff; font-weight:800; }
-    .lg-back{ background:#fff; transform:rotateY(180deg); font-size:42px; }
-
-    /* Disable clicks while resolving mismatch */
-    #lg-board.lg-resolving .lg-card{ pointer-events:none; }
-
-    /* Win banner */
-    .win{
-      margin-top:10px; padding:10px; border:1px dashed #94a3b8; border-radius:12px;
-      background:#f8fafc; display:none;
-    }
+    :root{--muted:#6b7280;--surface:#fff}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 20px 60px}
+    .center-col{max-width:920px;margin:0 auto}
+    .card{background:var(--surface);border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.06);padding:18px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
   </style>
 </head>
 <body>
+  <div id="header-placeholder"></div>
 
-  <!-- Header (swap with your site’s header if desired) -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <div class="brand">Deals-4Me</div>
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="games.html"><strong>Games</strong></a>
-        <a href="studio/index.html">Artist’s Studio</a>
-        <a href="pricing.html">Pricing</a>
-      </nav>
+  <main class="wrap">
+    <div class="center-col">
+      <h1>Play & earn Life Points</h1>
+      <p style="color:var(--muted)">Daily games with small rewards.</p>
+      <section class="grid-3" style="margin-top:24px">
+        <div class="card"><h3>Quick Math</h3><p>Answer in time to win points.</p></div>
+        <div class="card"><h3>Memory Match</h3><p>Flip and match pairs.</p></div>
+        <div class="card"><h3>Plant Builder</h3><p>Build your garden, earn streaks.</p></div>
+      </section>
     </div>
-  </header>
-
-  <main class="container">
-    <h1>Learning Games · Memory Match</h1>
-
-    <section class="panel">
-      <div class="controls">
-        <label>Board
-          <select id="lg-size">
-            <option value="12">12 cards (6 pairs)</option>
-            <option value="16" selected>16 cards (8 pairs)</option>
-            <option value="20">20 cards (10 pairs)</option>
-            <option value="24">24 cards (12 pairs)</option>
-          </select>
-        </label>
-
-        <label>Deck
-          <select id="lg-deck">
-            <option value="nature" selected>Nature</option>
-            <option value="toys">Toys & Fun</option>
-            <option value="food">Food</option>
-          </select>
-        </label>
-
-        <button id="lg-start" class="btn">Start / Restart</button>
-
-        <span class="muted">Moves: <span id="lg-moves" class="stat">0</span></span>
-        <span class="muted">Matches: <span id="lg-matches" class="stat">0</span></span>
-        <span class="muted">Time: <span id="lg-time" class="stat">0:00</span></span>
-        <span class="badg">Best: <span id="lg-best">—</span></span>
-      </div>
-
-      <div id="lg-board"></div>
-
-      <div id="lg-win" class="win">
-        🎉 Nice! You matched everything in <strong id="lg-win-time"></strong> with <strong id="lg-win-moves"></strong> moves.
-      </div>
-    </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <span>© <span id="year"></span> Deals-4Me</span>
-      <span class="muted">Have fun & learn!</span>
-    </div>
-  </footer>
+  <div id="footer-placeholder"></div>
 
-<script>
-(function(){
-  // Footer year
-  document.getElementById('year').textContent = new Date().getFullYear();
-
-  // Decks (emoji). You can swap these for image URLs if you prefer.
-  const DECKS = {
-    nature: ['🦉','🌵','💎','🦀','🪽','🍁','🎲','🌙','⭐','🌻','🍀','🪲'],
-    toys:   ['🧸','🪀','🎲','🧩','🪁','🛼','🎯','🃏','🚂','🪄','🎮','🛴'],
-    food:   ['🍎','🍊','🍇','🍉','🍓','🥐','🍔','🍕','🍪','🍩','🍣','🍰']
-  };
-
-  // Elements
-  const boardEl   = document.getElementById('lg-board');
-  const sizeSel   = document.getElementById('lg-size');
-  const deckSel   = document.getElementById('lg-deck');
-  const startBtn  = document.getElementById('lg-start');
-  const movesEl   = document.getElementById('lg-moves');
-  const matchesEl = document.getElementById('lg-matches');
-  const timeEl    = document.getElementById('lg-time');
-  const winEl     = document.getElementById('lg-win');
-  const winTimeEl = document.getElementById('lg-win-time');
-  const winMovesEl= document.getElementById('lg-win-moves');
-
-  const state = {
-    deck:[], first:null, second:null, lock:false,
-    matches:0, moves:0, t0:null, timer:null
-  };
-
-  const STORAGE_KEY = 'lg_best_v1'; // save best {size,deck,timeSec,moves}
-
-  function bestLabel(){
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return '—';
-    try {
-      const b = JSON.parse(raw);
-      return `${fmtTime(b.timeSec)} · ${b.moves} moves`;
-    } catch { return '—'; }
-  }
-  document.getElementById('lg-best').textContent = bestLabel();
-
-  // Helpers
-  function shuffledPairs(symbols, total){
-    const pairs = total/2;
-    const picks = symbols.slice(0, pairs);
-    const deck  = [...picks, ...picks].map((sym,i)=>({ id:`${i}-${sym}`, sym }));
-    for (let i=deck.length-1;i>0;i--){
-      const j = Math.floor(Math.random()*(i+1));
-      [deck[i], deck[j]] = [deck[j], deck[i]];
-    }
-    return deck;
-  }
-  const colsFor = (n)=> Math.ceil(Math.sqrt(n));
-
-  function fmtTime(sec){
-    const m = Math.floor(sec/60);
-    const s = sec%60;
-    return `${m}:${s.toString().padStart(2,'0')}`;
-  }
-
-  function startTimer(){
-    stopTimer();
-    state.t0 = Date.now();
-    state.timer = setInterval(()=>{
-      const sec = Math.floor((Date.now() - state.t0)/1000);
-      timeEl.textContent = fmtTime(sec);
-    }, 250);
-  }
-  function stopTimer(){ if (state.timer){ clearInterval(state.timer); state.timer=null; } }
-
-  function render(deck){
-    boardEl.innerHTML = '';
-    boardEl.style.gridTemplateColumns = `repeat(${colsFor(deck.length)}, 1fr)`;
-    deck.forEach(card=>{
-      const el = document.createElement('div');
-      el.className = 'lg-card';
-      el.dataset.sym = card.sym;
-      el.innerHTML = `
-        <div class="lg-inner">
-          <div class="lg-face lg-front">🎴</div>
-          <div class="lg-face lg-back">${card.sym}</div>
-        </div>`;
-      el.addEventListener('click', ()=>onFlip(el));
-      boardEl.appendChild(el);
-    });
-  }
-
-  function onFlip(el){
-    if (state.lock) return;
-    if (el.classList.contains('is-flipped') || el.classList.contains('is-matched')) return;
-
-    // start timer on first move
-    if (state.moves === 0 && !state.first && !state.t0) startTimer();
-
-    el.classList.add('is-flipped');
-
-    if (!state.first){ state.first = el; return; }
-    if (state.first === el) return;
-
-    state.second = el;
-    state.moves++; movesEl.textContent = state.moves;
-
-    const a = state.first.dataset.sym, b = state.second.dataset.sym;
-    if (a === b){
-      state.first.classList.add('is-matched');
-      state.second.classList.add('is-matched');
-      state.first = state.second = null;
-      state.matches++; matchesEl.textContent = state.matches;
-
-      // win?
-      if (state.matches === state.deck.length/2){
-        stopTimer();
-        const totalSec = Math.floor((Date.now() - state.t0)/1000);
-        winTimeEl.textContent  = fmtTime(totalSec);
-        winMovesEl.textContent = state.moves;
-        winEl.style.display = 'block';
-
-        // save best if better (lower time, then lower moves)
-        const prev = localStorage.getItem(STORAGE_KEY);
-        let better = false;
-        if (!prev) better = true;
-        else {
-          try {
-            const b = JSON.parse(prev);
-            better = (totalSec < b.timeSec) || (totalSec === b.timeSec && state.moves < b.moves);
-          } catch { better = true; }
-        }
-        if (better){
-          localStorage.setItem(STORAGE_KEY, JSON.stringify({ timeSec: totalSec, moves: state.moves }));
-          document.getElementById('lg-best').textContent = `${fmtTime(totalSec)} · ${state.moves} moves`;
-        }
-      }
-    } else {
-      state.lock = true; boardEl.classList.add('lg-resolving');
-      setTimeout(()=>{
-        state.first.classList.remove('is-flipped');
-        state.second.classList.remove('is-flipped');
-        state.first = state.second = null;
-        state.lock = false; boardEl.classList.remove('lg-resolving');
-      }, 750);
-    }
-  }
-
-  function start(){
-    // reset state
-    stopTimer(); timeEl.textContent = '0:00';
-    state.first = state.second = null; state.lock=false; state.matches=0; state.moves=0; state.t0=null;
-    movesEl.textContent = '0'; matchesEl.textContent = '0'; winEl.style.display = 'none';
-
-    const total   = Number(sizeSel.value) || 16;
-    const deckKey = deckSel.value;
-    const symbols = DECKS[deckKey] || DECKS.nature;
-
-    state.deck = shuffledPairs(symbols, total);
-    render(state.deck);
-  }
-
-  document.getElementById('lg-start').addEventListener('click', start);
-  // initial render
-  start();
-})();
-</script>
+  <script>
+    (async () => {
+      const [h,f] = await Promise.all([fetch("header.html").then(r=>r.text()), fetch("footer.html").then(r=>r.text())]);
+      header-placeholder.innerHTML = h; footer-placeholder.innerHTML = f;
+      const { supabase } = await import("./scripts/supabaseClient.js");
+      await import("./scripts/logout.js");
+      const { data:{session} } = await supabase.auth.getSession();
+      document.querySelectorAll(".show-when-logged-in").forEach(el=>el.style.display = session?.user ? "" : "none");
+      document.querySelectorAll(".show-when-logged-out").forEach(el=>el.style.display = session?.user ? "none" : "");
+      const w = document.getElementById("welcome"); if (w && session?.user?.email) w.textContent = `Welcome, ${session.user.email}`;
+    })();
+  </script>
 </body>
 </html>

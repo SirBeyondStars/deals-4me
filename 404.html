@@ -1,24 +1,37 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Page Title — Deals-4Me</title>
-  <link rel="stylesheet" href="theme.css"/>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Deals-4Me · Page Not Found</title>
+
+  <!-- Shared site styles & header/footer loader -->
+  <link rel="stylesheet" href="/theme.css">
+  <script defer src="/theme.js"></script>
+
+  <style>
+    .wrap{padding:60px 0;text-align:center}
+    .big{font-size:72px;font-weight:800;margin-bottom:10px;color:#d32f2f}
+    .muted{color:var(--muted)}
+    .btn--home{display:inline-block;margin-top:20px;padding:10px 20px;border-radius:10px;
+      background:var(--nav-pill);color:var(--nav-pill-ink);text-decoration:none;font-weight:600}
+    .btn--home:hover{opacity:.9}
+  </style>
 </head>
 <body>
-  <!-- Toolbar -->
-  <div id="site-toolbar"></div>
+  <!-- Global dark header injects here -->
+  <div id="header"></div>
 
-  <!-- Main page content -->
-  <main>
-    <h1>404 Error</h1>
-    <p>Coming soon…</p>
+  <main class="container wrap">
+    <div class="big">404</div>
+    <h1>Oops! Page not found</h1>
+    <p class="muted">The link you followed doesn’t exist or has moved. Let’s get you back on track.</p>
+    <a href="/index.html" class="btn--home">Return to Home</a>
   </main>
 
-  <!-- Footer -->
-  <div id="site-footer"></div>
+  <!-- Global footer injects here -->
+  <div id="footer"></div>
+  <script type="module" src="./scripts/logout.js"></script>
 
-  <script src="includes.js"></script>
 </body>
 </html>

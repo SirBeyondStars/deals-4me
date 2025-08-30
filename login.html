@@ -1,86 +1,69 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Deals-4Me · Login</title>
+  <meta charset="utf-8" />
+  <title>Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="theme.css" />
 
-  <!-- Shared site styles & header/footer loader -->
-  <link rel="stylesheet" href="/theme.css">
-  <script defer src="/theme.js"></script>
-
-  <!-- Page-specific styles -->
   <style>
-    .auth-wrap{min-height:calc(100vh - 160px);display:grid;place-items:center;padding:30px 0}
-    .auth{width:100%;max-width:420px}
-    .auth .head{margin-bottom:12px}
-    .auth .sub{color:var(--muted);margin:6px 0 0}
-
-    form{display:grid;gap:10px}
-    label{font-weight:600}
-    input[type="email"], input[type="password"]{
-      padding:10px;border:1px solid var(--border);border-radius:10px;font:inherit;background:#fff
+    body {
+      font-family: sans-serif;
+      max-width: 480px;
+      margin: 40px auto;
+      padding: 16px;
     }
-    .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .row a{font-weight:600}
-    .actions{display:flex;gap:10px;align-items:center;margin-top:4px}
-    .btn--primary{background:var(--nav-pill);color:var(--nav-pill-ink);border:1px solid #1e8c67}
-    .btn--ghost{border-color:#22324e}
-
-    .oauth{display:grid;gap:10px;margin-top:10px}
-    .oauth .btn{display:flex;align-items:center;justify-content:center;gap:10px}
-    .sep{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--muted)}
-    .sep::before,.sep::after{content:"";flex:1;height:1px;background:var(--border)}
-    .note{color:var(--muted);font-size:12px;margin-top:8px}
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      font-size: 1rem;
+    }
+    button {
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <!-- Global dark header injects here -->
-  <div id="header"></div>
+  <h1>Sign in / Sign up</h1>
 
-  <main class="container auth-wrap">
-    <section class="panel auth">
-      <div class="head">
-        <h1 style="margin:0">Welcome back</h1>
-        <p class="sub">Log in to continue to your dashboard.</p>
-      </div>
+  <input id="email" type="email" placeholder="Email" />
+  <input id="password" type="password" placeholder="Password" />
 
-      <form action="#" method="post" onsubmit="event.preventDefault(); alert('Demo only');">
-        <div>
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" placeholder="you@example.com" required>
-        </div>
+  <button id="signin">Sign in</button>
+  <button id="signup">Create Account</button>
 
-        <div>
-          <label for="password">Password</label>
-          <input id="password" name="password" type="password" placeholder="••••••••" required>
-        </div>
+  <p id="msg"></p>
 
-        <div class="row">
-          <label style="display:inline-flex;align-items:center;gap:8px">
-            <input type="checkbox"> Remember me
-          </label>
-          <a href="/reset.html">Forgot password?</a>
-        </div>
+  <script type="module">
+    import { supabase } from "./scripts/supabaseClient.js";
 
-        <div class="actions">
-          <button class="btn btn--primary" type="submit">Log in</button>
-          <a class="btn btn--ghost" href="/signup.html">Create account</a>
-        </div>
-      </form>
+    const emailEl = document.querySelector("#email");
+    const passEl  = document.querySelector("#password");
+    const msg     = document.querySelector("#msg");
 
-      <div class="sep">or</div>
+    // Handle sign in
+    document.querySelector("#signin").addEventListener("click", async () => {
+      msg.textContent = "Signing in…";
+      const { error } = await supabase.auth.signInWithPassword({
+        email: emailEl.value.trim(),
+        password: passEl.value
+      });
+      msg.textContent = error ? error.message : "Signed in!";
+      if (!error) location.href = "index.html"; // redirect on success
+    });
 
-      <div class="oauth">
-        <button class="btn" onclick="alert('Demo only')">Continue with Google</button>
-        <button class="btn" onclick="alert('Demo only')">Continue with Apple</button>
-      </div>
-
-      <p class="note">This is a demo login. Hook this up to your auth provider later.</p>
-    </section>
-  </main>
-
-  <!-- Global footer injects here -->
-  <div id="footer"></div>
+    // Handle sign up
+    document.querySelector("#signup").addEventListener("click", async () => {
+      msg.textContent = "Creating account…";
+      const { error } = await supabase.auth.signUp({
+        email: emailEl.value.trim(),
+        password: passEl.value
+      });
+      msg.textContent = error
+        ? error.message
+        : "Account created! Check your email to confirm.";
+    });
+  </script>
 </body>
 </html>

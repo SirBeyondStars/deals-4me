@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Deals-4Me · Shopping List</title>
+
+  <link rel="stylesheet" href="/theme.css">
+  <script defer src="/theme.js"></script>
+
+  <style>
+    .wrap{padding:30px 0}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+    .grid{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+    form#addForm{display:grid;grid-template-columns:2fr .8fr .8fr .8fr auto;gap:8px}
+    input, select{padding:10px;border:1px solid var(--border);border-radius:10px;background:#fff;font:inherit}
+    .list{display:grid;gap:8px}
+    .row{display:grid;grid-template-columns:auto 1.4fr .8fr .6fr .6fr auto;gap:8px;align-items:center}
+    .row input[type="text"]{width:100%}
+    .row input[type="number"]{width:100%}
+    .strike{opacity:.6;text-decoration:line-through}
+    .totals{display:flex;gap:16px;flex-wrap:wrap}
+    .muted{color:var(--muted)}
+    .btn--primary{background:var(--nav-pill);color:var(--nav-pill-ink);border:1px solid #1e8c67}
+    .pill{background:#f1f5f9;border:1px solid var(--border);border-radius:999px;padding:4px 8px;font-size:12px}
+  </style>
+</head>
+<body>
+  <div id="header"></div>
+
+  <main class="container wrap">
+    <section class="hero" style="margin-bottom:8px">
+      <h1>Shopping List <span class="pill">Local Save</span></h1>
+      <p class="muted">Plan your trip by store. Check items off as you go; totals update automatically.</p>
+    </section>
+
+    <section class="panel">
+      <div class="toolbar">
+        <select id="filterStore" class="input" style="width:auto">
+          <option value="">All stores</option>
+        </select>
+        <input id="search" class="input" type="search" placeholder="Search items…">
+        <button class="btn" id="clearFilters">Clear filters</button>
+        <span class="muted" style="margin-left:auto">Tip: Add prices to see an estimated total.</span>
+      </div>
+
+      <!-- Add form -->
+      <form id="addForm" onsubmit="event.preventDefault(); addItem();">
+        <input id="item" placeholder="Item (e.g., Milk 1 Gallon)" required>
+        <input id="qty" type="number" step="1" min="1" value="1" placeholder="Qty">
+        <input id="store" placeholder="Store (e.g., Market Basket)">
+        <input id="price" type="number" step="0.01" min="0" placeholder="Price (optional)">
+        <button class="btn btn--primary" type="submit">Add</button>
+      </form>
+
+      <!-- List -->
+      <div class="list" id="list" style="margin-top:12px"></div>
+
+      <!-- Totals -->
+      <div class="totals" style="margin-top:12px">
+        <div>Items: <strong id="count">0</strong></div>
+        <div>Estimated total: <strong id="total">$0.00</strong></div>
+        <div class="muted">(Unchecked items only)</div>
+        <div style="margin-left:auto; display:flex; gap:8px; flex-wrap:wrap">
+          <button class="btn" onclick="exportCSV()">Export CSV</button>
+          <button class="btn" onclick="window.print()">Print</button>
+          <button class="btn" onclick="clearChecked()">Clear checked</button>
+          <button class="btn" onclick="resetAll()">Reset all</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+
+  <script>
+    const KEY='d4m_shopping_list';
+    const $=id=>document.getElementById(id);
+    let items = load();
+
+    function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(items)); }
+
+    function addItem(){
+      const name = $('item').value.trim();
+      const qty = Number($('qty').value || 1);
+      const store = $('store').value.trim();
+      const price = $('price').value ? Number($('price').value) : null;
+      if (!name) return;
+      items.unshift({ id: crypto.randomUUID(), name, qty: qty>0?qty:1, store, price, done:false });
+      save(); $('addForm').reset(); $('qty').value=1;
+      render();
+    }
+
+    function toggle(id){
+      const it = items.find(x=>x.id===id); if (!it) return;
+      it.done = !it.done; save(); render();
+    }
+
+    function editField(id, field, value){
+      const it = items.find(x=>x.id===id); if (!it) return;
+      if (field==='qty') it.qty = Math.max(1, Number(value||1));
+      else if (field==='price') it.price = value===''? null : Math.max(0, Number(value||0));
+      else if (field==='name') it.name = value.trim();
+      else if (field==='store') it.store = value.trim();
+      save();
+      // no full re-render to keep focus; update totals
+      updateTotals();
+      populateStoreFilter();
+    }
+
+    function removeItem(id){
+      items = items.filter(x=>x.id!==id);
+      save(); render();
+    }
+
+    function populateStoreFilter(){
+      const sel = $('filterStore');
+      const prev = sel.value;
+      const stores = Array.from(new Set(items.map(i=>i.store).filter(Boolean))).sort();
+      sel.innerHTML = '<option value="">All stores</option>' + stores.map(s=>`<option>${escapeHTML(s)}</option>`).join('');
+      if ([...sel.options].some(o=>o.value===prev)) sel.value = prev;
+    }
+
+    function render(){
+      const q = $('search').value.trim().toLowerCase();
+      const fStore = $('filterStore').value;
+
+      const listEl = $('list');
+      listEl.innerHTML = '';
+
+      const list = items.filter(it=>{
+        const okQ = !q || (it.name.toLowerCase().includes(q) || (it.store||'').toLowerCase().includes(q));
+        const okS = !fStore || (it.store===fStore);
+        return okQ && okS;
+      });
+
+      if (!list.length){
+        listEl.innerHTML = '<div class="muted">No items. Add something above.</div>';
+      } else {
+        list.forEach(it=>{
+          const row = document.createElement('div');
+          row.className = 'row';
+          row.innerHTML = `
+            <input type="checkbox" ${it.done?'checked':''} aria-label="Mark as bought">
+            <input type="text" value="${escapeAttr(it.name)}" class="${it.done?'strike':''}">
+            <input type="number" min="1" step="1" value="${it.qty}">
+            <input type="text" value="${escapeAttr(it.store||'')}">
+            <input type="number" min="0" step="0.01" value="${it.price??''}" placeholder="Price">
+            <div style="display:flex;gap:6px;justify-content:flex-end">
+              <button class="btn" title="Delete">🗑</button>
+            </div>
+          `;
+          const [cb,name,qty,store,price,actions] = row.children;
+
+          cb.addEventListener('change', ()=>toggle(it.id));
+          name.addEventListener('input', e=>editField(it.id,'name', e.target.value));
+          qty.addEventListener('change', e=>editField(it.id,'qty', e.target.value));
+          store.addEventListener('input', e=>editField(it.id,'store', e.target.value));
+          price.addEventListener('change', e=>editField(it.id,'price', e.target.value));
+          actions.querySelector('button').addEventListener('click', ()=>removeItem(it.id));
+
+          listEl.appendChild(row);
+        });
+      }
+
+      populateStoreFilter();
+      updateTotals();
+    }
+
+    function updateTotals(){
+      const q = $('search').value.trim().toLowerCase();
+      const fStore = $('filterStore').value;
+
+      const visible = items.filter(it=>{
+        const okQ = !q || (it.name.toLowerCase().includes(q) || (it.store||'').toLowerCase().includes(q));
+        const okS = !fStore || (it.store===fStore);
+        return okQ && okS;
+      });
+
+      const unchecked = visible.filter(i=>!i.done);
+      const count = unchecked.reduce((a,i)=>a + (i.qty||1), 0);
+      const total = unchecked.reduce((sum,i)=> sum + (i.price? i.price*(i.qty||1) : 0), 0);
+
+      $('count').textContent = count;
+      $('total').textContent = `$${total.toFixed(2)}`;
+    }
+
+    function clearChecked(){
+      if (!confirm('Remove all checked items?')) return;
+      items = items.filter(i=>!i.done);
+      save(); render();
+    }
+
+    function resetAll(){
+      if (!confirm('Clear the entire list?')) return;
+      items = []; save(); render();
+    }
+
+    function exportCSV(){
+      const header = ['Name','Qty','Store','Price','Done'];
+      const rows = items.map(i=>[
+        csv(i.name),
+        i.qty,
+        csv(i.store||''),
+        i.price??'',
+        i.done?'yes':'no'
+      ].join(','));
+      const blob = new Blob([header.join(',')+'\n'+rows.join('\n')], {type:'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href=url; a.download='shopping-list.csv'; a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function csv(s){ return `"${String(s).replace(/"/g,'""')}"`; }
+    function escapeHTML(s=''){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+    function escapeAttr(s=''){return s.replace(/"/g,'&quot;')}
+
+    $('filterStore').addEventListener('change', render);
+    $('search').addEventListener('input', render);
+    $('clearFilters').addEventListener('click', ()=>{ $('filterStore').value=''; $('search').value=''; render(); });
+
+    // init
+    render();
+  </script>
+  <script type="module" src="./scripts/logout.js"></script>
+
+</body>
+</html>

@@ -1,70 +1,47 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Deals-4Me · Profile</title>
-
-  <!-- Shared site styles & header/footer loader -->
-  <link rel="stylesheet" href="/theme.css">
-  <script defer src="/theme.js"></script>
-
-  <!-- Page-specific styles -->
+  <meta charset="utf-8" />
+  <title>Deals-4Me • Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles/styles.css">
   <style>
-    .profile-wrap{padding:30px 0}
-    .profile-grid{display:grid;grid-template-columns:1fr 2fr;gap:20px}
-    .panel h3{margin-top:0}
-    .avatar{width:90px;height:90px;border-radius:50%;background:#cbd5e1;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700;color:#475569}
-    .info{display:flex;flex-direction:column;gap:6px}
-    .info strong{font-size:16px}
-    .label{color:var(--muted);font-size:13px}
-    form{display:grid;gap:12px;margin-top:10px}
-    input{padding:10px;border:1px solid var(--border);border-radius:10px;font:inherit;background:#fff}
-    .btn--primary{background:var(--nav-pill);color:var(--nav-pill-ink);border:1px solid #1e8c67}
+    :root{--muted:#6b7280;--surface:#fff}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 20px 60px}
+    .center-col{max-width:720px;margin:0 auto}
+    .card{background:var(--surface);border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.06);padding:18px}
+    .row{display:grid;grid-template-columns:1fr 2fr;gap:14px;align-items:center}
   </style>
 </head>
 <body>
-  <!-- Global dark header injects here -->
-  <div id="header"></div>
+  <div id="header-placeholder"></div>
 
-  <main class="container profile-wrap">
-    <h1>My Profile</h1>
-    <p class="muted">Manage your account details, preferences, and security settings.</p>
-
-    <div class="profile-grid">
-      <!-- Left panel -->
-      <section class="panel">
-        <div class="avatar">U</div>
-        <div class="info">
-          <strong>Username</strong>
-          <span class="label">you@example.com</span>
-          <span class="label">Member since Jan 2025</span>
+  <main class="wrap">
+    <div class="center-col">
+      <h1>Your Profile</h1>
+      <section class="card" id="profile-card" style="margin-top:18px">
+        <div class="row">
+          <strong>Email</strong>
+          <span id="profile-email" style="color:var(--muted)"></span>
         </div>
-      </section>
-
-      <!-- Right panel -->
-      <section class="panel">
-        <h3>Update Account</h3>
-        <form action="#" method="post" onsubmit="event.preventDefault(); alert('Demo only');">
-          <div>
-            <label for="name">Name</label>
-            <input id="name" type="text" value="User Name">
-          </div>
-          <div>
-            <label for="email">Email</label>
-            <input id="email" type="email" value="you@example.com">
-          </div>
-          <div>
-            <label for="password">New Password</label>
-            <input id="password" type="password" placeholder="••••••••">
-          </div>
-          <button class="btn btn--primary" type="submit">Save changes</button>
-        </form>
       </section>
     </div>
   </main>
 
-  <!-- Global footer injects here -->
-  <div id="footer"></div>
+  <div id="footer-placeholder"></div>
+
+  <script>
+    (async () => {
+      const [h,f] = await Promise.all([fetch("header.html").then(r=>r.text()), fetch("footer.html").then(r=>r.text())]);
+      header-placeholder.innerHTML = h; footer-placeholder.innerHTML = f;
+      const { supabase } = await import("./scripts/supabaseClient.js");
+      await import("./scripts/logout.js");
+      const { data:{session} } = await supabase.auth.getSession();
+      document.querySelectorAll(".show-when-logged-in").forEach(el=>el.style.display = session?.user ? "" : "none");
+      document.querySelectorAll(".show-when-logged-out").forEach(el=>el.style.display = session?.user ? "none" : "");
+      const w = document.getElementById("welcome"); if (w && session?.user?.email) w.textContent = `Welcome, ${session.user.email}`;
+      const pe = document.getElementById("profile-email"); if (pe) pe.textContent = session?.user?.email ?? "(not signed in)";
+    })();
+  </script>
 </body>
 </html>
