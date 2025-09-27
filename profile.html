@@ -32,15 +32,29 @@
 
   <script>
     (async () => {
-      const [h,f] = await Promise.all([fetch("header.html").then(r=>r.text()), fetch("footer.html").then(r=>r.text())]);
-      header-placeholder.innerHTML = h; footer-placeholder.innerHTML = f;
+      const [h, f] = await Promise.all([
+        fetch("header.html").then(r => r.text()),
+        fetch("footer.html").then(r => r.text())
+      ]);
+      document.getElementById("header-placeholder").innerHTML = h;
+      document.getElementById("footer-placeholder").innerHTML = f;
+
       const { supabase } = await import("./scripts/supabaseClient.js");
       await import("./scripts/logout.js");
-      const { data:{session} } = await supabase.auth.getSession();
-      document.querySelectorAll(".show-when-logged-in").forEach(el=>el.style.display = session?.user ? "" : "none");
-      document.querySelectorAll(".show-when-logged-out").forEach(el=>el.style.display = session?.user ? "none" : "");
-      const w = document.getElementById("welcome"); if (w && session?.user?.email) w.textContent = `Welcome, ${session.user.email}`;
-      const pe = document.getElementById("profile-email"); if (pe) pe.textContent = session?.user?.email ?? "(not signed in)";
+
+      const { data: { session } } = await supabase.auth.getSession();
+      const toggle = (sel, on) => document.querySelectorAll(sel).forEach(el => el.style.display = on ? "" : "none");
+      if (session?.user?.email) {
+        const w = document.getElementById("welcome");
+        if (w) w.textContent = `Welcome, ${session.user.email}`;
+        document.getElementById("profile-email").textContent = session.user.email;
+        toggle(".show-when-logged-in",  true);
+        toggle(".show-when-logged-out", false);
+      } else {
+        document.getElementById("profile-email").textContent = "(not signed in)";
+        toggle(".show-when-logged-in",  false);
+        toggle(".show-when-logged-out", true);
+      }
     })();
   </script>
 </body>

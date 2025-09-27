@@ -1,150 +1,67 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Deals-4Me · Pricing</title>
-
-  <!-- Shared site styles & header/footer loader -->
-  <link rel="stylesheet" href="/theme.css">
-  <script defer src="/theme.js"></script>
-
-  <!-- Page-specific styles -->
+  <meta charset="utf-8" />
+  <title>Deals-4Me • Pricing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles/styles.css">
   <style>
-    .plans{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:28px}
-    .plan{background:#fff;border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:0 8px 20px rgba(0,0,0,.05)}
-    .badge{display:inline-block;font-size:12px;padding:4px 8px;border-radius:999px;border:1px solid var(--border);background:#fafafa;margin-bottom:8px}
-    .price{font-weight:800;font-size:26px;margin:6px 0}
-    .per{font-weight:600;color:var(--muted);font-size:12px;margin-left:6px}
-    .desc{color:var(--muted);margin:6px 0 10px}
-    .features{margin:10px 0 14px;padding-left:18px}
-    .features li{margin:4px 0}
-    .cta{display:flex;gap:10px;flex-wrap:wrap}
-    .cta .btn{border-color:#22324e}
-    .plan--highlight{border-color:#12d18e; box-shadow:0 10px 24px rgba(18,209,142,.15)}
-    .note{color:var(--muted);font-size:12px}
-    .hero .toggle{margin-top:10px}
-    .toggle label{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-weight:600}
-    .toggle input{accent-color:#0f172a}
-    @media (prefers-reduced-motion:no-preference){
-      .plan:hover{transform:translateY(-2px);transition:transform .08s ease}
-    }
+    :root{--muted:#6b7280;--surface:#fff;--brand:#4CAF50;--brand-dark:#3e8e41}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 20px 60px}
+    .center-col{max-width:920px;margin:0 auto}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:var(--surface);border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.06);padding:18px;text-align:center}
+    .price{font-size:2rem;margin:6px 0}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border:0;border-radius:10px;font-weight:600;cursor:pointer;background:var(--brand);color:#fff}
+    .btn:hover{background:var(--brand-dark)}
+    @media (max-width:900px){.grid-3{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-  <!-- Global dark header injects here -->
-  <div id="header"></div>
+  <div id="header-placeholder"></div>
 
-  <main class="container">
-    <section class="hero">
-      <h1>Pricing</h1>
-      <p>Pick the plan that fits your family. Change or cancel anytime.</p>
-      <div class="toggle">
-        <label>
-          <input id="annualToggle" type="checkbox" />
-          Save with annual billing
-        </label>
-      </div>
-    </section>
+  <main class="wrap">
+    <div class="center-col">
+      <h1>Upgrade</h1>
+      <p style="color:var(--muted)">Choose a plan that fits your family.</p>
 
-    <section class="plans">
-      <!-- Basic -->
-      <div class="plan" data-plan="basic">
-        <span class="badge">Starter</span>
-        <h3>Basic</h3>
-        <div class="price">
-          <span class="js-price" data-monthly="0" data-annual="0">$0</span>
-          <span class="per">/ mo</span>
+      <section class="grid-3" style="margin-top:20px">
+        <div class="card">
+          <h3>Free</h3>
+          <div class="price">$0</div>
+          <p class="muted">Basic search & save</p>
+          <button class="btn" type="button">Current Plan</button>
         </div>
-        <p class="desc">Great for getting started with Deals-4Me.</p>
-        <ul class="features">
-          <li>Smart Wallet</li>
-          <li>Local Circulars</li>
-          <li>Community Chat</li>
-        </ul>
-        <div class="cta">
-          <a class="btn" href="/signup.html">Get Started</a>
+        <div class="card">
+          <h3>Plus</h3>
+          <div class="price">$3.99</div>
+          <p class="muted">Price alerts & lists</p>
+          <button class="btn" type="button">Choose Plus</button>
         </div>
-      </div>
-
-      <!-- Gold -->
-      <div class="plan plan--highlight" data-plan="gold">
-        <span class="badge">Most popular</span>
-        <h3>Gold</h3>
-        <div class="price">
-          <span class="js-price" data-monthly="4.99" data-annual="3.99">$4.99</span>
-          <span class="per">/ mo</span>
+        <div class="card">
+          <h3>Family</h3>
+          <div class="price">$6.99</div>
+          <p class="muted">Share with 4 members</p>
+          <button class="btn" type="button">Choose Family</button>
         </div>
-        <p class="desc">More features for families who love to save.</p>
-        <ul class="features">
-          <li>Everything in Basic</li>
-          <li>Family Dashboard</li>
-          <li>Ad-light experience</li>
-          <li>Email support</li>
-        </ul>
-        <div class="cta">
-          <a class="btn" href="/signup.html">Choose Gold</a>
-          <a class="btn" href="/pricing.html#compare">Compare</a>
-        </div>
-      </div>
-
-      <!-- Platinum -->
-      <div class="plan" data-plan="platinum">
-        <span class="badge">For power users</span>
-        <h3>Platinum</h3>
-        <div class="price">
-          <span class="js-price" data-monthly="9.99" data-annual="7.99">$9.99</span>
-          <span class="per">/ mo</span>
-        </div>
-        <p class="desc">Full suite of tools and priority support.</p>
-        <ul class="features">
-          <li>Everything in Gold</li>
-          <li>Advanced analytics</li>
-          <li>Priority support</li>
-          <li>Early access to new features</li>
-        </ul>
-        <div class="cta">
-          <a class="btn" href="/signup.html">Choose Platinum</a>
-          <a class="btn" href="/pricing.html#compare">Compare</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="compare" class="panel">
-      <h2 style="margin-top:0">What’s included</h2>
-      <p class="note">Annual toggle shows the effective monthly rate when billed yearly.</p>
-      <ul>
-        <li><strong>Smart Wallet:</strong> track savings, budget goals, and rewards.</li>
-        <li><strong>Local Circulars:</strong> weekly flyers from nearby stores.</li>
-        <li><strong>Family Dashboard (Gold+):</strong> see shared goals & lists.</li>
-        <li><strong>Analytics (Platinum):</strong> deeper insights and trends.</li>
-      </ul>
-    </section>
+      </section>
+    </div>
   </main>
 
-  <!-- Global footer injects here -->
-  <div id="footer"></div>
+  <div id="footer-placeholder"></div>
 
-  <!-- Small script just for the annual toggle -->
   <script>
-    (function(){
-      const toggle = document.getElementById('annualToggle');
-      const prices = document.querySelectorAll('.js-price');
-      function update(){
-        prices.forEach(el=>{
-          const monthly = parseFloat(el.getAttribute('data-monthly'));
-          const annual  = parseFloat(el.getAttribute('data-annual'));
-          const value = toggle.checked ? annual : monthly;
-          el.textContent = value === 0 ? '$0' : `$${value.toFixed(2)}`;
-        });
-      }
-      if (toggle) {
-        toggle.addEventListener('change', update);
-        update(); // init
-      }
+    (async () => {
+      const [h,f]=await Promise.all([fetch("header.html").then(r=>r.text()),fetch("footer.html").then(r=>r.text())]);
+      document.getElementById("header-placeholder").innerHTML=h;
+      document.getElementById("footer-placeholder").innerHTML=f;
+      const { supabase } = await import("./scripts/supabaseClient.js");
+      await import("./scripts/logout.js");
+      const { data:{session} } = await supabase.auth.getSession();
+      const toggle=(sel,on)=>document.querySelectorAll(sel).forEach(el=>el.style.display=on?"":"none");
+      if(session?.user?.email){const w=document.getElementById("welcome"); if(w) w.textContent=`Welcome, ${session.user.email}`; toggle(".show-when-logged-in",true); toggle(".show-when-logged-out",false);}
+      else{toggle(".show-when-logged-in",false); toggle(".show-when-logged-out",true);}
     })();
   </script>
-  <script type="module" src="./scripts/logout.js"></script>
-
 </body>
 </html>

@@ -1,0 +1,42 @@
+
+/* Scope all tweaks to Flyers page */
+.flyers-page .section { background: transparent !important; border: 0 !important; padding: 0; }
+.flyers-page .page-title, 
+.flyers-page .section-title { margin-bottom: .5rem; }
+
+.flyers-page .form-row { gap: .5rem; flex-wrap: wrap; }
+.flyers-page .input { border: 1px solid #d5d7de; border-radius: .6rem; }
+.flyers-page .btn { border-radius: .6rem; }
+
+.flyers-page #results { margin-top: .75rem; }
+
+/* Softer cards for each banner group */
+.flyers-page .group {
+  background: #fff;
+  border: 1px solid #e8e9ef;
+  border-radius: .8rem;
+  padding: .75rem .9rem;
+  margin: .6rem 0;
+  box-shadow: 0 1px 2px rgba(20,20,20,.04);
+}
+.flyers-page .group + .group { margin-top: .75rem; }
+
+.flyers-page .banner {
+  font-weight: 700;
+  margin: 0 0 .35rem;
+  font-size: 1.02rem;
+}
+
+.flyers-page .addr { margin: .25rem 0 0 1.1rem; padding: 0; list-style: none; }
+.flyers-page .addr li { margin: .22rem 0; }
+
+/* Checkbox alignment */
+.flyers-page .addr input[type="checkbox"] {
+  width: 1rem; height: 1rem; margin: 0 .35rem 0 0;
+  accent-color: #111; /* change to your brand if you want */
+}
+
+/* Divider + messages */
+.flyers-page .divider { height: 1px; background: #ececf3; margin: 1rem 0; }
+.flyers-page .muted { color: #6b7280; }
+.flyers-page .save-msg { margin-left: .5rem; font-size: .95rem; }

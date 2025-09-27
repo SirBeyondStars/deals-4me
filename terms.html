@@ -2,14 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Deals-4Me • About</title>
+  <title>Deals-4Me • FAQ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="styles/styles.css">
   <style>
     :root{--muted:#6b7280;--surface:#fff}
     .wrap{max-width:1100px;margin:0 auto;padding:28px 20px 60px}
     .center-col{max-width:920px;margin:0 auto}
-    .card{background:var(--surface);border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.06);padding:18px}
+    details{background:var(--surface);border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.06);padding:14px;margin:12px 0}
+    summary{font-weight:600;cursor:pointer}
+    p{color:var(--muted)}
   </style>
 </head>
 <body>
@@ -17,16 +19,22 @@
 
   <main class="wrap">
     <div class="center-col">
-      <h1>About Deals-4Me</h1>
-      <section class="card" style="margin-top:18px">
-        <p style="color:var(--muted)">
-          Deals-4Me helps families save on groceries by comparing weekly flyers, tracking prices,
-          and surfacing the best value per unit across stores.
-        </p>
-        <p style="color:var(--muted)">
-          Built for speed and simplicity — no clutter, just the essentials to spend less every week.
-        </p>
-      </section>
+      <h1>Frequently Asked Questions</h1>
+
+      <details open>
+        <summary>How do I find the best price?</summary>
+        <p>Use Quick search on the home page or the Deals page. We’ll soon add unit-price comparisons across stores.</p>
+      </details>
+
+      <details>
+        <summary>How do Life Points work?</summary>
+        <p>Play daily games to earn LP; redeem on future features like family sharing and premium alerts.</p>
+      </details>
+
+      <details>
+        <summary>Do I need an account?</summary>
+        <p>Yes, to save items and sync across devices. Sign up with your email on the login page.</p>
+      </details>
     </div>
   </main>
 

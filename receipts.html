@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Deals-4Me • Wallet</title>
+  <title>Deals-4Me • Receipts</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="styles/styles.css">
   <style>
@@ -10,8 +10,10 @@
     .wrap{max-width:1100px;margin:0 auto;padding:28px 20px 60px}
     .center-col{max-width:920px;margin:0 auto}
     .card{background:var(--surface);border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.06);padding:18px}
-    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-    @media (max-width:900px){.grid-2{grid-template-columns:1fr}}
+    table{width:100%;border-collapse:separate;border-spacing:0 10px}
+    th{text-align:left;color:var(--muted);font-weight:600}
+    td,.th{padding:10px 12px;background:var(--surface)}
+    tr{box-shadow:0 1px 6px rgba(0,0,0,.06);border-radius:10px}
   </style>
 </head>
 <body>
@@ -19,21 +21,22 @@
 
   <main class="wrap">
     <div class="center-col">
-      <h1>My Wallet</h1>
-      <p style="color:var(--muted)">Loyalty cards and Life Points.</p>
+      <h1>Receipts</h1>
+      <p style="color:var(--muted)">Your recent purchases.</p>
 
-      <section class="grid-2" style="margin-top:20px">
-        <div class="card">
-          <h3>Loyalty Cards</h3>
-          <ul id="cards" style="margin:8px 0 0; padding-left:18px; color:var(--muted)">
-            <li>Stop & Shop • #**** 2381</li>
-            <li>Market Basket • #**** 5510</li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3>Life Points</h3>
-          <p style="color:var(--muted)">Current balance: <strong>250 LP</strong></p>
-        </div>
+      <section class="card" style="margin-top:20px">
+        <table>
+          <thead>
+            <tr class="th">
+              <th>Date</th><th>Store</th><th>Total</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="receipts-body">
+            <tr><td>Aug 28</td><td>Market Basket</td><td>$56.21</td><td>Imported</td></tr>
+            <tr><td>Aug 25</td><td>Walmart</td><td>$32.10</td><td>Imported</td></tr>
+            <tr><td>Aug 22</td><td>Stop & Shop</td><td>$18.44</td><td>Pending</td></tr>
+          </tbody>
+        </table>
       </section>
     </div>
   </main>

@@ -6,46 +6,423 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="styles/styles.css">
   <style>
-    :root{--muted:#6b7280;--surface:#fff}
+    :root{--brand:#4CAF50;--brand-dark:#3e8e41;--muted:#6b7280;--bg:#f6f7fb;--surface:#fff;--ring:#93c5fd;--danger:#f44336}
+    html,body{margin:0;padding:0}
+    body{background:var(--bg)}
     .wrap{max-width:1100px;margin:0 auto;padding:28px 20px 60px}
-    .center-col{max-width:920px;margin:0 auto}
-    .card{background:var(--surface);border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.06);padding:18px}
+    .center-col{max-width:980px;margin:0 auto}
+
+    .page-head{margin:8px 0 18px}
+    .page-head h1{margin:0;font-size:2.1rem}
+    .page-head p{margin:6px 0 0;color:var(--muted)}
+
+    .section{margin-top:28px}
+    .section h2{margin:0 0 6px;font-size:1.35rem}
+    .section p{margin:0;color:var(--muted)}
+
+    .card{background:var(--surface);border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.06);padding:18px}
+
+    /* search */
+    .search-panel{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+    .input{width:100%;padding:12px 14px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
+    .input:focus{outline:none;border-color:var(--ring);box-shadow:0 0 0 3px rgba(147,197,253,.35)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border:0;border-radius:12px;font-weight:600;cursor:pointer}
+    .btn--primary{background:var(--brand);color:#fff}.btn--primary:hover{background:var(--brand-dark)}
+    .btn--ghost{background:#f3f4f6}.btn--ghost:hover{background:#e5e7eb}
+    .btn--danger{background:var(--danger);color:#fff}.btn--danger:hover{opacity:.95}
+    .btn-icon{gap:8px;padding:8px 10px;font-weight:600}
+    .btn-icon.is-on{background:#d1fae5;color:#065f46}
+
+    /* cards */
     .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    @media (max-width:980px){.grid-3{grid-template-columns:1fr}}
+    .deal{display:flex;flex-direction:column;gap:8px}
+    .deal h3{margin:0;font-size:1.05rem}
+    .deal p{margin:0;color:var(--muted)}
+    .row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    .pill{font-size:.78rem;padding:4px 8px;border-radius:999px;background:#ecfdf5;color:#14532d}
+    .btn-group{display:flex;gap:8px;flex-wrap:wrap}
+
+    /* list mode */
+    .view-toggle{display:flex;gap:8px;align-items:center}
+    .view-toggle .btn{padding:6px 10px}
+    .view-toggle .btn.is-active{background:#d1fae5;color:#065f46}
+    .scrollbox{border:1px solid #e5e7eb;border-radius:10px;background:#fff;max-height:420px;overflow:auto}
+    .list{display:flex;flex-direction:column}
+    .list-item{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid #e5e7eb}
+    .list-item:last-child{border-bottom:none}
+    .list-item h3{margin:0;font-size:1rem}
+    .list-item p{margin:0;color:var(--muted);font-size:.92rem}
+
+    .empty{color:var(--muted);text-align:center}
   </style>
 </head>
 <body>
+  <!-- shared header -->
   <div id="header-placeholder"></div>
 
   <main class="wrap">
     <div class="center-col">
-      <h1>Browse Deals</h1>
-      <p style="color:var(--muted)">Results for your quick searches and saved items.</p>
-      <section id="results" class="grid-3" style="margin-top:24px;"></section>
+      <header class="page-head">
+        <h1>Browse deals</h1>
+        <p>Results for your searches and saved items.</p>
+      </header>
+
+      <section class="card section">
+        <h2 style="margin-bottom:10px">Search</h2>
+        <div class="search-panel">
+          <input id="q" class="input" placeholder="eggs, milk, Cheerios" />
+          <button id="search" class="btn btn--primary">Search</button>
+        </div>
+        <p id="search-msg" style="color:var(--muted);font-size:.9rem;margin-top:8px"></p>
+      </section>
+
+      <!-- Results -->
+      <section class="section">
+        <div class="row" style="justify-content:space-between;align-items:end;margin-bottom:6px">
+          <h2 style="margin:0">Results</h2>
+          <div class="view-toggle" id="results-toggle">
+            <button class="btn btn--ghost is-active" data-view="card">Card</button>
+            <button class="btn btn--ghost" data-view="list">List</button>
+          </div>
+        </div>
+        <div id="results" class="grid-3"></div>
+      </section>
+
+      <!-- Flyers -->
+      <section class="section">
+        <div class="row" style="justify-content:space-between;align-items:end;margin-bottom:6px">
+          <h2 style="margin:0">Weekly Flyers</h2>
+          <div style="display:flex; gap:10px; align-items:center">
+            <!-- scope toggle -->
+            <div class="view-toggle" id="flyers-scope" style="margin-right:6px">
+              <button class="btn btn--ghost is-active" data-scope="all">All</button>
+              <button class="btn btn--ghost" data-scope="mine">My Flyers</button>
+            </div>
+            <!-- view toggle -->
+            <div class="view-toggle" id="flyers-toggle">
+              <button class="btn btn--ghost is-active" data-view="card">Card</button>
+              <button class="btn btn--ghost" data-view="list">List</button>
+            </div>
+          </div>
+        </div>
+        <p>Flip through this week’s ads from your favorite stores.</p>
+        <div id="flyers" class="grid-3" style="margin-top:12px"></div>
+      </section>
+
+      <!-- Saved -->
+      <section class="section">
+        <div class="row" style="justify-content:space-between;align-items:end;margin-bottom:6px">
+          <h2 style="margin:0">Your Saved Items</h2>
+          <div class="view-toggle" id="saved-toggle">
+            <button class="btn btn--ghost is-active" data-view="card">Card</button>
+            <button class="btn btn--ghost" data-view="list">List</button>
+          </div>
+        </div>
+        <p>Items you’ve bookmarked to watch for price drops.</p>
+        <div id="saved-items" style="margin-top:12px"></div>
+      </section>
     </div>
   </main>
 
+  <!-- shared footer -->
   <div id="footer-placeholder"></div>
 
-  <script>
-    (async () => {
-      const [h,f] = await Promise.all([fetch("header.html").then(r=>r.text()), fetch("footer.html").then(r=>r.text())]);
-      header-placeholder.innerHTML = h; footer-placeholder.innerHTML = f;
-      const { supabase } = await import("./scripts/supabaseClient.js");
-      await import("./scripts/logout.js");
-      const { data:{session} } = await supabase.auth.getSession();
-      document.querySelectorAll(".show-when-logged-in").forEach(el=>el.style.display = session?.user ? "" : "none");
-      document.querySelectorAll(".show-when-logged-out").forEach(el=>el.style.display = session?.user ? "none" : "");
-      const w = document.getElementById("welcome"); if (w && session?.user?.email) w.textContent = `Welcome, ${session.user.email}`;
+  <!-- page logic -->
+  <script type="module">
+    /* Header + footer */
+    const [h,f]=await Promise.all([fetch("header.html").then(r=>r.text()),fetch("footer.html").then(r=>r.text())]);
+    document.getElementById("header-placeholder").innerHTML=h;
+    document.getElementById("footer-placeholder").innerHTML=f;
 
-      const params = new URLSearchParams(location.search);
-      const q = params.get("q");
-      const results = document.getElementById("results");
-      results.innerHTML = `
-        <div class="card" style="grid-column:1/-1;text-align:center">
-          <h3>${q ? `Search results for “${q}”` : "All Deals"}</h3>
-          <p style="color:var(--muted)">Placeholder for flyer data. Hook up API next.</p>
-        </div>`;
-    })();
+    /* Auth + logout */
+    const { supabase } = await import("./scripts/supabaseClient.js");
+    await import("./scripts/logout.js");
+
+    const { data:{session} } = await supabase.auth.getSession();
+    const toggleVis=(sel,on)=>document.querySelectorAll(sel).forEach(el=>el.style.display=on?"":"none");
+    if(session?.user?.email){const w=document.getElementById("welcome"); if(w) w.textContent=`Welcome, ${session.user.email}`; toggleVis(".show-when-logged-in",true); toggleVis(".show-when-logged-out",false);} else {toggleVis(".show-when-logged-in",false); toggleVis(".show-when-logged-out",true);}
+
+    /* ===== Flyers (Supabase) helpers ===== */
+
+    // List flyers; when onlyMine=true, returns follows + pinned/wanted for the user.
+    async function listFlyers({ onlyMine = false } = {}) {
+      const { data: flyers, error } = await supabase
+        .from("flyers")
+        .select("id, title, week_start, week_end, store_id, stores:store_id ( id, name )")
+        .order("week_start", { ascending: false });
+
+      if (error) { console.error("[flyers] list error:", error); return []; }
+      if (!flyers?.length) return [];
+
+      if (!onlyMine) return flyers;
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return [];
+
+      const [followsRes, wantsRes] = await Promise.all([
+        supabase.from("user_store_follows").select("store_id").eq("user_id", user.id),
+        supabase.from("user_flyer_wants").select("flyer_id").eq("user_id", user.id),
+      ]);
+
+      const followSet = new Set((followsRes.data || []).map(x => x.store_id));
+      const wantSet   = new Set((wantsRes.data || []).map(x => x.flyer_id));
+
+      return flyers.filter(f => followSet.has(f.store_id) || wantSet.has(f.id));
+    }
+
+    async function followStore(storeId, on = true) {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      if (on) await supabase.from("user_store_follows").upsert({ user_id: user.id, store_id: storeId });
+      else    await supabase.from("user_store_follows").delete().eq("user_id", user.id).eq("store_id", storeId);
+    }
+
+    async function wantFlyer(flyerId, on = true) {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      if (on) await supabase.from("user_flyer_wants").upsert({ user_id: user.id, flyer_id: flyerId });
+      else    await supabase.from("user_flyer_wants").delete().eq("user_id", user.id).eq("flyer_id", flyerId);
+    }
+
+    async function flyerStatuses(flyerIds = [], storeIds = []) {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return { wants:new Set(), follows:new Set() };
+
+      const [wantsRes, followsRes] = await Promise.all([
+        flyerIds.length
+          ? supabase.from("user_flyer_wants").select("flyer_id").eq("user_id", user.id).in("flyer_id", flyerIds)
+          : Promise.resolve({ data: [] }),
+        storeIds.length
+          ? supabase.from("user_store_follows").select("store_id").eq("user_id", user.id).in("store_id", storeIds)
+          : Promise.resolve({ data: [] }),
+      ]);
+
+      return {
+        wants: new Set((wantsRes.data || []).map(x => x.flyer_id)),
+        follows: new Set((followsRes.data || []).map(x => x.store_id)),
+      };
+    }
+
+    /* ---- Results demo data (still local until API exists) ---- */
+    const params=new URLSearchParams(location.search);
+    const qParam=params.get("q")||"";
+    const resultsData=qParam?[
+      {id:`res-${qParam}-1`,name:`${qParam} — Store A`,price:"$3.49",store:"Store A"},
+      {id:`res-${qParam}-2`,name:`${qParam} — Store B`,price:"$3.19",store:"Store B"},
+      {id:`res-${qParam}-3`,name:`${qParam} — Store C`,price:"$3.79",store:"Store C"},
+    ]:[];
+
+    /* ---- Saved items (Supabase helper optional) ---- */
+    let api=null; try{api=await import("./scripts/savedItems.js")}catch{}
+    const userId=session?.user?.id||"guest";
+    const KEY=`d4m:saved:${userId}`;
+    const lsGet=()=>JSON.parse(localStorage.getItem(KEY)||"[]");
+    const lsSet=v=>localStorage.setItem(KEY,JSON.stringify(v));
+    async function getSaved(){return api?await api.getSavedItems():lsGet()}
+    async function saveItem(i){return api?await api.saveItem(i):(lsSet([...lsGet().filter(x=>x.id!==i.id),i]),true)}
+    async function unsave(id){return api?await api.unsaveItem(id):(lsSet(lsGet().filter(x=>x.id!==id)),true)}
+    async function isSaved(id){if(api)return await api.isSaved(id); return lsGet().some(x=>x.id===id)}
+
+    /* ---- Adaptive renderer ---- */
+    const AUTO_LIST_THRESHOLD=6;
+
+    const actionButtons = (item, from, saved) => {
+      // Base save/unsave
+      const saveBtn = saved
+        ? `<button class="btn btn--danger btn-icon" data-action="unsave" data-id="${item.id}">✕ Remove</button>`
+        : `<button class="btn btn--ghost btn-icon"  data-action="save"   data-id="${item.id}">♥ Save</button>`;
+
+      // Extra actions for Flyers: ⭐ Follow store, 📌 Pin flyer
+      if (from === "flyer") {
+        const followBtn = `<button class="btn btn--ghost btn-icon ${item._followed?'is-on':''}"
+                  data-action="toggle-follow" data-store-id="${item.store_id}"
+                  aria-pressed="${item._followed?'true':'false'}">
+                  ${item._followed ? '⭐ Following' : '☆ Follow'}
+                </button>`;
+        const pinBtn = `<button class="btn btn--ghost btn-icon ${item._wanted?'is-on':''}"
+                  data-action="toggle-want" data-flyer-id="${item.id}"
+                  aria-pressed="${item._wanted?'true':'false'}">
+                  ${item._wanted ? '📌 Pinned' : '📍 Pin'}
+                </button>`;
+        return `<div class="btn-group">${followBtn}${pinBtn}${saveBtn}</div>`;
+      }
+
+      return `<div class="btn-group">${saveBtn}</div>`;
+    };
+
+    const cardMarkup=(item,from="results",saved=false)=>{
+      const tag=from==="flyer"?`<span class="pill">Flyer</span>`:"";
+      return `<div class="card deal" data-card-id="${item.id}">
+        <div class="row"><h3>${item.name}</h3>${tag}</div>
+        <p>${item.price??""}${item.store?" — "+item.store:""}</p>
+        <div class="row">
+          <span style="color:var(--muted)">${item.week??""}</span>
+          ${actionButtons(item, from, saved)}
+        </div>
+      </div>`;
+    };
+
+    const listItemMarkup=(item,from="results",saved=false)=>{
+      const meta=[item.store,item.price,item.week].filter(Boolean).join(" • ");
+      const tag=from==="flyer"?` • <span class="pill" style="font-size:.72rem">Flyer</span>`:"";
+      return `<div class="list-item" data-card-id="${item.id}">
+        <div><h3>${item.name}</h3><p>${meta}${tag}</p></div>
+        ${actionButtons(item, from, saved)}
+      </div>`;
+    };
+
+    function setToggleActive(toggleEl, view){
+      toggleEl?.querySelectorAll('button[data-view]').forEach(b=>{
+        b.classList.toggle('is-active', b.dataset.view===view);
+      });
+    }
+
+    async function renderSection({data,containerId,from,emptyTitle,emptyText,toggleId}){
+      const el=document.getElementById(containerId);
+      const toggleEl=document.getElementById(toggleId);
+      const forced=toggleEl?.dataset.view||null;
+
+      const items=await Promise.all(data.map(async d=>({d,saved:await isSaved(d.id)})));
+      const view=forced || (items.length>AUTO_LIST_THRESHOLD ? 'list' : 'card');
+      setToggleActive(toggleEl, view);
+
+      if(!items.length){
+        el.className='';
+        el.innerHTML=`<div class="card empty" style="text-align:center"><h3>${emptyTitle}</h3><p>${emptyText}</p></div>`;
+        return;
+      }
+
+      if(view==='card'){
+        el.className='grid-3';
+        el.innerHTML=items.map(({d,saved})=>cardMarkup(d,from,saved)).join('');
+      } else {
+        el.className='scrollbox';
+        el.innerHTML=`<div class="list">${items.map(({d,saved})=>listItemMarkup(d,from,saved)).join('')}</div>`;
+      }
+
+      if(toggleEl && !toggleEl.dataset.bound){
+        toggleEl.addEventListener('click',e=>{
+          const b=e.target.closest('button[data-view]'); if(!b) return;
+          toggleEl.dataset.view=b.dataset.view;
+          renderSection({data,containerId,from,emptyTitle,emptyText,toggleId});
+        });
+        toggleEl.dataset.bound='1';
+      }
+    }
+
+    /* ---- Render functions ---- */
+    async function renderResults(){
+      await renderSection({
+        data:resultsData, containerId:"results", from:"results",
+        emptyTitle: qParam ? "No matches" : "No search yet",
+        emptyText:  qParam ? "Try a different search." : "Use the search box above or explore flyers below.",
+        toggleId: "results-toggle"
+      });
+    }
+
+    // Flyers scope (All | My Flyers)
+    let flyersScope='all';
+    async function renderFlyers(){
+      const onlyMine = (flyersScope === 'mine');
+      const flyers = await listFlyers({ onlyMine });
+
+      // Status sets for follow/pin toggles
+      const flyerIds = flyers.map(f => f.id);
+      const storeIds = flyers.map(f => f.store_id);
+      const { wants, follows } = await flyerStatuses(flyerIds, storeIds);
+
+      const items = flyers.map(f => ({
+        id: f.id,
+        store_id: f.store_id,
+        name: f.title || (f.stores?.name ? `${f.stores.name} Weekly Flyer` : "Weekly Flyer"),
+        price: "",
+        store: f.stores?.name || "",
+        week: (f.week_start && f.week_end) ? `${f.week_start}–${f.week_end}` : "",
+        _followed: follows.has(f.store_id),
+        _wanted: wants.has(f.id)
+      }));
+
+      await renderSection({
+        data: items, containerId:"flyers", from:"flyer",
+        emptyTitle: onlyMine ? "No flyers followed or pinned" : "No flyers available",
+        emptyText:  onlyMine ? "Follow a store or pin a flyer to see it here." : "Check back soon.",
+        toggleId: "flyers-toggle"
+      });
+    }
+
+    async function renderSaved(){
+      const raw=await getSaved();
+      const normalized=raw.map(d=>({id:d.item_id||d.id,name:d.name,price:d.price,store:d.store,week:d.week}));
+      await renderSection({
+        data:normalized, containerId:"saved-items", from:"saved",
+        emptyTitle:"No saved items yet", emptyText:"Tap “Save ♥” on any deal to add it here.",
+        toggleId: "saved-toggle"
+      });
+    }
+
+    /* ---- Event wiring ---- */
+
+    // Save/Unsave delegation (works in all sections)
+    function delegate(container){
+      container.addEventListener("click", async e=>{
+        const btn=e.target.closest("button[data-action]"); if(!btn) return;
+
+        // Flyers-specific actions
+        if (btn.dataset.action === "toggle-follow") {
+          const storeId = btn.dataset.storeId;
+          const isOn = btn.classList.contains("is-on");
+          await followStore(storeId, !isOn);
+          await renderFlyers();
+          return;
+        }
+        if (btn.dataset.action === "toggle-want") {
+          const flyerId = btn.dataset.flyerId;
+          const isOn = btn.classList.contains("is-on");
+          await wantFlyer(flyerId, !isOn);
+          await renderFlyers();
+          return;
+        }
+
+        // Generic save/unsave
+        const id=btn.dataset.id;
+        const itemName = btn.closest("[data-card-id]")?.querySelector("h3")?.textContent || id;
+        if(btn.dataset.action==="save") await saveItem({id,name:itemName});
+        else await unsave(id);
+        await Promise.all([renderResults(),renderFlyers(),renderSaved()]);
+      });
+    }
+    delegate(document.getElementById("results"));
+    delegate(document.getElementById("flyers"));
+    delegate(document.getElementById("saved-items"));
+
+    // Flyers scope toggle
+    const flyersScopeEl=document.getElementById("flyers-scope");
+    if(flyersScopeEl && !flyersScopeEl.dataset.bound){
+      flyersScopeEl.addEventListener("click",e=>{
+        const b=e.target.closest("button[data-scope]"); if(!b) return;
+        flyersScope=b.dataset.scope;
+        flyersScopeEl.querySelectorAll("button").forEach(x=>x.classList.toggle("is-active", x===b));
+        renderFlyers();
+      });
+      flyersScopeEl.dataset.bound='1';
+    }
+
+    // Search (navigates to THIS page)
+    const qInput=document.getElementById("q");
+    const searchBtn=document.getElementById("search");
+    const searchMsg=document.getElementById("search-msg");
+    qInput.value=qParam;
+    function goSearch(){
+      const v=qInput.value.trim();
+      if(!v){ searchMsg.textContent="Type something to search."; return; }
+      location.href = `deals.html?q=${encodeURIComponent(v)}`;
+    }
+    searchBtn.addEventListener("click", goSearch);
+    qInput.addEventListener("keydown", e=>{ if(e.key==="Enter") goSearch(); });
+
+    // Initial render
+    await Promise.all([renderResults(),renderFlyers(),renderSaved()]);
   </script>
 </body>
 </html>

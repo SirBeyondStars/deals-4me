@@ -1,82 +1,172 @@
-
-body { margin: 0; font-family: sans-serif; }
-a { color: #007BFF; text-decoration: none; }
-a:hover { text-decoration: underline; }
-
-/* ——— Shared colors (match signup) ——— */
-:root{
-  --ink:#111827;          /* text */
-  --muted:#9ca3af;
-  --brand:#10b981;        /* green like Sign Up button */
-  --header-bg:#ffffff;
-  --footer-bg:#0f172a;    /* dark footer */
-  --footer-ink:#e5e7eb;
+/* Reset browser default spacing */
+html, body {
+  margin: 0;
+  padding: 0;
 }
 
-/* Header / nav */
-.site-header{background:var(--header-bg); border-bottom:1px solid #e5e7eb;}
-.nav-container{max-width:1200px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand{display:inline-flex;align-items:center;gap:10px;white-space:nowrap;text-decoration:none;color:var(--ink);font-weight:700}
-.brand img{height:28px;width:28px;object-fit:contain}
 
-/* Nav links */
-nav ul{margin:0;padding:0;list-style:none;display:flex;gap:16px;align-items:center}
-nav a{display:inline-block;text-decoration:none;color:var(--ink);padding:8px 10px;border-radius:10px;font-weight:500}
-nav a:hover, nav a[aria-current="page"]{background:#f3f4f6}
+/* --- Primary nav alignment + dropdown --- */
+.site-header { position: sticky; top: 0; z-index: 100; }
+.site-header .container { display: flex; align-items: center; justify-content: space-between; }
 
-/* “Pricing” pill matches signup */
-.nav-pill{padding:8px 12px;border-radius:999px;background:var(--brand);color:#fff !important;font-weight:700}
-.nav-pill:hover{filter:brightness(.95)}
-
-/* Footer — force dark like signup */
-.site-footer{background:var(--footer-bg) !important;color:var(--footer-ink) !important;border-top:none}
-.site-footer a{color:var(--footer-ink)}
-.site-footer a:hover{color:#fff;text-decoration:underline}
-.footer-container{max-width:1200px;margin:0 auto;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-
-/* Login card button color to match signup’s green */
-.login-card button[type="submit"]{background:var(--brand)}
-
-/* === FORCE DARK HEADER / TOOLBAR TO MATCH FOOTER === */
-:root{
-  --footer-bg:#0f172a;      /* already used by your footer */
-  --footer-ink:#e5e7eb;
-  --brand:#10b981;          /* your green */
+/* Make the main list a single flat row */
+.nav-links .nav-list {
+  display: flex;
+  align-items: center;       /* keeps everything on the same baseline */
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  flex-wrap: nowrap;
 }
 
-/* Header container */
-.site-header{
-  background:var(--footer-bg) !important;
-  border-bottom:none !important;
+.nav-links .nav-item { position: relative; } /* needed for absolute dropdown */
+.nav-links .nav-link {
+  display: inline-block;
+  padding: 12px 10px;
+  line-height: 1;            /* prevents odd vertical offsets */
+  text-decoration: none;
 }
 
-/* Brand lock-up: keep on one line and centered vertically */
-.nav-container{display:flex;align-items:center;gap:12px}
-.brand{
-  display:inline-flex; align-items:center; gap:10px;
-  color:var(--footer-ink) !important; text-decoration:none;
-  white-space:nowrap; line-height:1;
+/* Dropdown menu: hidden by default, pops over the bar */
+.nav-item.dropdown .dropdown {
+  position: absolute;
+  left: 0;
+  top: 100%;                 /* directly under the parent item */
+  min-width: 180px;
+  display: none;
+  margin: 8px 0 0;
+  padding: 8px;
+  list-style: none;
+  background: #111827;       /* match your dark header */
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  z-index: 1000;
 }
-.brand img{
-  height:28px; width:28px; object-fit:contain;
-  display:block;               /* removes baseline sag */
-}
-
-/* Nav links on dark background */
-.site-header nav a{
-  color:var(--footer-ink) !important;
-  background:transparent !important;
-}
-.site-header nav a:hover,
-.site-header nav a[aria-current="page"]{
-  background:rgba(255,255,255,.08) !important;
-}
-
-/* Pricing pill stays green on dark header */
-.site-header .nav-pill{
-  background:var(--brand) !important;
-  color:#fff !important;
+.nav-item.dropdown .dropdown li a {
+  display: block;
+  padding: 8px 10px;
+  white-space: nowrap;
 }
 
-/* Optional: tighten header height slightly */
-.site-header .nav-container{padding:10px 16px}
+/* Show dropdown on hover (desktop) or when .open is toggled (mobile) */
+.nav-item.dropdown:hover .dropdown,
+.nav-item.dropdown.open .dropdown {
+  display: block;
+}
+
+/* Remove any stray default ul/li spacing that can push items down */
+.nav-links ul, .nav-links li { margin: 0; padding: 0; }
+/* --- Global site header --- */
+.site-header {
+  background: #111827;       /* dark navy/charcoal */
+  color: #fff;
+  padding: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.site-header a {
+  color: #f9fafb;            /* light gray/white links */
+  text-decoration: none;
+}
+.site-header a:hover {
+  color: #22c55e;            /* brand accent on hover */
+}
+
+/* Keep nav flat row aligned */
+.site-header .container.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Optional: make the Logout button stand out */
+.nav-link.pill,
+button#logout {
+  background: #ef4444;
+  color: #fff !important;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+.nav-link.pill:hover,
+button#logout:hover {
+  background: #dc2626;
+}
+/* Ensure header spans edge-to-edge with no white gap */
+.site-header {
+  background: #111827;   /* dark */
+  color: #fff;
+  padding: 0;
+  margin: 0;             /* prevent any accidental margin */
+  border: 0;             /* kill borders */
+}
+
+.site-header .container {
+  margin: 0 auto;
+  padding: 0 20px;
+  max-width: 1200px;     /* keep inner nav constrained */
+}
+
+/* --- Global site footer --- */
+.site-footer {
+  background: #111827;       /* same as header */
+  color: #f9fafb;
+  padding: 20px;
+  text-align: center;
+  font-size: 0.9rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.site-footer a {
+  color: #d1d5db;            /* light gray links */
+  text-decoration: none;
+  margin: 0 8px;
+}
+.site-footer a:hover {
+  color: #22c55e;            /* green accent on hover */
+}
+/* Flyers polish */
+.section { background: transparent; border: 0; padding: 0; }
+.page-title, .section-title { margin-bottom: .5rem; }
+
+.form-row { gap: .5rem; }
+.input { border: 1px solid #d5d7de; border-radius: .6rem; }
+.btn { border-radius: .6rem; }
+
+.results-list,
+#results { margin-top: .75rem; }
+
+/* Groups (store banners) */
+.group {
+  background: #fff;
+  border: 1px solid #e8e9ef;
+  border-radius: .8rem;
+  padding: .75rem .9rem;
+  margin: .6rem 0;
+  box-shadow: 0 1px 2px rgba(20,20,20,.04);
+}
+.group + .group { margin-top: .75rem; }
+
+.banner {
+  font-weight: 700;
+  margin: 0 0 .35rem;
+  font-size: 1.02rem;
+}
+
+/* Address list */
+.addr { margin: .25rem 0 0 0; padding: 0; list-style: none; }
+.addr li { margin: .22rem 0; }
+
+/* Checkbox alignment & look */
+.addr input[type="checkbox"] {
+  width: 1rem; height: 1rem; margin: 0 .35rem 0 0;
+  accent-color: #111; /* use your brand color if you like */
+}
+
+/* Divider & muted text */
+.divider { height: 1px; background: #ececf3; margin: 1rem 0; }
+.muted { color: #6b7280; }
+
+/* Save row */
+#savePicks { border-radius: .6rem; }
+#saveMsg { font-size: .95rem; }
