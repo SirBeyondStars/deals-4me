@@ -124,4 +124,115 @@ function openStoresModal() {
           <div class="muted">${s.addr || ''}</div>
         </div>
         <div class="store-actions"><button class="pill" type="button" aria-label="Move up">⬆</button></div>
-        <div
+        <div class="store-actions"><button class="pill" type="button" aria-label="Move down">⬇</button></div>
+        <div class="store-actions">
+          <button class="pill" type="button" aria-label="Set primary">Primary</button>
+          <button class="pill" type="button" aria-label="Remove">Remove</button>
+        </div>`;
+      const [up, down, primaryBtn, removeBtn] = row.querySelectorAll('button');
+      up.addEventListener('click', () => window.moveStoreUI(s.id, 'up'));
+      down.addEventListener('click', () => window.moveStoreUI(s.id, 'down'));
+      primaryBtn.addEventListener('click', () => window.setPrimaryUI(s.id));
+      removeBtn.addEventListener('click', () => window.removeStoreUI(s.id));
+      list.appendChild(row);
+    });
+  }
+  dlg.showModal();
+}
+
+/* ---------------------------
+   Event wiring
+---------------------------- */
+function wireEvents() {
+  // Radius
+  document.querySelector('#radius')?.addEventListener('change', (e) => {
+    state.radius = Number(e.target.value);
+  });
+
+  // Geolocation
+  document.querySelector('#useLocation')?.addEventListener('click', () => {
+    if (!navigator.geolocation) {
+      alert('Geolocation not supported.');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        state.geo = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      },
+      () => alert('Could not get your location.')
+    );
+  });
+
+  // ZIP “Go” arrow button + form submit (Enter)
+  document.querySelector('#goFindStores')?.addEventListener('click', triggerFindStores);
+  document.querySelector('#storeFinderForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    triggerFindStores();
+  });
+
+  // Manage stores modal
+  document.querySelector('#manageStores')?.addEventListener('click', () => openStoresModal());
+
+  // Tabs
+  document.querySelectorAll('.tabs .tab').forEach((tab) => {
+    tab.addEventListener('click', () => selectTab(tab.dataset.tab));
+  });
+  tabsKeyboardNav();
+
+  // Flyer category pills
+  document.querySelectorAll('#flyerCats .pill').forEach((pill) => {
+    pill.addEventListener('click', () => renderFlyers(pill.dataset.cat));
+  });
+
+  // Shopping list actions
+  document.querySelector('#exportList')?.addEventListener('click', exportCSV);
+  document.querySelector('#clearList')?.addEventListener('click', clearList);
+  document.querySelector('#printList')?.addEventListener('click', printList);
+
+  // Quick search (debounced) + Enter
+  const doSearch = debounce((q) => {
+    renderFlyers(null, q || null);
+  }, 500);
+  document.querySelector('#quickQuery')?.addEventListener('input', (e) =>
+    doSearch(e.currentTarget.value.trim())
+  );
+  document.querySelector('#quickQuery')?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      renderFlyers(null, e.currentTarget.value.trim() || null);
+    }
+  });
+}
+
+/* ---------------------------
+   Init
+---------------------------- */
+function init() {
+  renderYear();
+  initStores();
+  renderShopping();
+  renderFlyers();
+  setupSticky();
+}
+
+// expose for other modules & inline callbacks
+window.selectTabUI = selectTab;
+window.openStoresModal = openStoresModal;
+window.setPrimaryUI = (id) => {
+  setPrimary(id);
+  openStoresModal();
+};
+window.removeStoreUI = (id) => {
+  removeStore(id);
+  openStoresModal();
+};
+window.moveStoreUI = (id, dir) => {
+  moveStore(id, dir);
+  openStoresModal();
+};
+
+// Kickoff
+window.addEventListener('DOMContentLoaded', () => {
+  wireEvents();
+  init();
+});
