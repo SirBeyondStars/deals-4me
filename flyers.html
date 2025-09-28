@@ -1,103 +1,119 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Flyers – Find Stores & Submit Missing Ones</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- Page-scoped styles (light, modern, not boxy) -->
-  <style>
-    :root {
-      --bg: #f7f7f9;
-      --card: #ffffff;
-      --ink: #111;
-      --muted: #6b7280;
-      --line: #e9eaf0;
-      --accent: #111;   /* change to your brand */
-      --radius: 12px;
-    }
-    body.flyers-page { margin:0; color:var(--ink); background:var(--bg); font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; }
-    .wrap { max-width: 980px; margin: 32px auto; padding: 0 16px; }
-
-    h1 { font-size: 1.6rem; margin: 0 0 12px; }
-    h2 { font-size: 1.2rem; margin: 0 0 10px; }
-
-    .card { background:var(--card); border:1px solid var(--line); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 2px rgba(10,10,10,.04); }
-
-    /* Form controls */
-    .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
-    .stack { display:grid; gap:8px; max-width: 560px; }
-    .input, input[type="text"], input[type="email"], input[type="url"], textarea {
-      width:100%; padding:.6rem .7rem; border:1px solid #d5d7de; border-radius:10px; background:#fff; font-size:1rem;
-    }
-    textarea { min-height: 90px; resize: vertical; }
-    .btn { background:var(--accent); color:#fff; border:0; border-radius:10px; padding:.55rem .9rem; font-weight:600; cursor:pointer; }
-    .btn:disabled { opacity:.6; cursor:default; }
-    .muted { color:var(--muted); }
-    .divider { height:1px; background:var(--line); margin: 14px 0; }
-
-    /* Results */
-    #results { margin-top: 10px; }
-    .group { background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin:10px 0; box-shadow:0 1px 2px rgba(20,20,20,.05); }
-    .banner { font-weight:700; margin:0 0 6px; }
-    .addr { list-style:none; margin:6px 0 0 0; padding:0; }
-    .addr li { margin:.22rem 0; }
-    .addr input[type="checkbox"] { width:1rem; height:1rem; margin:0 .35rem 0 0; accent-color:var(--accent); }
-    #saveMsg { margin-left:.5rem; }
-    .error { color:#b00020; }
-    .success { color:#1f7a1f; }
-  </style>
+  <title>Deals-4Me — Weekly Flyers</title>
+  <meta name="description" content="Browse weekly flyers, compare sizes, and request custom weights/quantities.">
+  <link rel="stylesheet" href="./css/theme.css" />
+  <link rel="stylesheet" href="./css/home.css" />
+  <link rel="stylesheet" href="./css/flyers.css" />
 </head>
+<body>
+  <header>
+    <div class="container nav" role="navigation" aria-label="Main">
+      <div class="logo">Deals-4Me</div>
+      <nav class="row">
+        <a class="pill" href="./index.html">Home</a>
+        <a class="pill" href="./flyers.html" aria-current="page">Flyers</a>
+      </nav>
+    </div>
+  </header>
 
-<body class="flyers-page">
-  <div class="wrap">
-
-    <!-- Find Stores -->
-    <section class="card">
-      <h1>Find Stores by ZIP</h1>
-      <form id="zipForm" class="row" novalidate>
-        <input id="zip" name="zip" class="input" type="text" inputmode="numeric" maxlength="5"
-               placeholder="ZIP code (e.g., 02324)" required aria-label="ZIP code">
-        <button id="goBtn" type="submit" class="btn">Find stores</button>
-        <span id="msg" class="muted"></span>
-      </form>
-      <div id="results" class="muted">Enter a 5-digit ZIP and press “Find stores”.</div>
+  <main class="container">
+    <section class="page-head">
+      <h1 class="h1">Weekly Flyers</h1>
+      <div class="muted">Deep browse, compare sizes, and add custom-weight items for curbside pickup.</div>
     </section>
 
-    <form id="zipForm" class="row" novalidate>
-  <input id="zip" name="zip" class="input" type="text" inputmode="numeric" maxlength="5"
-         placeholder="ZIP code (e.g., 02324)" required aria-label="ZIP code">
-  <select id="radius" class="input" aria-label="Search radius">
-    <option value="5">5 miles</option>
-    <option value="10" selected>10 miles</option>
-    <option value="20">20 miles</option>
-  </select>
-  <button id="goBtn" type="submit" class="btn">Find stores</button>
-  <span id="msg" class="muted"></span>
-</form>
+    <!-- Controls -->
+    <section class="controls card p1">
+      <div class="row wrap">
+        <div class="control">
+          <label class="muted" for="flySearch">Search</label><br/>
+          <div class="row">
+            <input id="flySearch" class="input" type="search" placeholder="Search products (e.g., Skippy peanut butter, salmon)"/>
+            <button class="btn" id="btnSearch" type="button">Search</button>
+          </div>
+        </div>
 
+        <div class="control">
+          <label class="muted" for="selStore">Store</label><br/>
+          <select id="selStore" class="input select">
+            <option value="all">All saved stores</option>
+          </select>
+        </div>
 
-    <!-- Submit a Store -->
-    <section class="card">
-      <h2>Submit a Store</h2>
-      <form id="storeForm" class="stack" novalidate>
-        <input type="text" id="banner" class="input" placeholder="Store Name (banner)" required />
-        <input type="text" id="street_address" class="input" placeholder="Street Address" required />
-        <input type="text" id="city" class="input" placeholder="City" required />
-        <input type="text" id="state" class="input" placeholder="State (e.g., MA)" maxlength="2" required />
-        <input type="text" id="zip_new" class="input" placeholder="ZIP code (5 digits)" maxlength="5" required />
-        <input type="text" id="phone" class="input" placeholder="Phone (optional)" />
-        <input type="email" id="submitter_email" class="input" placeholder="Your Email (optional)" />
-        <input type="url" id="source_url" class="input" placeholder="Source URL (optional)" />
-        <textarea id="note" class="input" placeholder="Notes (optional)"></textarea>
-        <button type="submit" class="btn">Submit Store</button>
-      </form>
-      <div id="storeMsg" class="muted" style="margin-top:.4rem;"></div>
+        <div class="control">
+          <label class="muted" for="selCat">Category</label><br/>
+          <select id="selCat" class="input select">
+            <option value="all">All</option>
+            <option>Groceries</option>
+            <option>Household</option>
+            <option>Pharmacy</option>
+            <option>Specials</option>
+            <option>Deli</option>
+            <option>Meat</option>
+            <option>Seafood</option>
+            <option>Produce</option>
+          </select>
+        </div>
+
+        <div class="control">
+          <label class="muted" for="sortBy">Sort</label><br/>
+          <select id="sortBy" class="input select">
+            <option value="top">Top deals</option>
+            <option value="priceAsc">Price: Low → High</option>
+            <option value="priceDesc">Price: High → Low</option>
+            <option value="saveDesc">Savings: High → Low</option>
+          </select>
+        </div>
+      </div>
     </section>
 
-  </div>
+    <!-- Grid -->
+    <section class="mt1">
+      <div id="resultsInfo" class="muted"></div>
+      <div id="resultsGrid" class="grid mt1" aria-live="polite"></div>
+    </section>
 
-  <!-- ONE script include. Adjust path if your file lives elsewhere. -->
-  <script type="module" src="./scripts/flyers.js"></script>
+    <!-- Drawer: Product details, fixed variants, and custom-weight controls -->
+    <dialog id="drawer" class="drawer">
+      <form method="dialog" class="drawer-box">
+        <header class="drawer-head">
+          <h4 id="drawerTitle">Product</h4>
+          <button value="close" aria-label="Close" class="drawer-close">×</button>
+        </header>
+        <div class="drawer-body">
+          <div id="drawerMeta" class="muted"></div>
+
+          <!-- Fixed-size variants render here -->
+          <div class="variant-list" id="variantList"></div>
+
+          <!-- Custom weight/quantity UI from targetWeight.js will append here -->
+          <div id="customTargetHook" class="mt1"></div>
+
+          <div id="drawerSavings" class="badge mt1"></div>
+        </div>
+        <footer class="drawer-foot">
+          <button class="btn ghost" value="close">Done</button>
+        </footer>
+      </form>
+    </dialog>
+  </main>
+
+  <footer class="container mb3 muted">
+    <div class="mt1">© <span id="year"></span> Deals-4Me • <a href="./privAndTerms.html">Terms & Privacy</a></div>
+  </footer>
+
+  <!-- JS modules (order matters) -->
+  <script src="./js/stores.js" type="module" defer></script>
+  <script src="./js/list.js" type="module" defer></script>
+
+  <!-- Your new variable-weight/by-count module -->
+  <script src="./js/targetWeight.js" type="module" defer></script>
+
+  <!-- Flyers page controller (must import targetWeight inside) -->
+  <script src="./js/flyers-page.js" type="module" defer></script>
 </body>
 </html>

@@ -1,154 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Deals-4Me — Find Deals Near You</title>
-  <meta name="description" content="Find local grocery deals, browse weekly flyers, and build your shopping list.">
-  <link rel="stylesheet" href="/css/theme.css" />
-  <link rel="stylesheet" href="/css/home.css" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Deals-4Me — Save on Groceries</title>
+  <meta name="description" content="Find weekly flyers near you and build a smart shopping list.">
+  <link rel="stylesheet" href="./css/theme.css"/>
+  <link rel="stylesheet" href="./css/home.css"/>
 </head>
 <body>
+  <!-- Header / Nav -->
   <header>
     <div class="container nav" role="navigation" aria-label="Main">
       <div class="logo">Deals-4Me</div>
-      <!-- TODO: Replace with your reusable toolbar from “Ideas” (keep styles in theme.css) -->
       <nav class="row">
-        <a class="pill" href="/about.html">About</a>
-        <a class="pill" href="/games/index.html">Games Hub</a>
-        <a class="pill" href="/login.html">Login</a>
+        <a class="pill" href="./index.html" aria-current="page">Home</a>
+        <a class="pill" href="./flyers.html">Flyers</a>
+        <a class="pill" href="./flyer.html">Flyer (new)</a>
+        <!-- Sign-in / Sign-out controls (template-ready) -->
+        <button class="pill" id="openAuth" type="button">Sign In</button>
+        <button class="pill ghost" id="logoutBtn" type="button" style="display:none">Sign Out</button>
       </nav>
     </div>
   </header>
 
+  <!-- Hero: Find Deals Near You -->
   <main class="container">
-    <!-- HERO: Store Finder -->
-    <section class="hero" aria-labelledby="storeFinderTitle">
-      <div class="card p1" id="heroCard">
-        <h1 id="storeFinderTitle" class="h1">Find Deals Near You</h1>
-        <form id="storeFinderForm" class="row" onsubmit="return false" aria-label="Find stores">
-          <div>
+    <section id="heroCard" class="card p1">
+      <h1 class="h1">Find deals near you</h1>
+      <p class="muted">Enter a ZIP or use your location to load nearby store flyers.</p>
+
+      <form id="storeFinderForm" class="row" onsubmit="return false" aria-label="Find stores">
+        <div>
           <label for="zip" class="muted">ZIP Code</label><br />
           <div class="input-go">
             <input id="zip" inputmode="numeric" pattern="[0-9]{5}" maxlength="5"
-             placeholder="02324" aria-label="ZIP Code" class="input zip"/>
-           <button class="go-btn" id="goFindStores" type="button" aria-label="Find stores">
-            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-             <path d="M5 12h12M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-         </button>
-        </div>
-        <div id="zipMsg" class="msg" aria-live="polite"></div>
+                  placeholder="02324" aria-label="ZIP Code" class="input zip"/>
+            <button class="go-btn" id="goFindStores" type="button" aria-label="Find stores">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path d="M5 12h12M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <div id="zipMsg" class="msg" aria-live="polite"></div>
         </div>
 
         <div>
           <label class="muted">&nbsp;</label><br />
-            <button class="btn ghost" id="useLocation" type="button">Use My Location</button>
+          <button class="btn ghost" id="useLocation" type="button">Use My Location</button>
         </div>
 
         <div>
           <label for="radius" class="muted">Radius</label><br />
-            <select id="radius" aria-label="Search radius" class="input select">
-              <option value="5">5 miles</option>
-              <option value="10" selected>10 miles</option>
-              <option value="20">20 miles</option>
-            </select>
-          </div>
-             <!-- removed the separate “Find Stores” button -->
-          </form>
+          <select id="radius" aria-label="Search radius" class="input select">
+            <option value="5">5 miles</option>
+            <option value="10" selected>10 miles</option>
+            <option value="20">20 miles</option>
+          </select>
+        </div>
+      </form>
 
-        <div id="storeResults" class="mt1" aria-live="polite"></div>
+      <div id="storeResults" class="grid mt1" aria-live="polite">
+        <!-- results placeholder; filled by JS -->
       </div>
     </section>
 
-    <!-- Saved Stores Card -->
-    <section class="mt1" aria-labelledby="savedStoresTitle">
-      <div class="card p1">
+    <!-- Tabs: Flyers preview & Shopping List -->
+    <section class="mt2">
+      <div class="tabs" role="tablist" aria-label="Browse and plan">
+        <button class="tab active" role="tab" aria-selected="true" data-tab="flyers">Flyers</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="list">Shopping List</button>
+        <div class="flex-spacer"></div>
+        <button id="manageStores" class="pill" type="button">Manage Stores</button>
+      </div>
+
+      <div id="tab-flyers" role="tabpanel" style="display:block">
         <div class="row between center">
-          <h2 id="savedStoresTitle" class="h2">Saved Stores</h2>
-          <span class="badge" id="primaryBadge">Primary: —</span>
-        </div>
-        <div id="savedStoresList" class="row mt05" aria-live="polite"></div>
-        <div class="row mt075">
-          <button id="manageStores" class="btn ghost" type="button">Manage</button>
-          <button id="filterPrimary" class="btn secondary" type="button" aria-pressed="false">Show Primary Only</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Sticky Quick Search (appears after stores & scroll past hero) -->
-    <section id="stickySearch" class="sticky-search" aria-label="Quick product search">
-      <div class="card p06">
-        <label for="quickQuery" class="sr-only">Search products</label>
-        <input id="quickQuery" type="search" placeholder="Search products at your saved stores…" class="input full"/>
-      </div>
-    </section>
-
-    <!-- Flyers + Shopping Tabs -->
-    <section class="mt1" aria-label="Flyers and shopping">
-      <div class="tabs" role="tablist" aria-label="Content tabs">
-        <button class="tab active" role="tab" aria-selected="true" aria-controls="tab-flyers" data-tab="flyers">Flyers</button>
-        <button class="tab" role="tab" aria-selected="false" aria-controls="tab-shopping" data-tab="shopping">Shopping List</button>
-      </div>
-
-      <div id="tab-flyers" role="tabpanel" style="padding:1rem 0">
-        <div id="flyerCarousel" class="empty">Top weekly deals will appear here once you’ve saved stores.</div>
-        <div class="row mt075" id="flyerCats">
-          <button class="pill" type="button" data-cat="Groceries">Groceries</button>
-          <button class="pill" type="button" data-cat="Household">Household</button>
-          <button class="pill" type="button" data-cat="Pharmacy">Pharmacy</button>
-          <button class="pill" type="button" data-cat="Specials">Specials</button>
-        </div>
-        <div id="flyerGrid" class="grid mt1" aria-live="polite"></div>
-      </div>
-
-      <div id="tab-shopping" role="tabpanel" style="display:none;padding:1rem 0">
-        <div class="row between center">
-          <h3 class="h3">Your Shopping List</h3>
-          <div class="row">
-            <button class="btn ghost" id="exportList" type="button">Export</button>
-            <button class="btn ghost" id="clearList" type="button">Clear</button>
-            <button class="btn" id="printList" type="button">Print</button>
+          <div class="muted">Quick search</div>
+          <div id="stickySearch" class="sticky" style="display:none">
+            <input id="quickQuery" class="input" type="search" placeholder="Search flyers (e.g., cereal, eggs)"/>
           </div>
         </div>
-        <div id="shoppingList" class="grid"></div>
-        <div id="shoppingTotals" class="badge mt1">Est. savings: $0.00</div>
-      </div>
-    </section>
-
-    <!-- Daily / Weekend Specials Banner -->
-    <section class="mt1 mb2" aria-label="Weekend flash deals">
-      <div class="card p1 row between center">
-        <div>
-          <strong>Weekend Flash Deals</strong>
-          <div class="muted">Fri–Sun • Updated daily</div>
+        <div id="flyerCats" class="row wrap mt1">
+          <button class="pill" data-cat="All">All</button>
+          <button class="pill" data-cat="Groceries">Groceries</button>
+          <button class="pill" data-cat="Household">Household</button>
+          <button class="pill" data-cat="Pharmacy">Pharmacy</button>
+          <button class="pill" data-cat="Specials">Specials</button>
         </div>
-        <button class="btn" id="viewFlash" type="button">See Deals</button>
+        <div id="flyersGrid" class="grid mt1">
+          <!-- flyer previews go here -->
+        </div>
+      </div>
+
+      <div id="tab-list" role="tabpanel" style="display:none">
+        <div class="row wrap mt1">
+          <button id="exportList" class="btn">Export CSV</button>
+          <button id="printList" class="btn">Print</button>
+          <button id="clearList" class="btn ghost">Clear</button>
+        </div>
+        <div id="shoppingList" class="mt1">
+          <!-- list items render here -->
+        </div>
       </div>
     </section>
   </main>
 
+  <!-- Footer -->
   <footer class="container mb3 muted">
-    <div class="mt1">© <span id="year"></span> Deals-4Me • <a href="/privAndTerms.html">Terms & Privacy</a></div>
+    <div class="mt1">© <span id="year"></span> Deals-4Me • <a href="./privAndTerms.html">Terms & Privacy</a></div>
   </footer>
 
-  <!-- Manage Stores Modal -->
-  <dialog id="storesModal" class="modal">
-    <form method="dialog" class="modal-box">
-      <header class="modal-head">
-        <h4>Manage Saved Stores</h4>
-        <button value="close" aria-label="Close" class="modal-close">×</button>
+  <!-- Scripts: site modules -->
+  <script src="./js/stores.js" type="module" defer></script>
+  <script src="./js/list.js" type="module" defer></script>
+  <script src="./js/flyers.js" type="module" defer></script>
+  <script src="./js/app.js" type="module" defer></script>
+
+  <!-- Small helper: toggle Sign Out when someone signs in via the modal -->
+  <script>
+    (function(){
+      const btnIn  = document.getElementById('openAuth');
+      const btnOut = document.getElementById('logoutBtn');
+      function applySignedInUI(name){
+        if(btnIn){ btnIn.textContent = 'Signed in as ' + name; btnIn.disabled = true; btnIn.classList.add('muted'); }
+        if(btnOut){ btnOut.style.display = ''; }
+      }
+      function applySignedOutUI(){
+        if(btnIn){ btnIn.textContent = 'Sign In'; btnIn.disabled = false; btnIn.classList.remove('muted'); }
+        if(btnOut){ btnOut.style.display = 'none'; }
+      }
+      // reflect saved state on load
+      try{
+        const raw = localStorage.getItem('auth.user');
+        if(raw){ const u = JSON.parse(raw); applySignedInUI(u.name || 'User'); } else { applySignedOutUI(); }
+      }catch{ applySignedOutUI(); }
+
+      // respond to modal success
+      window.addEventListener('auth:signedin', (e)=>{ applySignedInUI(e.detail?.user?.name || 'User'); });
+
+      // sign out clears local session
+      btnOut?.addEventListener('click', ()=>{
+        localStorage.removeItem('auth.user');
+        applySignedOutUI();
+      });
+    })();
+  </script>
+
+  <!-- ▼▼▼ Embedded Family Picker + PIN Modal (login template) ▼▼▼ -->
+  <style>
+    .dfm-auth-modal{ border:none; padding:0; border-radius:16px; max-width:640px; width:95vw }
+    .dfm-auth-modal::backdrop{ background:rgba(2,6,23,.55) }
+    .dfm-auth-box{ background:#fff; border:1px solid #e5e7eb; border-radius:14px }
+    .dfm-auth-head{ display:flex; justify-content:space-between; align-items:center; padding:1rem; border-bottom:1px solid #e5e7eb }
+    .dfm-auth-close{ background:transparent; border:none; font-size:1.2rem; cursor:pointer }
+    .dfm-auth-body{ padding:1rem; }
+    .dfm-auth-grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:.8rem }
+    .dfm-tile{ grid-column:span 4; border:1px solid #e5e7eb; border-radius:12px; padding:.8rem; background:#fff; cursor:pointer; display:flex; gap:.7rem; align-items:center; }
+    .dfm-tile:hover{ box-shadow:0 6px 18px rgba(0,0,0,.06) }
+    .dfm-avatar{ width:48px;height:48px;border-radius:12px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-weight:800;color:#334155; flex:0 0 48px }
+    .dfm-pin-row{ display:flex; gap:.5rem; margin-top:.5rem }
+    .dfm-pin{ width:42px; height:56px; text-align:center; font-size:1.4rem; border:1px solid #cbd5e1; border-radius:10px }
+    .dfm-muted{ color:#64748b }
+    @media (max-width:700px){ .dfm-tile{ grid-column:span 6 } }
+    /* ZIP arrow button from earlier */
+    .input-go{ position:relative; display:inline-block; }
+    .input-go .input.zip{ padding-right:44px; }
+    .go-btn{
+      position:absolute; right:6px; top:50%; transform:translateY(-50%);
+      width:34px; height:34px; border:1px solid #cbd5e1; background:#fff;
+      border-radius:8px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer;
+    }
+    .go-btn:hover{ filter:brightness(1.05); }
+    .go-btn:active{ transform:translateY(calc(-50% + 1px)); }
+    .go-btn:focus{ outline:2px solid #0ea5e955; outline-offset:2px; }
+  </style>
+
+  <dialog id="authModal" class="dfm-auth-modal">
+    <form method="dialog" class="dfm-auth-box">
+      <header class="dfm-auth-head">
+        <h4>Who’s signing in?</h4>
+        <button value="close" aria-label="Close" class="dfm-auth-close">×</button>
       </header>
-      <div id="storesListModal" class="modal-body" aria-live="polite"></div>
-      <footer class="modal-foot">
-        <button class="btn ghost" value="close">Done</button>
-      </footer>
+
+      <div id="authStagePick" class="dfm-auth-body">
+        <div class="dfm-auth-grid" id="familyGrid" aria-live="polite"></div>
+      </div>
+
+      <div id="authStagePin" class="dfm-auth-body" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem">
+          <div>
+            <div class="dfm-muted">Signing in as</div>
+            <div id="authUserName" style="font-weight:700"></div>
+          </div>
+          <button class="pill" type="button" id="authBack">← Back</button>
+        </div>
+
+        <div class="dfm-muted" style="margin-top:1rem">Enter your 6-digit passkey</div>
+        <div class="dfm-pin-row" id="pinRow">
+          <input inputmode="numeric" maxlength="1" class="dfm-pin" aria-label="Digit 1">
+          <input inputmode="numeric" maxlength="1" class="dfm-pin" aria-label="Digit 2">
+          <input inputmode="numeric" maxlength="1" class="dfm-pin" aria-label="Digit 3">
+          <input inputmode="numeric" maxlength="1" class="dfm-pin" aria-label="Digit 4">
+          <input inputmode="numeric" maxlength="1" class="dfm-pin" aria-label="Digit 5">
+          <input inputmode="numeric" maxlength="1" class="dfm-pin" aria-label="Digit 6">
+        </div>
+
+        <div style="display:flex;gap:.5rem;margin-top:1rem">
+          <button class="btn" type="button" id="authSubmit">Unlock</button>
+          <button class="btn ghost" value="close" type="button">Cancel</button>
+        </div>
+
+        <div id="authMsg" class="msg" style="margin-top:1rem" aria-live="polite"></div>
+      </div>
     </form>
   </dialog>
 
-  <script src="/js/stores.js" type="module" defer></script>
-  <script src="/js/flyers.js" type="module" defer></script>
-  <script src="/js/list.js" type="module" defer></script>
-  <script src="/js/app.js" type="module" defer></script>
+  <script type="module">
+    // Family Picker + PIN (front-end only; swap verifyPin with backend later)
+    const FAMILY = [
+      { id:'mom', name:'Mom', avatar:'M',  color:'#fde68a', pin:'246810' },
+      { id:'dad', name:'Dad', avatar:'D',  color:'#a7f3d0', pin:'135790' },
+      { id:'son', name:'Son', avatar:'S',  color:'#bfdbfe', pin:'112233' },
+      { id:'d1',  name:'Daughter1', avatar:'D1', color:'#fecaca', pin:'445566' },
+      { id:'d2',  name:'Daughter2', avatar:'D2', color:'#ddd6fe', pin:'778899' },
+    ];
+    const $ = (q)=>document.querySelector(q);
+    const $$ = (q)=>Array.from(document.querySelectorAll(q));
+    const msg = (t)=>{ const m = $('#authMsg'); if(m){ m.textContent = t || ''; } };
+
+    window.openAuth = openAuth;
+    let currentUser = null;
+
+    $('#openAuth')?.addEventListener('click', openAuth);
+    $('#authBack')?.addEventListener('click', ()=>{ $('#authStagePin').style.display='none'; $('#authStagePick').style.display=''; msg(''); });
+    $('#authSubmit')?.addEventListener('click', submitPin);
+
+    function openAuth(){
+      buildFamilyTiles();
+      $('#authStagePick').style.display = '';
+      $('#authStagePin').style.display = 'none';
+      msg('');
+      $('#authModal').showModal();
+    }
+    function buildFamilyTiles(){
+      const grid = $('#familyGrid'); grid.innerHTML = '';
+      FAMILY.forEach(p=>{
+        const el = document.createElement('button');
+        el.type='button'; el.className='dfm-tile';
+        el.innerHTML = `
+          <div class="dfm-avatar" style="background:${p.color}">${p.avatar}</div>
+          <div><div style="font-weight:700">${p.name}</div><div class="dfm-muted">Tap to sign in</div></div>`;
+        el.addEventListener('click', ()=> pickUser(p));
+        grid.appendChild(el);
+      });
+    }
+    function pickUser(p){
+      currentUser = p;
+      $('#authUserName').textContent = p.name;
+      $('#authStagePick').style.display = 'none';
+      $('#authStagePin').style.display = '';
+      setupPinInputs();
+    }
+    function setupPinInputs(){
+      const pins = $$('#pinRow .dfm-pin');
+      pins.forEach(inp=>{
+        inp.value=''; inp.addEventListener('input', onDigit);
+        inp.addEventListener('keydown', onKey); inp.addEventListener('paste', onPaste);
+      });
+      pins[0].focus(); msg('');
+    }
+    function onDigit(e){
+      const i=e.target; i.value=i.value.replace(/\D/g,'').slice(0,1);
+      if(i.value && i.nextElementSibling){ i.nextElementSibling.focus(); }
+    }
+    function onKey(e){
+      const i=e.target;
+      if(e.key==='Backspace' && !i.value && i.previousElementSibling){ i.previousElementSibling.focus(); i.previousElementSibling.value=''; e.preventDefault(); }
+      if(e.key==='ArrowLeft' && i.previousElementSibling){ i.previousElementSibling.focus(); }
+      if(e.key==='ArrowRight' && i.nextElementSibling){ i.nextElementSibling.focus(); }
+      if(e.key==='Enter'){ submitPin(); }
+    }
+    function onPaste(e){
+      const text=(e.clipboardData||window.clipboardData).getData('text');
+      if(!/^\d{6}$/.test(text)) return; e.preventDefault();
+      const pins = $$('#pinRow .dfm-pin'); text.split('').forEach((d,i)=>{ if(pins[i]) pins[i].value=d; }); pins[pins.length-1].focus();
+    }
+    function getPin(){ return $$('#pinRow .dfm-pin').map(i=>i.value).join(''); }
+    function verifyPin(user, code){ return user && code === user.pin; } // replace with backend later
+    function submitPin(){
+      const code=getPin();
+      if(code.length!==6){ msg('Enter all 6 digits.'); return; }
+      if(verifyPin(currentUser, code)){ onAuthSuccess(currentUser); }
+      else { msg('That passkey didn’t work. Try again.'); $$('#pinRow .dfm-pin').forEach(i=>i.value=''); $$('#pinRow .dfm-pin')[0].focus(); }
+    }
+    function onAuthSuccess(user){
+      localStorage.setItem('auth.user', JSON.stringify({ id:user.id, name:user.name, ts:Date.now() }));
+      window.dispatchEvent(new CustomEvent('auth:signedin', { detail:{ user }}));
+      $('#authModal').close();
+    }
+  </script>
+  <!-- ▲▲▲ End Embedded Login Template ▲▲▲ -->
 </body>
 </html>
