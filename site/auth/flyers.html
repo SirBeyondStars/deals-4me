@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Deals‑4Me — flyers</title>
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="toolbarTheme.css" />
+</head>
+<body>
+  <!-- Shared header include -->
+  <div id="site-header"></div>
+  <script src="header.behavior.js" defer></script>
+  <script>
+    fetch('header.html')
+      .then(r => r.text())
+      .then(html => {
+        document.getElementById('site-header').innerHTML = html;
+        window.initDealsHeader && window.initDealsHeader();
+      });
+  </script>
+
+  <main class="wrap">
+    <!-- CONTENT START (flyers) -->
+    <h1>flyers</h1>
+    <p class="muted">Weekly flyers browser. Replace this placeholder with your current flyer viewer.</p>
+    <!-- Put your existing flyers page content here below this line. -->
+  </main>
+</body>
+</html>

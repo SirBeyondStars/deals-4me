@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Deals-4Me • Sign up</title>
+  <link rel="stylesheet" href="../../scripts/theme.css" />
+</head>
+<body class="page">
+  <header class="header">
+    <div class="header-inner">
+      <a class="brand" data-root-href="index.html">Deals-4Me</a>
+      <nav class="nav" aria-label="Main">
+        <a data-root-href="index.html">Home</a>
+        <a data-root-href="flyers.html">Weekly Flyers</a>
+        <a data-root-href="deals.html">All Deals</a>
+        <a id="loginLink" data-root-href="auth/login.html">Login</a>
+        <button id="logoutBtn" class="logout-btn hidden" type="button">Logout</button>
+      </nav>
+    </div>
+  </header>
+
+  <main style="max-width:520px;margin:40px auto;padding:1rem;">
+    <h1>Create your account</h1>
+
+    <form id="signupForm" style="display:grid;gap:.5rem;">
+      <label for="email">Email</label>
+      <input id="email" type="email" required autocomplete="email" />
+      <label for="password">Password</label>
+      <input id="password" type="password" required autocomplete="new-password" />
+      <button id="signupBtn" type="submit">Create account</button>
+    </form>
+
+    <section id="setPinStep" class="hidden" style="margin-top:1.25rem;">
+      <h2>Set a 6-digit PIN</h2>
+      <div class="pin-row">
+        <input class="pin-box" id="sp1"  inputmode="numeric" maxlength="1" aria-label="New PIN digit 1" />
+        <input class="pin-box" id="sp2"  inputmode="numeric" maxlength="1" aria-label="New PIN digit 2" />
+        <input class="pin-box" id="sp3"  inputmode="numeric" maxlength="1" aria-label="New PIN digit 3" />
+        <input class="pin-box" id="sp4"  inputmode="numeric" maxlength="1" aria-label="New PIN digit 4" />
+        <input class="pin-box" id="sp5"  inputmode="numeric" maxlength="1" aria-label="New PIN digit 5" />
+        <input class="pin-box" id="sp6"  inputmode="numeric" maxlength="1" aria-label="New PIN digit 6" />
+      </div>
+      <div class="pin-row" style="margin-top:.5rem;">
+        <input class="pin-box" id="scp1" inputmode="numeric" maxlength="1" aria-label="Confirm PIN 1" />
+        <input class="pin-box" id="scp2" inputmode="numeric" maxlength="1" aria-label="Confirm PIN 2" />
+        <input class="pin-box" id="scp3" inputmode="numeric" maxlength="1" aria-label="Confirm PIN 3" />
+        <input class="pin-box" id="scp4" inputmode="numeric" maxlength="1" aria-label="Confirm PIN 4" />
+        <input class="pin-box" id="scp5" inputmode="numeric" maxlength="1" aria-label="Confirm PIN 5" />
+        <input class="pin-box" id="scp6" inputmode="numeric" maxlength="1" aria-label="Confirm PIN 6" />
+      </div>
+      <div style="margin-top:.75rem;">
+        <button id="setPinBtn" type="button">Save PIN</button>
+      </div>
+    </section>
+
+    <p id="status" style="margin-top:1rem;color:#555;"></p>
+  </main>
+
+  <footer style="text-align:center;margin:2rem 0;color:#666;font-size:.9rem;">
+    © 2025 Deals-4Me. All rights reserved.
+  </footer>
+
+  <script type="module" src="../../js/header-auth.js"></script>
+  <script type="module" src="../../js/signup.js"></script>
+</body>
+</html>

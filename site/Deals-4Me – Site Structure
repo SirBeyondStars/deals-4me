@@ -1,0 +1,101 @@
+# Deals-4Me – Site Structure (Toolbar = Flowchart)
+
+Top-level nav (10 main tabs): Home • Deals • Flyers • Recipes • Dashboard • Ideas • Family • Profile/Settings • Sponsors • Help/About
+
+```mermaid
+flowchart TD
+    A[Top Nav] --> B[Home]
+    A --> C[Deals ▼]
+    A --> D[Flyers ▼]
+    A --> E[Recipes ▼]
+    A --> F[Dashboard]
+    A --> G[Ideas]
+    A --> H[Family Learning Center]
+    A --> I[Profile / Settings ▼]
+    A --> J[Sponsors ▼]
+    A --> K[Help / About ▼]
+
+%% ===== Deals =====
+    subgraph DEALS[Deals]
+      C --> C1[Search Deals\n(sale-only, multi-store)]
+      C --> C2[Watchlist\n(plan-limited)]
+      C --> C3[Price Alerts]
+      C --> C4[(Future) AI Bundled Weekly Plan]
+    end
+
+%% ===== Flyers =====
+    subgraph FLYERS[Flyers]
+      D --> D1[Store Picker]
+      D --> D2[Browse Flyers]
+      D --> D3[(Future) Clearance / Flash Sales]
+    end
+
+%% ===== Recipes =====
+    subgraph RECIPES[Recipes]
+      E --> E1[Recipes List]
+      E --> E2[New Recipe\n(plan caps 5/15/∞)]
+      E --> E3[Recipe Detail\n(edit ingredients; sale flags + Flyer/Map)]
+      E --> E4[(Future) Suggested Recipes from Deals]
+    end
+
+%% ===== Dashboard =====
+    subgraph DASH[Dashboard]
+      F --> F1[Saved Items Snapshot]
+      F --> F2[Recent Alerts]
+      F --> F3[Weekly Savings]
+    end
+
+%% ===== Ideas =====
+    subgraph IDEAS[Ideas]
+      G --> G1[Reusable Snippets]
+      G --> G2[Feature Backlog]
+      G --> G3[Design Notes]
+    end
+
+%% ===== Family Learning Center =====
+    subgraph FLC[Family]
+      H --> H1[Mini-Games]
+      H --> H2[Points: KLP / ALP / FLP]
+      H --> H3[Streaks & Rewards]
+    end
+
+%% ===== Profile / Settings =====
+    subgraph SETTINGS[Profile / Settings]
+      I --> S0[Profile Overview]
+      I --> S1[Account]
+      I --> S2[Plan & Billing]
+      I --> S3[Family & PINs]
+      I --> S4[Notifications]
+      I --> S5[Privacy & Data]
+      I --> S6[Stores & Location]
+      I --> S7[Integrations]
+      I --> S8[Appearance]
+      I --> S9[Support]
+    end
+
+%% ===== Sponsors =====
+    subgraph SPONSORS[Sponsors]
+      J --> P1[Public Sponsors Page]
+      J --> P2[Sponsor Deals / Placements]
+      J --> P3[Sponsor Tiers]
+      J --> P4[Sponsor Portal]
+      P4 --> P4a[Submit Creative]
+      P4 --> P4b[Placement Selection]
+      P4 --> P4c[Analytics]
+      P4 --> P4d[Billing / Contracts]
+    end
+
+%% ===== Help / About =====
+    subgraph HELP[Help / About]
+      K --> K1[About]
+      K --> K2[FAQ]
+      K --> K3[Contact / Feedback]
+      K --> K4[Legal: Terms / Privacy]
+    end
+
+%% ===== Cross-links =====
+    E3 -. sale lookup .-> C1
+    C1 -. add items .-> C2
+    D2 -. pick items .-> E1
+    C3 -. notify .-> F2
+    P2 -. featured slots .-> D2

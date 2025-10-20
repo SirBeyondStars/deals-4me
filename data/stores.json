@@ -1,0 +1,105 @@
+{
+  "region": "New England",
+  "updated": "2025-10-10",
+  "stores": [
+    {
+      "id": "marketbasket",
+      "name": "Market Basket",
+      "method": "scraper",
+      "headquarters": "Tewksbury, MA",
+      "flyer_start": "SUN",
+      "status": "active",
+      "logo": "../images/logos/marketbasket.png"
+    },
+    {
+      "id": "bigy",
+      "name": "Big Y",
+      "method": "scraper",
+      "headquarters": "Springfield, MA",
+      "flyer_start": "THU",
+      "status": "active",
+      "logo": "../images/logos/bigy.png"
+    },
+    {
+      "id": "hannaford",
+      "name": "Hannaford",
+      "method": "ocr",
+      "headquarters": "Scarborough, ME",
+      "flyer_start": "SUN",
+      "status": "active",
+      "logo": "../images/logos/hannaford.png"
+    },
+    {
+      "id": "shaws",
+      "name": "Shaw’s / Star Market",
+      "method": "ocr",
+      "headquarters": "West Bridgewater, MA",
+      "flyer_start": "FRI",
+      "status": "active",
+      "logo": "../images/logos/shaws.png"
+    },
+    {
+      "id": "pricechopper",
+      "name": "Price Chopper / Market 32",
+      "method": "ocr",
+      "headquarters": "Schenectady, NY",
+      "flyer_start": "SUN",
+      "status": "active",
+      "logo": "../images/logos/pricechopper.png"
+    },
+    {
+      "id": "rochebros",
+      "name": "Roche Bros.",
+      "method": "ocr",
+      "headquarters": "Wellesley, MA",
+      "flyer_start": "FRI",
+      "status": "active",
+      "logo": "../images/logos/rochebros.png"
+    },
+    {
+      "id": "stopandshop",
+      "name": "Stop & Shop",
+      "method": "manual",
+      "headquarters": "Quincy, MA",
+      "flyer_start": "FRI",
+      "status": "active",
+      "logo": "../images/logos/stopandshop.png"
+    },
+    {
+      "id": "traderjoes",
+      "name": "Trader Joe’s",
+      "method": "manual",
+      "headquarters": "Needham, MA",
+      "flyer_start": "SUN",
+      "status": "active",
+      "logo": "../images/logos/traderjoes.png"
+    },
+    {
+      "id": "bjs",
+      "name": "BJ’s Wholesale",
+      "method": "manual",
+      "headquarters": "Westborough, MA",
+      "flyer_start": "FRI",
+      "status": "active",
+      "logo": "../images/logos/bjs.png"
+    },
+    {
+      "id": "costco",
+      "name": "Costco",
+      "method": "manual",
+      "headquarters": "Waltham, MA",
+      "flyer_start": "MON",
+      "status": "active",
+      "logo": "../images/logos/costco.png"
+    },
+    {
+      "id": "target",
+      "name": "Target Grocery",
+      "method": "manual",
+      "headquarters": "Minneapolis, MN",
+      "flyer_start": "SUN",
+      "status": "active",
+      "logo": "../images/logos/target.png"
+    }
+  ]
+}

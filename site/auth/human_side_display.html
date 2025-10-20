@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Human Side Connect – Stories</title></head>
+<body>
+<section id="human-side-display" style="padding:2rem; background:#eef6ff;">
+  <div style="max-width:900px; margin:0 auto;">
+    <h2>🏆 Meet the Humans Behind the Brands</h2>
+    <label>Filter by Company:</label>
+    <select id="companyFilter" onchange="loadStories()">
+      <option value="">-- All Companies --</option>
+      <option value="Wegmans">Wegmans</option>
+      <option value="Blue Cross Blue Shield">Blue Cross Blue Shield</option>
+    </select>
+    <div id="storyContainer" style="display:flex; flex-wrap:wrap; gap:1rem;"></div>
+    <button onclick="loadRandomStory()">🎲 Show Me Another</button>
+  </div>
+</section>
+<script type="module" src="js/firebase_story_bridge.js"></script>
+<script>
+async function loadStories(){
+  const c = document.getElementById("storyContainer");
+  c.innerHTML = "Loading...";
+  const company = document.getElementById("companyFilter").value;
+  const stories = await window.fetchStories(company);
+  c.innerHTML = "";
+  stories.forEach(d => c.appendChild(renderCard(d)));
+}
+function renderCard(d){
+  const card = document.createElement("div");
+  card.style = "flex:1 1 250px;background:#fff;border-radius:10px;padding:1rem;box-shadow:0 2px 8px rgba(0,0,0,.1)";
+  card.innerHTML = `<h3>${d.name}</h3><p><strong>${d.role}</strong> at <strong>${d.company}</strong></p><p><em>${d.location}</em></p><p>🎬 <strong>Fun Fact:</strong><br>${d.funFact}</p>${d.message?`<p>💬 ${d.message}</p>`:''}`;
+  return card;
+}
+async function loadRandomStory(){
+  const all = await window.fetchStories();
+  if(all.length){
+    const d = all[Math.floor(Math.random()*all.length)];
+    const c = document.getElementById("storyContainer");
+    c.innerHTML = "";
+    c.appendChild(renderCard(d));
+  }
+}
+document.addEventListener("DOMContentLoaded", loadStories);
+</script>
+</body></html>

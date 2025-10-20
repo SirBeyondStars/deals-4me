@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign in — Deals‑4Me</title>
+  <link href="./css/theme.css" rel="stylesheet" />
+  <link href="./css/auth.css" rel="stylesheet" />
+  <meta name="robots" content="noindex" />
+</head>
+<body>
+  <div id="siteHeader"></div>
+  <main role="main" class="container auth-container">
+    <h1>Welcome back</h1>
+    <form id="loginForm" class="card">
+      <label>Email<input type="email" name="email" autocomplete="email" required></label>
+      <label>Password<input type="password" name="password" autocomplete="current-password" required></label>
+      <button type="submit" class="btn btn-primary">Sign in</button>
+      <div class="row-links">
+        <a href="./forgot.html">Forgot password?</a>
+        <a href="./signup.html">Create account</a>
+      </div>
+    </form>
+  </main>
+  <div id="siteFooter"></div>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="./scripts/header-auth.js"></script>
+  <script src="./scripts/auth/login.js"></script>
+  <script src="./scripts/footer.js"></script>
+</body>
+</html>

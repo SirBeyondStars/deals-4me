@@ -1,0 +1,138 @@
+/* toolbarTheme.css */
+
+/* Variables */
+:root {
+  --bg: #0f172a;
+  --fg: #e2e8f0;
+  --muted: #94a3b8;
+  --card: #ffffff;
+  --line: #e5e7eb;
+}
+
+/* Header Container */
+.header {
+  background: var(--bg);
+  color: var(--fg);
+  border-bottom: 1px solid #1e293b;
+}
+
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  font-weight: 700;
+  color: var(--fg);
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+/* Navigation Links */
+.nav {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.nav a,
+.menu-trigger {
+  color: var(--fg);
+  text-decoration: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.nav a:hover,
+.menu-trigger:hover {
+  background: #111827;
+}
+
+/* Dropdown Menus */
+.menu {
+  position: relative;
+}
+
+.menu-panel {
+  position: absolute;
+  top: 36px;
+  left: 0;
+  min-width: 180px;
+  background: #0b1020;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 6px;
+  display: none;
+  z-index: 50;
+}
+
+.menu-panel a {
+  display: block;
+  padding: 6px 8px;
+}
+
+.menu-panel.open {
+  display: block;
+}
+
+/* Mobile Menu Toggle */
+.nav-toggle {
+  margin-left: auto;
+  background: #111827;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: #e5e7eb;
+  padding: 6px 10px;
+  display: none;
+}
+
+/* Mobile Layout */
+@media (max-width: 760px) {
+  .nav {
+    display: none;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+
+  .nav-drawer {
+    display: none;
+    background: #0b1020;
+    border-top: 1px solid #1e293b;
+  }
+
+  .nav-drawer.open {
+    display: block;
+  }
+
+  .nav-drawer .nav {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .nav-drawer .menu {
+    position: static;
+  }
+
+  .nav-drawer .menu-panel {
+    position: static;
+    display: none;
+    border: 0;
+    padding: 0;
+    background: transparent;
+  }
+
+  .nav-drawer .menu-panel.open {
+    display: block;
+  }
+}

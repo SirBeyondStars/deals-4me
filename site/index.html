@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Deals‑4Me — Sign in or Create Account</title>
+  <link href="./css/theme.css" rel="stylesheet" />
+  <meta name="description" content="Sign in to Deals‑4Me to compare flyers and track prices, or create a free account." />
+  <style>
+    .split{display:grid;grid-template-columns:1fr 1fr;min-height:100dvh}
+    .left{padding:3rem;display:flex;flex-direction:column;gap:1.5rem;background:#faf7f0}
+    .right{display:flex;align-items:center;justify-content:center;padding:3rem}
+    .login-card{width:100%;max-width:520px}
+    #dotwSlot{margin-top:1rem}
+    .badge{font-size:.75rem;display:inline-block;padding:.25rem .5rem;border:1px solid #ccc;border-radius:999px}
+    .dotw-body{display:grid;grid-template-columns:160px 1fr;gap:1rem;align-items:center}
+    .dotw-media img{width:100%;height:auto;border-radius:.5rem;display:block}
+    .dotw-price-row{display:flex;gap:1rem;align-items:baseline}
+    @media (max-width: 900px){.split{grid-template-columns:1fr}.left{display:none}}
+  </style>
+</head>
+<body>
+  <div id="siteHeader"></div>
+  <main role="main" class="split">
+    <section class="left">
+      <div class="brand" style="display:flex;align-items:center;gap:.75rem">
+        <img src="./assets/logo-mark.svg" alt="Deals‑4Me" height="32"/>
+        <h1 style="margin:0">Deals‑4Me</h1>
+      </div>
+      <div>
+        <h2>All your grocery deals in one place</h2>
+        <p class="muted">Browse weekly flyers, track prices, and save as a family with simple 4‑digit PINs.</p>
+      </div>
+      <section id="dotwSlot" class="card" aria-labelledby="dotwTitle">
+        <div class="badge">Deal of the Week</div>
+        <div class="dotw-body">
+          <div class="dotw-media">
+            <img id="dotwImage" alt="Deal image" loading="lazy"/>
+          </div>
+          <div class="dotw-info">
+            <h3 id="dotwTitle">Loading…</h3>
+            <p id="dotwSubtitle" class="muted"></p>
+            <div class="dotw-price-row">
+              <span id="dotwPrice" class="price"></span>
+              <span id="dotwStore" class="store"></span>
+            </div>
+            <a id="dotwCta" class="btn btn-primary" href="#" target="_blank" rel="noopener">Shop now</a>
+            <p class="caption">Sponsored</p>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="right">
+      <form id="indexLoginForm" class="card login-card">
+        <header class="card-header" style="display:flex;justify-content:space-between;align-items:center;gap:1rem">
+          <h2 style="margin:0">Welcome!</h2>
+          <a class="btn btn-outline" href="./signup.html">Create Account</a>
+        </header>
+        <label>Email or username
+          <input type="email" name="email" autocomplete="email" required />
+        </label>
+        <label>Password
+          <input type="password" name="password" autocomplete="current-password" required />
+        </label>
+        <button type="submit" class="btn btn-primary" style="margin-top:.5rem">Continue</button>
+        <div class="row-links">
+          <a href="./forgot.html">Forgot password?</a>
+          <a href="./login.html">More sign‑in options</a>
+        </div>
+        <p class="caption">Access is for registered users. New here? Click <strong>Create Account</strong> to get started.</p>
+      </form>
+    </section>
+  </main>
+  <div id="siteFooter"></div>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="./scripts/header-auth.js"></script>
+  <script src="./scripts/dotw.js"></script>
+  <script>
+    (function(){
+      const form = document.getElementById('indexLoginForm');
+      if(!form) return;
+      form.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        // TODO: call supabase.auth.signInWithPassword
+        window.location.href = './home.html';
+      });
+    })();
+  </script>
+  <script src="./scripts/footer.js"></script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Deals-4Me • Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Global theme styles (contains .hidden and .logout-btn that you added) -->
+  <link rel="stylesheet" href="../scripts/theme.css" />
+
+  <style>
+    /* Page-specific light styling so the content looks tidy without touching your main theme */
+    .container { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+    .hero h1 { margin: 0.25rem 0 0.5rem; }
+    .muted { color: #6b7280; }
+    .section { margin-top: 24px; }
+    .rewards { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    .rewards th, .rewards td { border: 1px solid #e5e7eb; padding: 10px 12px; vertical-align: middle; }
+    .rewards thead th { background: #f3f4f6; text-align: left; }
+    .pill { display: inline-block; padding: .35rem .7rem; border-radius: 999px; font-weight: 600; font-size: .9rem; border: 0; cursor: pointer; }
+    .pill.primary { background: #2563eb; color: #fff; }
+    .pill.primary:hover { background: #1d4ed8; }
+    .kick-btn { display: inline-flex; align-items: center; gap: .5rem; background: #7c3aed; color: #fff; border: 0; border-radius: 10px; padding: .6rem 1rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.08); }
+    .kick-btn:hover { background: #6d28d9; transform: translateY(-1px); }
+    footer { margin-top: 40px; padding: 16px 0; text-align: center; opacity: .8; }
+  </style>
+</head>
+<body class="page">
+
+  <!-- HEADER (wired Login/Logout) -->
+  <header class="header">
+    <div class="header-inner">
+      <a class="brand" href="index.html">Deals-4Me</a>
+
+      <nav class="nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="family.html">Family Learning Center</a>
+        <a href="yearly.html">Yearly Reflection</a>
+
+        <!-- Auth controls: auto-toggled by header-auth.js -->
+        <a id="loginLink" href="auth/login.html">Login</a>
+        <button id="logoutBtn" class="logout-btn hidden" type="button">Logout</button>
+      </nav>
+
+      <button class="nav-toggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Toggle menu">☰</button>
+    </div>
+
+    <nav id="mobileNav" class="nav-drawer" aria-label="Mobile"></nav>
+  </header>
+
+  <!-- MAIN -->
+  <main class="container">
+    <section class="hero">
+      <h1>Welcome to Deals-4Me</h1>
+      <p class="muted">Track local deals, save on groceries, and earn rewards for your whole family. It’s more than a circular — it’s a savings experience.</p>
+      <hr style="margin:16px 0;">
+    </section>
+
+    <section class="section">
+      <h2>🚀 Help Us Grow Deals-4Me: Save More. Live Smarter.</h2>
+    </section>
+
+    <section class="section">
+      <h3>🧰 What is Deals-4Me?</h3>
+      <ul>
+        <li>Track grocery deals across stores</li>
+        <li>Set savings goals with real circulars</li>
+        <li>Play real-life–inspired games that teach kids and parents money-saving habits</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h3>🎁 Backer Rewards</h3>
+      <table class="rewards">
+        <thead>
+          <tr>
+            <th style="width:200px;">Tier</th>
+            <th style="width:140px;">Pledge</th>
+            <th>Reward</th>
+            <th style="width:160px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>🟢 Supporter</td>
+            <td>$5</td>
+            <td>Thank-you shoutout on our site</td>
+            <td><button class="pill primary">Support</button></td>
+          </tr>
+          <tr>
+            <td>🥇 Gold</td>
+            <td>$15</td>
+            <td>6 months of Gold + Founders Wall</td>
+            <td><button class="pill primary">Get Gold</button></td>
+          </tr>
+          <tr>
+            <td>👨‍👩‍👧 Pro Family</td>
+            <td>$40</td>
+            <td>1 year Platinum + LP booster</td>
+            <td><button class="pill primary">Get Pro Family</button></td>
+          </tr>
+          <tr>
+            <td>🏛 Founding Member</td>
+            <td>$100</td>
+            <td>Lifetime Platinum + badge</td>
+            <td><button class="pill primary">Become a Founder</button></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:16px;">
+        <button class="kick-btn" type="button">💜 Support Us Now</button>
+        <p class="muted" style="margin-top:.5rem;">* Replace checkout links in <code>js/checkout_links.js</code> when you’re ready.</p>
+      </div>
+    </section>
+
+    <footer>
+      © 2025 Deals-4Me. All rights reserved.
+    </footer>
+  </main>
+
+  <!-- Header auth wiring (root path) -->
+  <script type="module" src="../scripts/header-auth.js"></script>
+</body>
+</html>

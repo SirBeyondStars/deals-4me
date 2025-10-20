@@ -1,0 +1,27 @@
+Rara's Cake Design Empire
+
+3 options
+
+Option 1
+Cartoon store front
+	customers come in to buy cakes
+	oven for cake to come out of
+		costs to increase production
+			(1 cake, 2 cake, 3 cake)
+		upgrade to 2 ovens that produce more
+	have array of different cake designs and flavors
+		(chocolate, vanilla, marble) (maybe more as empire grows)
+	cake costs start low then gradually increases with style and height
+		(1 tier, 2 tier, 3 tier, event cake)
+Option 2
+Cake stack
+	each level cake pieces come in from each level and have to press spacebar to stop.
+	layer each on top of each other until user no longer can stop on top
+
+Option 3
+User decorates their cake (make rotatable)
+	choose style 
+		circle, half sheet, full sheet
+	use cake tools to layer frosting
+	use piping bag to do frosting (choose color)
+	use piping bag with different tips for different shapes	

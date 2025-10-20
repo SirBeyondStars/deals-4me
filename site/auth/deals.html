@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Deals-4Me – Weekly Deals</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body{font-family:system-ui,Segoe UI,Arial,sans-serif;margin:24px}
+    h1{margin:0 0 16px}
+    label{margin-right:8px}
+    select,input{padding:6px 8px;margin-right:16px}
+    table{width:100%;border-collapse:collapse;margin-top:18px}
+    th,td{border-bottom:1px solid #eee;padding:10px;text-align:left}
+    thead th{background:#f6f6f6}
+    #status{margin-left:8px;color:#666}
+  </style>
+</head>
+<body>
+  <h1>Weekly Deals</h1>
+
+  <label>Store:
+    <select id="storeSelect"></select>
+  </label>
+
+  <label>Week:
+    <select id="weekSelect"></select>
+  </label>
+
+  <label>Search:
+    <input id="searchInput" placeholder="e.g., chicken, milk, $2.99" />
+  </label>
+  <span id="status"></span>
+
+  <table id="dealsTable">
+    <thead>
+      <tr><th>Line</th><th>Price</th><th>Description</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- deals.html is in /site/, JS is in /js/ -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="../js/deals.js" type="module"></script>
+</body>
+</html>

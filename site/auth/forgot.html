@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Deals-4Me • Reset password</title>
+  <link rel="stylesheet" href="../../scripts/theme.css" />
+</head>
+<body class="page">
+  <header class="header">
+    <div class="header-inner">
+      <a class="brand" data-root-href="index.html">Deals-4Me</a>
+      <nav class="nav" aria-label="Main">
+        <a data-root-href="index.html">Home</a>
+        <a data-root-href="auth/login.html">Back to Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <main style="max-width:520px;margin:40px auto;padding:1rem;">
+    <h1>Reset your password</h1>
+    <p>Enter your account email. We’ll send a reset link if an account exists.</p>
+    <form id="forgotForm" style="display:grid;gap:.5rem;">
+      <label for="email">Email</label>
+      <input id="email" type="email" required autocomplete="email" />
+      <button id="forgotBtn" type="submit">Send reset link</button>
+    </form>
+    <p id="status" style="margin-top:1rem;color:#555;"></p>
+  </main>
+
+  <footer style="text-align:center;margin:2rem 0;color:#666;font-size:.9rem;">
+    © 2025 Deals-4Me. All rights reserved.
+  </footer>
+
+  <script type="module" src="../../js/header-auth.js"></script>
+  <script type="module" src="../../js/forgot.js"></script>
+</body>
+</html>

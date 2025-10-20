@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Deals‑4Me — tos</title>
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="toolbarTheme.css" />
+</head>
+<body>
+  <!-- Shared header include -->
+  <div id="site-header"></div>
+  <script src="header.behavior.js" defer></script>
+  <script>
+    fetch('header.html')
+      .then(r => r.text())
+      .then(html => {
+        document.getElementById('site-header').innerHTML = html;
+        window.initDealsHeader && window.initDealsHeader();
+      });
+  </script>
+
+  <main class="wrap">
+    <!-- CONTENT START (tos) -->
+    <h1>Terms of Service</h1>
+<p class="muted">Last updated: October 14, 2025</p>
+
+<section>
+  <h2>1) Overview</h2>
+  <p>Deals-4Me (“we”, “us”, the “Service”) helps shoppers discover weekly sales by organizing publicly available information from retailers’ flyers and websites. By using the Service, you agree to these Terms.</p>
+</section>
+
+<section>
+  <h2>2) Public Information & Attribution</h2>
+  <ul>
+    <li>We surface <strong>publicly available</strong> facts (prices, products, dates) from retailer flyers/sites. Extraction may use OCR and simple parsing.</li>
+    <li>All retailer names, logos, and product images are the property of their respective owners and are used for identification (nominative fair use). No endorsement or affiliation is implied unless explicitly stated.</li>
+    <li>Where practical, we reference the originating retailer and promotion week.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>3) No Affiliation</h2>
+  <p>Deals-4Me is independent and not affiliated with any retailer or brand unless we clearly say so.</p>
+</section>
+
+<section>
+  <h2>4) Accuracy & Changes</h2>
+  <ul>
+    <li>Retail prices, availability, and promotions can change without notice and may vary by store or region. <strong>Always verify at the retailer</strong> before purchasing.</li>
+    <li>We don’t guarantee accuracy, completeness, or timeliness. Report issues to <a href="mailto:support@deals-4me.com">support@deals-4me.com</a>.</li>
+    <li>The Service may be updated, paused, or discontinued at any time.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>5) Accounts & Security</h2>
+  <ul>
+    <li>We use <strong>Firebase Authentication</strong> for account creation, email verification, and sign-in.</li>
+    <li>If a PIN is used, we store a <strong>cryptographic hash</strong> (not the raw PIN). Don’t reuse sensitive PINs you use elsewhere.</li>
+    <li>For convenience, some preferences may be cached locally on your device (e.g., localStorage). Your account remains the source of truth.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>6) Acceptable Use</h2>
+  <ul>
+    <li>No abuse of the Service (e.g., automated scraping of our UI at scale, malicious code, attempts to bypass access controls).</li>
+    <li>No impersonation of retailers or misrepresentation of affiliation.</li>
+    <li>Don’t republish our compiled datasets without permission.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>7) Intellectual Property</h2>
+  <ul>
+    <li>We own the compilation, selection, and presentation of listings. Third-party trademarks and materials belong to their owners.</li>
+    <li>Rights concerns? Email <a href="mailto:legal@deals-4me.com">legal@deals-4me.com</a> with details (URL, description, proof). We respond promptly to good-faith takedown requests.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>8) Third-Party Links</h2>
+  <p>Links to retailer sites are provided for convenience. We don’t control third-party content or policies.</p>
+</section>
+
+<section>
+  <h2>9) Disclaimers</h2>
+  <p>THE SERVICE IS PROVIDED “AS IS” AND “AS AVAILABLE,” WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.</p>
+</section>
+
+<section>
+  <h2>10) Limitation of Liability</h2>
+  <p>To the fullest extent permitted by law, we’re not liable for indirect, incidental, special, consequential, or exemplary damages, or lost profits/data, even if advised of the possibility. Our total liability for any claim related to the Service won’t exceed USD $50.</p>
+</section>
+
+<section>
+  <h2>11) Privacy</h2>
+  <p>Your use is also governed by our <a href="privacy.html">Privacy Policy</a>. We use Firebase for auth and don’t sell personal information.</p>
+</section>
+
+<section>
+  <h2>12) Termination</h2>
+  <p>We may suspend or terminate access if we reasonably believe you violated these Terms or used the Service in a harmful way.</p>
+</section>
+
+<section>
+  <h2>13) Changes to These Terms</h2>
+  <p>We may update these Terms periodically. Material changes will be reflected by updating the “Last updated” date above. Continued use after updates constitutes acceptance.</p>
+</section>
+
+<section>
+  <h2>14) Governing Law</h2>
+  <p>These Terms are governed by the laws of the state/province where Deals-4Me is operated, without regard to conflict-of-law principles.</p>
+</section>
+
+<section>
+  <h2>15) Contact</h2>
+  <p>Questions or requests? <a href="mailto:support@deals-4me.com">support@deals-4me.com</a>.</p>
+</section>
+
+<hr>
+<p class="small">
+  <strong>Short Legal Disclaimer:</strong>
+  Deals-4Me aggregates publicly available retail promotions. All trademarks and product images belong to their respective owners. We are not affiliated with any retailer unless explicitly stated.
+</p>
+
+    <p class="muted">Terms of Service. Paste your finalized TOS text here.</p>
+    <!-- Put your existing tos page content here below this line. -->
+  </main>
+</body>
+</html>

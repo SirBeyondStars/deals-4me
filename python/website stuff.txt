@@ -1,0 +1,33 @@
+'https://acoqndggldnrsjmonlge.supabase.co'
+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjb3FuZGdnbGRucnNqbW9ubGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3ODk5NjMsImV4cCI6MjA3MDM2NTk2M30.ka4l5Xnwwcl913awGdjyfXY_Y-DE3gyg6Nndg7gih4o'
+
+cooking.html
+about_timeline.html
+account_settings.html
+admin_panel.html
+avatar_customizer.html - could be used on profile page too or accessed and the same one used
+billing.html
+budget_tracker.html
+dashboard.html
+deals.html
+family_learning_center.html **
+feedback.html
+flyers.html
+gamesHub.html **
+header.html
+human_side_display.html
+human_side_form.html 
+index_with_kickstarter_button.html *
+lp_rewards.html
+pricing.html
+privacy.html
+profile.html *
+recipes.html
+requested_games.html
+search-deals.html *
+signup.html *
+sponsor-slot.html
+suggest_game.html
+tos.html *
+watchlist.html
+

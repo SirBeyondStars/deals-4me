@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deals-4Me – Page Title</title>
+
+  <!-- Site-wide theme, then toolbar theme -->
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="toolbarTheme.css" />
+</head>
+<body>
+
+  <!-- Toolbar wrapper -->
+  <header class="toolbar" role="banner">
+    <div class="brand">
+      <span class="logo" aria-hidden="true"></span>
+      <span>Deals-4Me</span>
+    </div>
+    <div id="toolbar"></div>
+    <div class="spacer"></div>
+  </header>
+
+  <!-- Page content -->
+  <main class="container">
+    <h1>Page Heading</h1>
+    <p>Your content goes here…</p>
+  </main>
+
+  <!-- Inject toolbar.html, then wire active tab + mobile toggles -->
+  <script>
+    (function(){
+      const slot = document.getElementById('toolbar');
+
+      fetch('toolbar.html')
+        .then(r => r.text())
+        .then(html => {
+          slot.innerHTML = html;
+
+          // Active item highlight (matches data-page to current file)
+          const path = location.pathname.split('/').pop().toLowerCase() || 'index.html';
+          const slug = path.replace('.html','');
+          document.querySelectorAll('.nav [data-page]').forEach(el=>{
+            const page = (el.getAttribute('data-page')||'').toLowerCase();
+            if(page && page === slug) el.classList.add('active');
+          });
+
+          // Mobile: tap-to-open dropdowns + outside-click close
+          document.addEventListener('click', (e)=>{
+            const btn = e.target.closest('.dd-btn');
+            const dd  = e.target.closest('.dd');
+            if(btn){
+              const wrap = btn.closest('.dd');
+              const isOpen = wrap.classList.toggle('open');
+              btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+              return;
+            }
+            if(!dd){
+              document.querySelectorAll('.dd.open').forEach(w=>{
+                w.classList.remove('open');
+                w.querySelector('.dd-btn')?.setAttribute('aria-expanded','false');
+              });
+            }
+          });
+        })
+        .catch(()=>{ slot.innerHTML = '<div class="muted">Navigation failed to load.</div>'; });
+
+    })();
+  </script>
+
+</body>
+</html>

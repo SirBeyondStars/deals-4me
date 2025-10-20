@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Human Side Connect – Submission Form</title></head>
+<body>
+<section id="human-side-connect" style="padding:2rem; background:#fff0f7;">
+  <div style="max-width:700px; margin:0 auto;">
+    <h2 style="color:#5a2a82; font-size:2rem; margin-bottom:1rem;">👥 Human Side Connect: Submit Your Story</h2>
+    <p>We believe every company is made of people. Share your human side.</p>
+    <form id="humanConnectForm">
+      <label>Name:</label><input type="text" id="name" required><br/>
+      <label>Company:</label><input type="text" id="company" required><br/>
+      <label>Role:</label><input type="text" id="role" required><br/>
+      <label>Location:</label><input type="text" id="location" required><br/>
+      <label>Fun Fact:</label><textarea id="funFact" required></textarea><br/>
+      <label>Message (optional):</label><textarea id="question"></textarea><br/>
+      <button type="submit">Submit My Story</button>
+    </form>
+  </div>
+</section>
+<script>
+document.getElementById("humanConnectForm").addEventListener("submit", function(e){
+  e.preventDefault(); alert("Thanks! Your story will be reviewed."); this.reset();
+});
+</script>
+</body></html>

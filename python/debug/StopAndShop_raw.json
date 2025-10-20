@@ -1,0 +1,621 @@
+[
+  {
+    "Intercepts": [
+      {
+        "InterceptID": "SI_1S8WaAm139wIMRM",
+        "InterceptRevision": null,
+        "Decision": {
+          "ActionSetID": null,
+          "Creative": null,
+          "Target": {
+            "Type": "",
+            "URL": "",
+            "OriginalURL": null,
+            "OriginalURLOrigin": null,
+            "DisplayType": null
+          },
+          "PopUnderTarget": null
+        },
+        "DistributionID": null,
+        "DirectoryID": null,
+        "ContactID": null,
+        "SurveyID": null
+      }
+    ],
+    "ClientSideIntercepts": [
+      {
+        "InterceptID": "SI_1L0vpdypsahQBQp",
+        "Name": "Web dOSAT",
+        "Active": true,
+        "RandomizedActionSets": true,
+        "InterceptRevision": "60",
+        "PreventRepeatedDisplay": "90",
+        "HideOnLocalStorageDisabled": true,
+        "HideOnCookiesDisabled": true,
+        "LogicTree": {
+          "Operator": "AND",
+          "Left": {
+            "Comparator": "HAS_NOT_BEEN_SEEN",
+            "Left": {
+              "LogicType": "InterceptLogicNone",
+              "InterceptIDs": [
+                "SI_1L0vpdypsahQBQp",
+                "SI_1S8WaAm139wIMRM",
+                "SI_29yoX3kDzQd8BXo",
+                "SI_cNECmvwR7BHqTZ4",
+                "SI_do21UKcOQGKw3Ea"
+              ],
+              "Type": "LogicNode"
+            },
+            "Right": {
+              "Value": "7776000",
+              "Type": "ValueNode"
+            },
+            "Type": "ComparatorNode"
+          },
+          "Right": {
+            "Comparator": "NEQ",
+            "Left": {
+              "LogicType": "JavaScriptExpression",
+              "Expression": "window.DD_RUM?.getInternalContext()?.session_id",
+              "Type": "LogicNode"
+            },
+            "Right": {
+              "Value": "undefined",
+              "Type": "ValueNode"
+            },
+            "Type": "ComparatorNode"
+          },
+          "Type": "ConjunctionNode"
+        },
+        "ActionSets": [
+          {
+            "ActionSetID": "AS_17088022",
+            "Label": null,
+            "Creative": {
+              "ID": "CR_2rWDpW3xzdEcZ5b",
+              "Name": "Overall CSAT Popover",
+              "Revision": "4",
+              "AnchorTags": {},
+              "Type": "PopOver"
+            },
+            "Target": {
+              "Type": "Survey",
+              "URL": "https://siteintercept.qualtrics.com/WRSiteInterceptEngine/?Q_CLIENTTYPE=web&Q_Redirect=https://aholddelhaize.az1.qualtrics.com/jfe/form/SV_8tUjfhFB3M81yDP?Q_CHL%3Dsi&Q_CID=CR_2rWDpW3xzdEcZ5b&Q_ASID=AS_17088022&Q_SRT=/nF5MHQN1/gdbiz6n5CMXw%3D%3D&Q_SIID=SI_1L0vpdypsahQBQp&Q_LOC=https://stopandshop.com/savings/weekly-ad/grid-view&Q_CLIENTVERSION=2.36.0",
+              "OriginalURL": "https://aholddelhaize.az1.qualtrics.com/jfe/form/SV_8tUjfhFB3M81yDP?Q_CHL=si",
+              "OriginalURLOrigin": "https://aholddelhaize.az1.qualtrics.com",
+              "DisplayType": null
+            },
+            "SurveyID": "SV_8tUjfhFB3M81yDP",
+            "ContactFrequencyPassed": null,
+            "PopUnderTarget": null,
+            "LogicTree": {
+              "Comparator": "GT",
+              "Left": {
+                "LogicType": "TimeOnSite",
+                "Expression": "Focused",
+                "Type": "LogicNode"
+              },
+              "Right": {
+                "Value": "240",
+                "Type": "ValueNode"
+              },
+              "Type": "ComparatorNode"
+            }
+          },
+          {
+            "ActionSetID": "AS_02119812",
+            "Label": null,
+            "Creative": {
+              "ID": "CR_2rWDpW3xzdEcZ5b",
+              "Name": "Overall CSAT Popover",
+              "Revision": "4",
+              "AnchorTags": {},
+              "Type": "PopOver"
+            },
+            "Target": {
+              "Type": "Survey",
+              "URL": "https://siteintercept.qualtrics.com/WRSiteInterceptEngine/?Q_CLIENTTYPE=web&Q_Redirect=https://aholddelhaize.az1.qualtrics.com/jfe/form/SV_8tUjfhFB3M81yDP?Q_CHL%3Dsi&Q_CID=CR_2rWDpW3xzdEcZ5b&Q_ASID=AS_02119812&Q_SRT=/nF5MHQN1/gdbiz6n5CMXw%3D%3D&Q_SIID=SI_1L0vpdypsahQBQp&Q_LOC=https://stopandshop.com/savings/weekly-ad/grid-view&Q_CLIENTVERSION=2.36.0",
+              "OriginalURL": "https://aholddelhaize.az1.qualtrics.com/jfe/form/SV_8tUjfhFB3M81yDP?Q_CHL=si",
+              "OriginalURLOrigin": "https://aholddelhaize.az1.qualtrics.com",
+              "DisplayType": null
+            },
+            "SurveyID": "SV_8tUjfhFB3M81yDP",
+            "ContactFrequencyPassed": null,
+            "PopUnderTarget": null,
+            "LogicTree": {
+              "Comparator": "GT",
+              "Left": {
+                "LogicType": "TimeOnSite",
+                "Expression": "Focused",
+                "Type": "LogicNode"
+              },
+              "Right": {
+                "Value": "540",
+                "Type": "ValueNode"
+              },
+              "Type": "ComparatorNode"
+            }
+          },
+          {
+            "ActionSetID": "AS_07575317",
+            "Label": null,
+            "Creative": {
+              "ID": "CR_2rWDpW3xzdEcZ5b",
+              "Name": "Overall CSAT Popover",
+              "Revision": "4",
+              "AnchorTags": {},
+              "Type": "PopOver"
+            },
+            "Target": {
+              "Type": "Survey",
+              "URL": "https://siteintercept.qualtrics.com/WRSiteInterceptEngine/?Q_CLIENTTYPE=web&Q_Redirect=https://aholddelhaize.az1.qualtrics.com/jfe/form/SV_8tUjfhFB3M81yDP?Q_CHL%3Dsi&Q_CID=CR_2rWDpW3xzdEcZ5b&Q_ASID=AS_07575317&Q_SRT=/nF5MHQN1/gdbiz6n5CMXw%3D%3D&Q_SIID=SI_1L0vpdypsahQBQp&Q_LOC=https://stopandshop.com/savings/weekly-ad/grid-view&Q_CLIENTVERSION=2.36.0",
+              "OriginalURL": "https://aholddelhaize.az1.qualtrics.com/jfe/form/SV_8tUjfhFB3M81yDP?Q_CHL=si",
+              "OriginalURLOrigin": "https://aholddelhaize.az1.qualtrics.com",
+              "DisplayType": null
+            },
+            "SurveyID": "SV_8tUjfhFB3M81yDP",
+            "ContactFrequencyPassed": null,
+            "PopUnderTarget": null,
+            "LogicTree": {
+              "Comparator": "GT",
+              "Left": {
+                "LogicType": "TimeOnSite",
+                "Expression": "Focused",
+                "Type": "LogicNode"
+              },
+              "Right": {
+                "Value": "360",
+                "Type": "ValueNode"
+              },
+              "Type": "ComparatorNode"
+            }
+          }
+        ],
+        "ContactID": null,
+        "DistributionID": null,
+        "DirectoryID": null,
+        "ContactFrequencyRulesEnabled": false
+      },
+      {
+        "InterceptID": "SI_1S8WaAm139wIMRM",
+        "Name": "Q3 2025 Rewards Baseline Intercept Survey 2: Ease of Use Loyalty",
+        "Active": true,
+        "RandomizedActionSets": false,
+        "InterceptRevision": "2",
+        "PreventRepeatedDisplay": "90",
+        "HideOnLocalStorageDisabled": true,
+        "HideOnCookiesDisabled": true,
+        "LogicTree": {
+          "Value": false,
+          "Type": "ValueNode"
+        },
+        "ActionSets": [],
+        "ContactID": null,
+        "DistributionID": null,
+        "DirectoryID": null,
+        "ContactFrequencyRulesEnabled": false
+      },
+      {
+        "InterceptID": "SI_cNECmvwR7BHqTZ4",
+        "Name": "UserVoice 2.0",
+        "Active": true,
+        "RandomizedActionSets": false,
+        "InterceptRevision": "50",
+        "PreventRepeatedDisplay": "0",
+        "HideOnLocalStorageDisabled": false,
+        "HideOnCookiesDisabled": false,
+        "LogicTree": {
+          "Value": true,
+          "Type": "ValueNode"
+        },
+        "ActionSets": [
+          {
+            "ActionSetID": "AS_2tM03zUrabpBjZc",
+            "Label": "Action Set 1",
+            "Creative": {
+              "ID": "CR_d5cgK1ZH310sElM",
+              "Name": "UserVoice 2.0 HTML Creative",
+              "Revision": "10",
+              "AnchorTags": {},
+              "Type": "UserDefinedHTML"
+            },
+            "Target": {
+              "Type": "Survey",
+              "URL": "https://siteintercept.qualtrics.com/WRSiteInterceptEngine/?Q_CLIENTTYPE=web&Q_Redirect=https://aholddelhaize.az1.qualtrics.com/jfe/form/SV_0HxMURRELf35LLw?Q_CHL%3Dsi&Q_CID=CR_d5cgK1ZH310sElM&Q_ASID=AS_2tM03zUrabpBjZc&Q_SRT=%2BSrNyLCfLOUuuP15XZ1yUQ%3D%3D&Q_SIID=SI_cNECmvwR7BHqTZ4&Q_LOC=https://stopandshop.com/savings/weekly-ad/grid-view&Q_CLIENTVERSION=2.36.0",
+              "OriginalURL": "https://aholddelhaize.az1.qualtrics.com/jfe/form/SV_0HxMURRELf35LLw?Q_CHL=si",
+              "OriginalURLOrigin": "https://aholddelhaize.az1.qualtrics.com",
+              "DisplayType": null
+            },
+            "SurveyID": "SV_0HxMURRELf35LLw",
+            "ContactFrequencyPassed": null,
+            "PopUnderTarget": null,
+            "LogicTree": {
+              "Value": true,
+              "Type": "ValueNode"
+            }
+          }
+        ],
+        "ContactID": null,
+        "DistributionID": null,
+        "DirectoryID": null,
+        "ContactFrequencyRulesEnabled": false
+      }
+    ],
+    "Modules": {
+      "Core": "latest"
+    },
+    "FeatureFlags": {
+      "DX.PepperPotts_TestingTools": false,
+      "DUX.ClientSideTargetingM1": true,
+      "SI.ResponsiveDialog.EnableDisplayOptions": true,
+      "DX.GoogleDataLayer": true,
+      "DX.CustomCSSChanges": true,
+      "DX.PepperPotts_XMD": false,
+      "DX.UpdateAssetHostName": false,
+      "DX.UseDXAIngestionV2": true,
+      "DX.PepperPotts_PakoCompression": true,
+      "isClientLoggingEnabled": false,
+      "DX.EmbeddedFeedback_NewAPIs": true,
+      "DX.PostToStart": true,
+      "DX.DXA_UseSyntheticPageChangeEvents": true,
+      "DX.DXA_iFrames": true,
+      "DX.DXA_FunnelAnalyticsPOC": false,
+      "DX.DXA_No_Delay": true,
+      "DX.PepperPotts_VisitorEnabled": true,
+      "DX.DXAConditionalTargeting_EA": true,
+      "DX.DXA_Error_Capture": true,
+      "deferredSliderLoadingFeatureEnabled": true,
+      "DX.DXA_Enforce_MinSessionLength": true,
+      "DX.DXA_NearestClickableTarget": false,
+      "DX.EmbeddedFeedback_GA_Visitor": true,
+      "isLatencyLoggingEnabled": true,
+      "DX.DXA_DI_EA": true,
+      "DX.StatsAccuracy": true,
+      "DX.RealTimeTriggeredIntercepts": true,
+      "DX.DXA_Auto_SPA": false,
+      "DX.DXA_Collect_KPIs": false
+    },
+    "RequestData": {
+      "CORSOrigin": "https://stopandshop.com",
+      "ID": "ZN_3f8e6TCEOtW1Rnn",
+      "adobeSCVariable": "s",
+      "bVersion": "Published",
+      "brandBaseUrl": "https://aholddelhaize.az1.qualtrics.com",
+      "brandDC": "pdx1.qualtrics.com",
+      "brandID": "aholddelhaize",
+      "browser": "HeadlessChrome",
+      "browserVersion": 140.0,
+      "cookieDomain": "",
+      "googleDataLayerVariable": "GTM-PTR8VBJ",
+      "displayInterceptType": "",
+      "eventTrackers": {},
+      "extRefType": "",
+      "extRefValue": "",
+      "hasBeenResolved": false,
+      "hasDependencies": true,
+      "isBrowserSupported": true,
+      "isDebug": false,
+      "isMobile": false,
+      "historyStorageType": "sessionStorage",
+      "historyStorageSize": null,
+      "maxCookieSize": null,
+      "osName": "Windows",
+      "screenCaptureServiceBaseURL": "https://pdx1.qualtrics.com/htmltoimage/",
+      "validIntercepts": {
+        "SI_1L0vpdypsahQBQp": "DependencyResolver",
+        "SI_cNECmvwR7BHqTZ4": "AS_2tM03zUrabpBjZc"
+      },
+      "zoneManualDisplay": false,
+      "reevaluateInterceptOnUrlChange": true,
+      "geo": {
+        "country": "US"
+      },
+      "customJavaScriptPermission": true,
+      "isolationStatus": "NOT_ISOLATED",
+      "validatedIdentifier": false
+    },
+    "Dependencies": {
+      "Intercept": [
+        "none"
+      ],
+      "JavaScript": {
+        "QID_24485968": "window.DD_RUM?.getInternalContext()?.session_id"
+      },
+      "TimeOnSite": true
+    },
+    "SRTestConfiguration": null
+  },
+  {
+    "CreativeDefinition": {
+      "CreativeID": "CR_d5cgK1ZH310sElM",
+      "BrandID": "aholddelhaize",
+      "Revision": "10",
+      "Title": "UserVoice 2.0 HTML Creative",
+      "ZoneID": "ZN_3f8e6TCEOtW1Rnn",
+      "Options": {
+        "elements": {
+          "Elements": [
+            {
+              "type": "EmbeddedTarget",
+              "style": {
+                "width": "0",
+                "height": "428",
+                "borderWidth": "0",
+                "borderColor": "transparent",
+                "backgroundColor": "rgb(255, 255, 255)",
+                "zIndex": 2000000000,
+                "opacity": 100,
+                "display": "block",
+                "borderRadius": "0"
+              },
+              "position": {
+                "top": "73",
+                "bottom": "497",
+                "left": "201",
+                "right": "1074"
+              },
+              "positionAnchors": {
+                "positionX": "left",
+                "positionY": "top"
+              },
+              "content": "<div><div style=\"width: 0px; height: 428px; position: absolute; top: 0px; left: 0px;\"><i>Your Intercept's target will appear here</i><div class=\"PreviewWatermark\" style=\"display: none;\">Target Preview</div></div><iframe scrolling=\"auto\" frameborder=\"no\" style=\"width: 0px; height: 428px;\"></iframe></div>",
+              "unitsOfMeasurement": {
+                "width": "px",
+                "height": "px"
+              },
+              "accessibilityTitle": "",
+              "locators": false
+            },
+            {
+              "type": "EmbeddedTarget",
+              "style": {
+                "width": "600",
+                "height": "430",
+                "borderWidth": "0",
+                "borderColor": "transparent",
+                "backgroundColor": "rgb(255, 255, 255)",
+                "zIndex": 2000000000,
+                "opacity": 100,
+                "display": "block",
+                "borderRadius": "0"
+              },
+              "position": {
+                "top": "72",
+                "bottom": "496",
+                "left": "200",
+                "right": "475"
+              },
+              "positionAnchors": {
+                "positionX": "left",
+                "positionY": "top"
+              },
+              "content": "<div><div style=\"width: 600px; height: 430px; position: absolute; top: 0px; left: 0px;\"><i>Your Intercept's target will appear here</i><div class=\"PreviewWatermark\" style=\"display: none; top: 190px; left: 162px;\">Target Preview</div></div><iframe scrolling=\"auto\" frameborder=\"no\" style=\"width: 600px; height: 430px;\"></iframe></div>",
+              "unitsOfMeasurement": {
+                "width": "px",
+                "height": "px"
+              },
+              "accessibilityTitle": "",
+              "locators": false
+            }
+          ],
+          "MinTop": 72,
+          "MinLeft": 200
+        },
+        "displayOptions": {
+          "customPosition": false,
+          "position": "TL",
+          "replaceContents": false,
+          "appendContents": true,
+          "insertContentsBefore": false,
+          "insertContentsAfter": false,
+          "xOffset": "0",
+          "yOffset": "0",
+          "fixToPage": false,
+          "minFixDist": "0"
+        }
+      },
+      "Type": "UserDefinedHTML"
+    }
+  },
+  {
+    "InterceptDefinition": {
+      "BrandID": "aholddelhaize",
+      "InterceptID": "SI_cNECmvwR7BHqTZ4",
+      "InterceptName": "UserVoice 2.0",
+      "Revision": "50",
+      "DeletedDate": null,
+      "ActionSets": {
+        "AS_2tM03zUrabpBjZc": {
+          "ID": "AS_2tM03zUrabpBjZc",
+          "Label": "Action Set 1",
+          "Creative": "CR_d5cgK1ZH310sElM",
+          "CreativeType": "UserDefinedHTML",
+          "WeightedSampleRate": "33",
+          "Target": {
+            "Type": "Survey",
+            "PrimaryElement": "SV_0HxMURRELf35LLw"
+          },
+          "EmbeddedData": [
+            {
+              "name": "Brand URL",
+              "type": "CurrentPage",
+              "value": null
+            },
+            {
+              "name": "SessionID",
+              "type": "JavaScriptVal",
+              "value": "ga.getAll()[0].get('dimension42');"
+            },
+            {
+              "name": "Delivery Option",
+              "type": "JavaScriptVal",
+              "value": "ga.getAll()[0].get('dimension82');"
+            },
+            {
+              "name": "Optimizely Test Variation",
+              "type": "JavaScriptVal",
+              "value": "ga.getAll()[0].get('dimension93');"
+            },
+            {
+              "name": "Platform",
+              "type": "JavaScriptVal",
+              "value": "ga.getAll()[0].get('dimension61');"
+            },
+            {
+              "name": "Browser",
+              "type": "JavaScriptVal",
+              "value": "ga.getAll()[0].get('dimension43');"
+            },
+            {
+              "name": "NumberOfOrders",
+              "type": "JavaScriptVal",
+              "value": "google_tag_manager['GTM-K89RGB6'].dataLayer.get('numberOfOrders');"
+            },
+            {
+              "name": "UserType",
+              "type": "JavaScriptVal",
+              "value": "ga.getAll()[0].get('dimension74');"
+            },
+            {
+              "name": "OrderStatus",
+              "type": "JavaScriptVal",
+              "value": "ga.getAll()[0].get('dimension75');"
+            },
+            {
+              "name": "UserID",
+              "type": "JavaScriptVal",
+              "value": "ga.getAll()[0].get('dimension41');"
+            },
+            {
+              "name": "LoyaltyID",
+              "type": "JavaScriptVal",
+              "value": "google_tag_manager['GTM-PN7ML7L'].dataLayer.get('loyaltyId');"
+            },
+            {
+              "name": "UniquePageCount",
+              "type": "PageCount",
+              "value": null
+            },
+            {
+              "name": "SearchTerm",
+              "type": "SearchTerm",
+              "value": null
+            },
+            {
+              "name": "TimeSpentOnSite",
+              "type": "TimeOnSite",
+              "value": null
+            },
+            {
+              "name": "SiteHistory",
+              "type": "History",
+              "value": null
+            },
+            {
+              "name": "Glassbox Session Replay Link",
+              "type": "JavaScriptVal",
+              "value": "_detector.getSessionReplayLink('console.c2101.glassboxdigital.io')"
+            },
+            {
+              "name": "Glassbox Session ID",
+              "type": "JavaScriptVal",
+              "value": "_detector.sessionId"
+            }
+          ],
+          "ActionOptions": {
+            "targetNewWindow": false,
+            "targetEmbedded": false,
+            "targetFullScreen": false,
+            "resizeForEmbeddedTargets": false,
+            "targetWidth": "1000",
+            "targetHeight": "800",
+            "accessibilityTitle": "",
+            "displayElement": "PDL-QUALTRICS-INSTANCE",
+            "selectedDevices": {
+              "browsers": {
+                "Browser|all": true,
+                "Browser|Internet Explorer|all": true,
+                "Browser|Firefox|all": true,
+                "Browser|Chrome|all": true,
+                "Browser|Opera|all": true,
+                "Browser|Safari|all": true,
+                "Browser|Other|all": true,
+                "Browser|Internet Explorer|9": false,
+                "Browser|Internet Explorer|10": false,
+                "Browser|Opera|9": false,
+                "Browser|Opera|10": false,
+                "Browser|Opera|11": false,
+                "Browser|Opera|12": false,
+                "Browser|Safari|3": false,
+                "Browser|Safari|4": false,
+                "Browser|Safari|5": false,
+                "Browser|Safari|6": false
+              },
+              "platforms": {
+                "Platform|all": true,
+                "Platform|Windows|all": true,
+                "Platform|Mac OS X|all": true,
+                "Platform|Mobile|all": true,
+                "Platform|Mobile|iOS|iPhone": false,
+                "Platform|Mobile|iOS|iPad": false,
+                "Platform|Mobile|iOS|iPod": false,
+                "Platform|Mobile|iOS|all": false,
+                "Platform|Mobile|Android|all": false,
+                "Platform|Mobile|BlackBerry|all": false,
+                "Platform|Windows|XP": false,
+                "Platform|Windows|Vista": false,
+                "Platform|Windows|7": false,
+                "Platform|Windows|8": false,
+                "Platform|Mac OS X|10.4": false,
+                "Platform|Mac OS X|10.5": false,
+                "Platform|Mac OS X|10.6": false,
+                "Platform|Mac OS X|10.7": false,
+                "Platform|Mac OS X|10.8": false
+              }
+            },
+            "actionSetSampleRate": "100",
+            "actionSetContinueExecution": true,
+            "autoCloseTarget": false,
+            "targetPopUnder": false,
+            "targetNewTab": false,
+            "useCustomTrigger": false,
+            "triggerEntirePage": true,
+            "triggerMultipleTimes": false,
+            "triggerType": "click",
+            "triggerElementID": "",
+            "scrollPercentage": "100",
+            "targetReplaceContents": true,
+            "sameSizeAsCreative": true,
+            "targetPopUnderDisplay": {
+              "id": "Target",
+              "name": "Display Target"
+            }
+          },
+          "platform": "Desktop"
+        }
+      },
+      "DisplayOptions": {
+        "displayRate": "100",
+        "noshow": "0",
+        "manualDisplay": true,
+        "displayInterceptType": "manual",
+        "cookieDomain": "",
+        "hasRandomization": false,
+        "useWeightedActionSets": false,
+        "hideOnCookiesDisabled": false,
+        "hideOnLocalStorageDisabled": false,
+        "linkWithXMD": false,
+        "useContactFrequencyRules": false,
+        "contactHydration": false,
+        "contactFrequencyRefLocator": "JavaScript",
+        "contactFrequencyRefExpression": {
+          "expression": "",
+          "guid": "QID_07028043"
+        },
+        "contactFrequencyUserID": "UR_e2wHd44MjAkPwep"
+      },
+      "Logic": ""
+    }
+  }
+]

@@ -1,0 +1,142 @@
+/* ===== Deals-4Me Login Split (full CSS) ===== */
+:root{
+  --primary:#ff6b35;       /* Orange */
+  --secondary:#1f3c88;     /* Deep Blue */
+  --bg:#f8f9fa;
+  --surface:#ffffff;
+  --text:#212529;
+  --muted:#6c757d;
+}
+
+/* Reset / base */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+}
+
+/* ===== Layout: left slideshow | right panel ===== */
+.split{
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  min-height:100vh;                 /* lock full height */
+}
+@media (max-width: 960px){
+  .split{grid-template-columns:1fr}
+}
+
+/* ===== Slideshow (fixed size, no jumping) ===== */
+.slideshow{
+  position:relative;
+  width:100%;
+  height:100vh;                     /* fill viewport on desktop */
+  overflow:hidden;
+  background:#000;                  /* avoids white flash between images */
+}
+@media (max-width: 960px){
+  .slideshow{height:42vh}           /* shorter on mobile */
+}
+
+.slideshow .slides{
+  position:absolute;
+  inset:0;
+  display:none;                     /* JS toggles .show */
+}
+.slideshow .slides.show{display:block}
+
+.slideshow .slides img{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover;                 /* consistent cover */
+  object-position:center;
+  transition:transform 1.2s ease, opacity .6s ease;
+  transform:scale(1.04);            /* subtle zoom */
+  opacity:.96;
+}
+
+/* ===== Right panel ===== */
+.panel{
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  gap:1rem;
+  padding:2rem;
+  background:linear-gradient(to bottom, rgba(255,255,255,.96), rgba(255,255,255,.96));
+}
+
+.brand{
+  display:flex; align-items:center; gap:.5rem;
+  font-weight:800; letter-spacing:.2px; color:var(--secondary);
+}
+.brand .dot{width:12px;height:12px;border-radius:50%;background:var(--primary)}
+
+.card{
+  background:var(--surface);
+  border:1px solid rgba(0,0,0,.06);
+  border-radius:14px;
+  padding:1.25rem;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+h2{margin:.25rem 0 1rem; color:var(--secondary)}
+.muted{color:var(--muted)}
+.small{font-size:.85rem}
+
+/* Form */
+label{display:block;margin:.5rem 0 .25rem}
+input{
+  width:100%;
+  padding:.7rem .8rem;
+  border:1px solid rgba(0,0,0,.12);
+  border-radius:10px;
+  background:#fff;
+}
+.pin input{text-align:center;letter-spacing:.3em}
+
+/* Button */
+.btn{
+  width:100%;
+  margin-top:.75rem;
+  display:inline-flex; align-items:center; justify-content:center;
+  background:var(--primary); color:#fff;
+  border:0; border-radius:10px; padding:.75rem 1rem;
+  font-weight:700; cursor:pointer;
+  box-shadow:0 8px 18px rgba(255,107,53,.35);
+  transition:transform .06s ease-in-out, box-shadow .2s ease;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0) scale(.99)}
+
+/* Links under form */
+.links{
+  display:flex; justify-content:space-between; gap:1rem; margin-top:.75rem;
+}
+.links a{color:var(--secondary);text-decoration:none;font-weight:600}
+.links a:hover{text-decoration:underline}
+
+/* Promo copy under form */
+.promo{
+  margin-top:1rem; padding-top:1rem;
+  border-top:1px solid rgba(0,0,0,.08);
+}
+.pill{
+  display:inline-block;
+  background:rgba(31,60,136,.08);
+  color:var(--secondary);
+  padding:.2rem .6rem;
+  border-radius:999px;
+  font-weight:700; font-size:.85rem;
+}
+.promo h3{margin:.6rem 0 .2rem}
+.promo ul{margin:.4rem 0 0; padding-left:1.1rem; color:var(--muted)}
+.promo li{margin:.25rem 0}
+
+/* Accessibility focus */
+a:focus, button:focus, input:focus{
+  outline:3px solid rgba(31,60,136,.35);
+  outline-offset:2px;
+  border-color:transparent;
+}

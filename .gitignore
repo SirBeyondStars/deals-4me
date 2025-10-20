@@ -1,0 +1,9 @@
+﻿# large / generated / scratch
+assets/flyers/
+flyers/
+exports/
+__pycache__/
+*.pyc
+*.log
+*.lnk
+*.bmp

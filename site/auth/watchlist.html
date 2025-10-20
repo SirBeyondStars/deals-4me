@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deals-4Me – Watchlist</title>
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="toolbarTheme.css" />
+</head>
+<body>
+  <header class="toolbar">
+    <div class="brand"><span class="logo" aria-hidden="true"></span><span>Deals-4Me</span></div>
+    <div id="toolbar"></div><div class="spacer"></div>
+  </header>
+
+  <main class="container">
+    <h1>Watchlist</h1>
+    <p class="muted">Your saved items. Plan limits apply.</p>
+    <div id="watchList" class="grid"></div>
+  </main>
+
+  <script>
+    // inject toolbar + active state + mobile toggles
+    (function(){
+      const slot = document.getElementById('toolbar');
+      fetch('toolbar.html').then(r=>r.text()).then(html=>{
+        slot.innerHTML = html;
+        const slug = (location.pathname.split('/').pop().toLowerCase()||'index.html').replace('.html','');
+        document.querySelectorAll('.nav [data-page]').forEach(el=>{
+          if((el.getAttribute('data-page')||'').toLowerCase()===slug) el.classList.add('active');
+        });
+        document.addEventListener('click',(e)=>{
+          const btn=e.target.closest('.dd-btn'), dd=e.target.closest('.dd');
+          if(btn){const w=btn.closest('.dd');const o=w.classList.toggle('open');btn.setAttribute('aria-expanded',o?'true':'false');return;}
+          if(!dd){document.querySelectorAll('.dd.open').forEach(w=>{w.classList.remove('open');w.querySelector('.dd-btn')?.setAttribute('aria-expanded','false');});}
+        });
+      });
+    })();
+
+    // minimal local watchlist display (adjust keys later if you change storage)
+    (function(){
+      const PREFIX = 'd4m:watch:'; // e.g., saved from a “Add to Watchlist” button elsewhere
+      const listEl = document.getElementById('watchList');
+
+      function loadAll(){
+        const items=[];
+        for(let i=0;i<localStorage.length;i++){
+          const k=localStorage.key(i);
+          if(k && k.startsWith(PREFIX)){
+            try{ items.push(JSON.parse(localStorage.getItem(k))); }catch(e){}
+          }
+        }
+        return items;
+      }
+
+      function render(){
+        const rows = loadAll();
+        listEl.innerHTML = '';
+        if(rows.length===0){
+          const empty=document.createElement('div');
+          empty.className='card'; empty.innerHTML='<div class="muted">Nothing saved yet. Find deals, then tap “Add to Watchlist”.</div>';
+          listEl.appendChild(empty); return;
+        }
+        rows.forEach(it=>{
+          const card=document.createElement('div');
+          card.className='item';
+          card.style.cssText='display:flex;justify-content:space-between;align-items:center;gap:.75rem;padding:.75rem;border:1px solid #1e293b;border-radius:.6rem;background:#0b1220;';
+          card.innerHTML = `
+            <div>
+              <div class="name" style="color:#e2e8f0;font-weight:600">${it.name||'(item)'}</div>
+              <div class="muted">${it.store ? `From ${it.store}` : ''} ${it.validThrough ? `• Thru ${it.validThrough}` : ''}</div>
+            </div>
+            <div class="actions" style="display:flex;gap:.5rem">
+              ${it.salePrice ? `<span class="pill-counter" style="background:#065f46;color:#d1fae5;padding:.2rem .5rem;border-radius:999px">$${(+it.salePrice).toFixed(2)}</span>`:''}
+              <button data-remove="${it.id||''}">Remove</button>
+            </div>`;
+          listEl.appendChild(card);
+        });
+        listEl.querySelectorAll('button[data-remove]').forEach(b=>{
+          b.onclick=()=>{ localStorage.removeItem(PREFIX + b.getAttribute('data-remove')); render(); };
+        });
+      }
+
+      render();
+    })();
+  </script>
+</body>
+</html>

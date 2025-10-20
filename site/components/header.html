@@ -1,0 +1,64 @@
+<header class="header">
+  <div class="header-inner">
+    <a class="brand" data-root-href="index.html">Deals-4Me</a>
+
+    <nav class="nav" aria-label="Main">
+      <a data-root-href="index.html">Home</a>
+
+      <div class="menu" data-submenu>
+        <button class="menu-trigger" aria-haspopup="true" aria-expanded="false">Deals</button>
+        <div class="menu-panel" role="menu">
+          <a role="menuitem" data-root-href="deals.html">All deals</a>
+          <a role="menuitem" data-root-href="flyers.html">Weekly flyers</a>
+
+          <div class="menu" data-submenu>
+            <button class="menu-trigger" aria-haspopup="true" aria-expanded="false">Groceries ▸</button>
+            <div class="menu-panel" role="menu">
+              <a role="menuitem" data-root-href="deals.html?cat=produce">Produce</a>
+              <a role="menuitem" data-root-href="deals.html?cat=meat">Meat</a>
+              <a role="menuitem" data-root-href="deals.html?cat=pantry">Pantry</a>
+            </div>
+          </div>
+
+          <a role="menuitem" data-root-href="deals.html?cat=household">Household</a>
+        </div>
+      </div>
+
+      <a data-root-href="recipes.html">Recipes</a>
+      <a data-root-href="gamesHub.html">Games</a>
+
+      <div class="menu" data-submenu>
+        <button class="menu-trigger" aria-haspopup="true" aria-expanded="false">Research</button>
+        <div class="menu-panel" role="menu">
+          <a role="menuitem" data-root-href="dashboard.html">Dashboard</a>
+          <a role="menuitem" data-root-href="search-deals.html">Search deals</a>
+        </div>
+      </div>
+
+      <!-- NEW: make Contact easy to find -->
+      <a data-root-href="contact.html" class="contact-link">Contact</a>
+
+      <!-- Auth controls: auto-toggled by header-auth.js -->
+      <a id="loginLink" data-root-href="auth/login.html">Login</a>
+      <button id="logoutBtn" class="logout-btn hidden" type="button">Logout</button>
+    </nav>
+
+    <button class="nav-toggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Toggle menu">☰</button>
+  </div>
+
+  <nav id="mobileNav" class="nav-drawer" aria-label="Mobile"></nav>
+</header>
+
+<style>
+  /* minimal sugar; your theme.css can style these further */
+  .contact-link { color:#1a4dd8; font-weight:600; }
+  .menu[data-submenu] { position: relative; }
+  .menu-panel { display:none; position:absolute; top:100%; left:0; background:#fff; border:1px solid #e5e7eb; border-radius:8px; padding:6px 0; box-shadow:0 4px 12px rgba(0,0,0,.06); z-index:50; }
+  .menu[data-open="true"] > .menu-panel { display:block; }
+  .nav-toggle { background:none; border:1px solid #e5e7eb; border-radius:8px; padding:6px 10px; }
+  .nav-drawer { display:none; }
+  @media (max-width: 820px){
+    .nav { display:none; }
+    .nav-drawer { display:block; border-top:1px solid #e5e7eb; }
+  }
+</style>

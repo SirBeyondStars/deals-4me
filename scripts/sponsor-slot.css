@@ -1,0 +1,25 @@
+/* Sponsor Slot styles (fixed size; no layout jump) */
+#sponsor-container{
+  width:100%;
+  max-width:400px;
+  height:250px;
+  overflow:hidden;
+  margin:auto;
+  position:relative;
+  border-radius:12px;
+  box-shadow:0 8px 24px rgba(0,0,0,.08);
+  background:#fff;
+}
+
+#sponsor-container img{
+  width:100%;
+  height:100%;
+  object-fit:contain;    /* keep proportions; clean letterbox */
+  background:#ffffff;    /* behind transparent PNGs */
+  display:block;
+}
+
+/* Optional: responsive tweak */
+@media (max-width:768px){
+  #sponsor-container{ max-width:100%; height:200px; }
+}

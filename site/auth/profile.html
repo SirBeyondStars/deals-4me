@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Deals-4Me</title>
+    <link rel="stylesheet" href="theme.css">
+    <style>
+        /* Keep page layout consistent */
+        .profile-section {
+            margin-bottom: 20px;
+        }
+
+        .profile-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .profile-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Your profile</h1>
+    </header>
+
+    <main>
+        <section class="profile-section">
+            <label for="fullName">Full name</label>
+            <input type="text" id="fullName" placeholder="Your full name">
+
+            <label for="zipCode">ZIP code</label>
+            <input type="text" id="zipCode" placeholder="12345">
+
+            <label for="dealRadius">Deal radius</label>
+            <select id="dealRadius">
+                <option>5 miles</option>
+                <option selected>10 miles</option>
+                <option>25 miles</option>
+                <option>50 miles</option>
+            </select>
+
+            <div class="profile-option">
+                <input type="checkbox" id="familyLearning">
+                <label for="familyLearning">Include me in <strong>Family Learning Center</strong> activities &amp; badges</label>
+            </div>
+
+            <div style="margin-top: 15px;">
+                <button class="btn btn-primary">Save changes</button>
+                <button class="btn btn-secondary">Switch user</button>
+            </div>
+        </section>
+
+        <section class="saved-items">
+            <h2>Your saved items</h2>
+            <p>Add items from circulars to track prices and get alerts.</p>
+            <p><em>No items yet — start saving from the deals page.</em></p>
+
+            <h3>Today's highlights</h3>
+            <ul>
+                <li>🔥 20% off at Local Grocery Mart</li>
+                <li>🛒 BOGO Fresh Strawberries</li>
+                <li>🥫 Campbell’s Soup $0.99/can</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>© Deals-4Me</p>
+    </footer>
+    <script>
+  const PROFILE_KEY = 'd4m_profile_v1';
+  const SAVED_ITEMS_KEY = 'd4m_saved_items_v1';
+  const HIGHLIGHTS_CACHE_KEY = 'd4m_highlights_cache_v1';
+
+  function loadJSON(k, f){ try{ const r = localStorage.getItem(k); return r ? JSON.parse(r) : f; } catch { return f; } }
+  function saveJSON(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
+  function initials(name){ if(!name) return 'U'; const p=name.trim().split(/\s+/).slice(0,2); return p.map(x=>x[0].toUpperCase()).join(''); }
+
+  function renderHeader(){
+    const profile = loadJSON(PROFILE_KEY, null);
+    const name = profile?.fullName || 'there';
+    document.getElementById('welcome').textContent = `Welcome, ${name}!`;
+    document.getElementById('avatar').textContent = initials(profile?.fullName || 'User');
+    const flc = profile?.flc ? 'On' : 'Off';
+    const radius = profile?.dealRadius || '—';
+    const zip = profile?.zipCode || '—';
+    document.getElementById('location').innerHTML =
+      `Your location: <strong>${zip}</strong>. Radius: <strong>${radius}</strong>. FLC: <strong>${flc}</strong>`;
+  }
+
+  function renderSaved(){
+    const list = document.getElementById('savedList');
+    const saved = loadJSON(SAVED_ITEMS_KEY, []);
+    list.innerHTML = '';
+    if (!saved.length){
+      list.innerHTML = '<li class="muted">No saved items yet. Add from <a href="deals.html">Deals</a> or <a href="flyers.html">Flyers</a>.</li>';
+      return;
+    }
+    saved.sort((a,b)=>(b.dateSaved||0)-(a.dateSaved||0));
+    saved.forEach(it=>{
+      const when = it.dateSaved ? new Date(it.dateSaved).toLocaleDateString() : '';
+      const li = document.createElement('li');
+      li.textContent = `${it.title} — ${it.store || ''} ${it.price ? '· $' + it.price : ''} ${when ? '· ' + when : ''}`;
+      list.appendChild(li);
+    });
+  }
+
+  function pick(arr,n){ const out=[], copy=[...arr]; while(copy.length && out.length<n){ out.push(copy.splice(Math.floor(Math.random()*copy.length),1)[0]); } return out; }
+  function generateHighlights(){
+    const pool = [
+      {t:'Milk (1 gal)', s:'Local Grocery Mart', p:'2.99'},
+      {t:'Bananas (lb)', s:'FreshCo', p:'0.39'},
+      {t:'Eggs (dozen)', s:'MarketPlace', p:'1.49'},
+      {t:'Ground Beef (lb)', s:'SuperSaver', p:'3.29'},
+      {t:'Cheerios (10.8oz)', s:'ValueMart', p:'1.99'},
+      {t:'Strawberries (1 lb)', s:'Farmway', p:'2.49'},
+      {t:'Yogurt 4-pack', s:'Town Market', p:'1.79'}
+    ];
+    const picks = pick(pool, 3).map(x=>`<li>⭐ ${x.t} — ${x.s} · $${x.p}</li>`).join('');
+    return { html: picks, ts: new Date().toDateString() };
+  }
+  function renderHighlights(){
+    const cache = loadJSON(HIGHLIGHTS_CACHE_KEY, null);
+    const today = new Date().toDateString();
+    const data = (!cache || cache.ts !== today) ? (()=>{ const g=generateHighlights(); saveJSON(HIGHLIGHTS_CACHE_KEY,g); return g; })() : cache;
+    document.getElementById('highlightsList').innerHTML = data.html;
+  }
+
+  window.addEventListener('storage', (e)=>{
+    if (e.key === SAVED_ITEMS_KEY || e.key === PROFILE_KEY){
+      renderHeader(); renderSaved(); renderHighlights();
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+    renderHeader(); renderSaved(); renderHighlights();
+  });
+</script>
+
+</body>
+</html>
