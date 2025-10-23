@@ -1,31 +1,33 @@
-# Deals‑4Me Sponsor Slot (No Images)
+# 🛒 Deals-4Me
 
-This is a reusable component you can drop into any page. It supports:
-- **Slideshow mode** (default) — rotate through multiple sponsor images
-- **Single mode** — show one static sponsor banner
+**Deals-4Me** is a grocery price tracker and savings platform that brings weekly store flyers, circulars, and price comparisons together in one place.
 
-## Files
-- `sponsor-slot.html` — demo page
-- `sponsor-slot.css` — fixed sizing so layout never jumps
-- `sponsor-slot.js` — logic for slideshow/single + pause on hover
+It helps users:
+- Track grocery prices across multiple stores
+- Save favorite items and set price alerts
+- Earn Life Points (LP) through games and challenges
+- Access local and family-focused savings tools
 
-## How to use
-1) Copy `sponsor-slot.css` and `sponsor-slot.js` into your project.
-2) Add this markup where you want the slot to appear:
+---
 
-<link rel="stylesheet" href="sponsor-slot.css">
-<div id="sponsor-container">
-  <a id="sponsor-link" href="#" target="_blank" rel="noopener">
-    <img id="sponsor-image" src="images/placeholder1.jpg" alt="Sponsor">
-  </a>
-</div>
-<script src="sponsor-slot.js"></script>
+## 📁 Project Structure
+- **/site** – Website files (HTML, CSS, JS)
+- **/python** – Data scrapers and automation scripts
+- **/flyers** – Weekly flyer data (images, text, parsed CSVs)
+- **/exports** – Combined store data output
+- **/scripts** – PowerShell, setup, and helper scripts
 
-3) Put your images under `images/` and edit `sponsor-slot.js`:
-   - For slideshow: update `sponsorImages = [{src, link}, ...]`
-   - For single banner: set `mode = "single"` and set `singleSponsor = {src, link}`
+---
 
-## Optional Console Controls
-Deals4MeSponsor.setMode("single"); // or "slideshow")
-Deals4MeSponsor.setSingle({ src:"images/target.jpg", link:"https://target.com" });
-Deals4MeSponsor.setSlides([{src:"images/campbells.jpg", link:"#"}, {src:"images/lays.jpg", link:"#"}]);
+## ⚙️ Current Tools
+Built with:
+- **Python** (for scrapers & automation)
+- **Supabase** (database)
+- **HTML/CSS/JS** (frontend)
+- **GitHub** for version control
+
+---
+
+Created and maintained by **Jesse Weintraub**  
+📧 support@deals-4me.com  
+[GitHub: SirBeyondStars](https://github.com/SirBeyondStars)

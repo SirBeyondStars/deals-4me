@@ -1,30 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Deals‑4Me — flyers</title>
-  <link rel="stylesheet" href="theme.css" />
-  <link rel="stylesheet" href="toolbarTheme.css" />
+<link rel="stylesheet" href="./styles/theme.css">
+<link rel="stylesheet" href="./styles/toolbarTheme.css">
+</head>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deals-4Me | Weekly Flyers</title>
+  <link rel="stylesheet" href="./styles/theme.css" />
+  <script type="module" src="./scripts/supabaseClient.js"></script>
+  <script type="module" src="./scripts/checkProStatus.js"></script>
 </head>
 <body>
-  <!-- Shared header include -->
-  <div id="site-header"></div>
-  <script src="header.behavior.js" defer></script>
-  <script>
-    fetch('header.html')
-      .then(r => r.text())
-      .then(html => {
-        document.getElementById('site-header').innerHTML = html;
-        window.initDealsHeader && window.initDealsHeader();
-      });
-  </script>
+  <!-- HEADER / TOOLBAR -->
+  <header class="main-header">
+    <div class="toolbar">
+      <h1 class="site-title">🛒 Deals-4Me</h1>
+      <nav class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="flyers.html" class="active">Flyers</a>
+        <a href="stores.html">Stores</a>
+        <a href="profile.html">Profile</a>
+        <button id="logoutBtn" class="btn-small">Logout</button>
+      </nav>
+    </div>
+  </header>
 
-  <main class="wrap">
-    <!-- CONTENT START (flyers) -->
-    <h1>flyers</h1>
-    <p class="muted">Weekly flyers browser. Replace this placeholder with your current flyer viewer.</p>
-    <!-- Put your existing flyers page content here below this line. -->
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <section class="intro">
+      <h2>Weekly Store Flyers</h2>
+      <p>View the best grocery deals near you and compare stores instantly.</p>
+    </section>
+
+    <!-- PRO-ONLY CONTENT -->
+    <section class="pro-content" style="display:none;">
+      <h3>✨ Pro-Only Flyers & Insights</h3>
+      <div class="flyer-grid">
+        <div class="flyer-card">
+          <h4>Shaw’s Exclusive Ad</h4>
+          <p>Includes Pro insights, price drops, and trend highlights.</p>
+          <a href="./flyers/shaws.html" class="btn-primary">View Flyer</a>
+        </div>
+        <div class="flyer-card">
+          <h4>Aldi Weekly Breakdown</h4>
+          <p>Full-page scan, OCR deals, and matchups to your saved list.</p>
+          <a href="./flyers/aldi.html" class="btn-primary">View Flyer</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- UPGRADE PROMPT FOR FREE USERS -->
+    <section class="upgrade-section" style="text-align:center;">
+      <div class="upgrade-button" style="display:none;">
+        <h3>Unlock Pro Flyers</h3>
+        <p>Access exclusive store breakdowns, early previews, and personalized deals.</p>
+        <button class="btn-upgrade" onclick="window.location='pricing.html'">
+          Upgrade to Pro for just $4.99/mo
+        </button>
+      </div>
+    </section>
+
+    <!-- BASIC FLYERS (ALWAYS VISIBLE) -->
+    <section class="basic-flyers">
+      <h3>📰 Free Flyers (All Users)</h3>
+      <div class="flyer-grid">
+        <div class="flyer-card">
+          <h4>Hannaford</h4>
+          <p>Weekly circular preview and top 10 items.</p>
+          <a href="./flyers/hannaford.html" class="btn-secondary">View Flyer</a>
+        </div>
+        <div class="flyer-card">
+          <h4>Market Basket</h4>
+          <p>Local flyer deals for your region.</p>
+          <a href="./flyers/marketbasket.html" class="btn-secondary">View Flyer</a>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <!-- FOOTER -->
+  <footer class="main-footer">
+    <p>© 2025 Deals-4Me. All rights reserved.</p>
+  </footer>
+
+  <script type="module">
+    import { supabase } from './scripts/supabaseClient.js';
+
+    // Logout button logic
+    const logoutBtn = document.getElementById('logoutBtn');
+    logoutBtn.addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location = 'login.html';
+    });
+  </script>
 </body>
 </html>

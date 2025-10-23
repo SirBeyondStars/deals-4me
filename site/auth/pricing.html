@@ -1,15 +1,158 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deals‑4Me Pricing</title></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deals-4Me Pricing</title>
+  <link rel="stylesheet" href="./styles/theme.css">
+  <link rel="stylesheet" href="./styles/toolbarTheme.css">
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+      line-height: 1.5;
+    }
+    section h2 {
+      margin-top: 1.5rem;
+    }
+    .plan-card {
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      margin: 1rem 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .upgrade-btn {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.5rem 1.25rem;
+      border: none;
+      border-radius: 8px;
+      background: #5c6bc0;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .hidden { display: none !important; }
+  </style>
+</head>
+
 <body>
   <section>
-    <h1>Deals‑4Me Pricing Plans</h1>
+    <h1>Deals-4Me Pricing Plans</h1>
     <p>Save smarter. Track better. Find deals faster.</p>
-    <h2>🟢 Basic – Free</h2>
-    <ul><li>Save up to 30 items</li><li>View local circulars</li><li>Grocery discounts</li><li>Earn KLPs/ALPs</li></ul>
-    <h2>🟡 Gold – $0.99/month (First month FREE)</h2>
-    <ul><li>Save up to 50 items</li><li>Price drop alerts</li><li>Ad-free</li><li>Early access to Family Learning Center</li></ul>
-    <h2>🟣 Platinum – $4.99/month</h2>
-    <ul><li>Unlimited saved items</li><li>Family access (up to 5)</li><li>Shared FLPs</li><li>Budget tools + suggestions</li></ul>
+
+    <div class="plan-card">
+      <h2>🟢 Basic – Free</h2>
+      <ul>
+        <li>Save up to 30 items</li>
+        <li>View local circulars</li>
+        <li>Grocery discounts</li>
+        <li>Earn KLPs/ALPs</li>
+      </ul>
+      <button class="upgrade-btn" onclick="location.href='/site/auth/signup.html'">
+        Get Started Free
+      </button>
+    </div>
+
+    <div class="plan-card">
+      <h2>🟡 Gold – $0.99/month <small>(First month FREE)</small></h2>
+      <ul>
+        <li>Save up to 50 items</li>
+        <li>Price drop alerts</li>
+        <li>Ad-free</li>
+        <li>Early access to Family Learning Center</li>
+      </ul>
+      <button class="upgrade-btn upgrade-cta hidden" data-price-id="price_GOLD_ID">
+        Upgrade to Gold
+      </button>
+    </div>
+
+    <div class="plan-card">
+      <h2>🟣 Platinum – $4.99/month</h2>
+      <ul>
+        <li>Unlimited saved items</li>
+        <li>Family access (up to 5)</li>
+        <li>Shared FLPs</li>
+        <li>Budget tools + suggestions</li>
+      </ul>
+      <button class="upgrade-btn upgrade-cta hidden" data-price-id="price_PLATINUM_ID">
+        Upgrade to Platinum
+      </button>
+    </div>
+
+    <div class="plan-card pro-only hidden">
+      <h2>⭐ Manage Subscription</h2>
+      <p>You’re a Pro subscriber! Manage your billing or cancel anytime below.</p>
+      <button class="upgrade-btn" id="manageBilling">
+        Manage Billing
+      </button>
+    </div>
   </section>
-</body></html>
+
+  <!-- Supabase & Auth Gating -->
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+    const supabase = createClient(
+      "https://YOUR-PROJECT.supabase.co",
+      "YOUR-ANON-KEY"
+    );
+
+    async function gateUi() {
+      const { data: { user } } = await supabase.auth.getUser();
+      const proBlocks = [...document.querySelectorAll(".pro-only")];
+      const upgradeButtons = [...document.querySelectorAll(".upgrade-cta")];
+
+      if (!user) {
+        // Not logged in
+        upgradeButtons.forEach(btn => btn.classList.remove("hidden"));
+        proBlocks.forEach(block => block.classList.add("hidden"));
+        return;
+      }
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("is_active")
+        .eq("id", user.id)
+        .single();
+
+      const isPro = !!profile?.is_active;
+
+      if (isPro) {
+        proBlocks.forEach(el => el.classList.remove("hidden"));
+        upgradeButtons.forEach(el => el.classList.add("hidden"));
+      } else {
+        proBlocks.forEach(el => el.classList.add("hidden"));
+        upgradeButtons.forEach(btn => {
+          btn.classList.remove("hidden");
+          btn.onclick = async () => {
+            const priceId = btn.dataset.priceId;
+            const resp = await fetch("/api/create-checkout-session", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ priceId, userId: user.id, userEmail: user.email })
+            });
+            const { url } = await resp.json();
+            location.href = url;
+          };
+        });
+      }
+
+      // Billing portal for existing pros
+      const manageBilling = document.getElementById("manageBilling");
+      if (isPro && manageBilling) {
+        manageBilling.onclick = async () => {
+          const resp = await fetch("/api/create-portal", { method: "POST" });
+          const { url } = await resp.json();
+          location.href = url;
+        };
+      }
+    }
+
+    gateUi();
+  </script>
+</body>
+</html>
