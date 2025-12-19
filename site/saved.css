@@ -1,0 +1,68 @@
+/* ============================
+   Saved Items page styles
+   ============================ */
+
+/* Saved Items page styles (dark theme friendly) */
+.saved-items-page {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* Labels & text */
+.saved-items-page label,
+.saved-items-page p,
+.saved-items-page span {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+
+.saved-items-page .muted {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* Inputs & dropdowns */
+.saved-items-page select,
+.saved-items-page input {
+  color: #0f172a;
+  background-color: #ffffff;
+  border: 1px solid #94a3b8; /* slate-400 */
+  padding: 0.45rem 0.55rem;
+  border-radius: 6px;
+}
+
+/* Dropdown options */
+.saved-items-page option {
+  color: #0f172a;
+  background-color: #ffffff;
+}
+
+/* Buttons */
+.saved-items-page button {
+  color: #ffffff;
+  background-color: #0f766e; /* teal-700 */
+  border: none;
+  padding: 0.45rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.saved-items-page button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+/* Saved Items: plan info readability */
+#saved-plan-info {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+
+  /* readable on dark background */
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.08);
+
+  /* subtle separation */
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  line-height: 1.35;
+}
+#saved-plan-info strong {
+  color: #fff;
+}

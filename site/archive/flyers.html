@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Deals-4Me – Flyers</title>
+    <link rel="stylesheet" href="/site/theme.css" />
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <div id="toolbar-root"></div>
+
+    <main>
+      <div class="page-shell">
+        <h1 class="page-title">Weekly Flyers</h1>
+        <p class="page-subtitle">
+          Pick a store to view this week’s deals.
+        </p>
+
+        <div class="grid grid-2">
+          <section>
+            <h2 style="font-size:1.05rem;margin-bottom:0.5rem;">Stores</h2>
+            <div id="flyers-store-list"></div>
+          </section>
+
+          <section>
+            <h2 style="font-size:1.05rem;margin-bottom:0.5rem;">Deals</h2>
+            <div id="flyers-deals-container" class="alert">
+              Select a store to see its flyer items.
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <script src="/site/supabaseClient.js"></script>
+    <script src="/site/auth.js"></script>
+    <script src="/site/helpers.js"></script>
+    <script src="/site/toolbar.js"></script>
+    <script src="/site/flyers.js"></script>
+  </body>
+</html>

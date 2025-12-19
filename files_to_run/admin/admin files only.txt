@@ -1,0 +1,37 @@
+===========================================
+Deals-4Me — ADMIN SCRIPTS
+===========================================
+
+This folder contains ONLY launchers and UI-facing
+tools. These scripts DO NOT contain any heavy logic,
+OCR, ingestion, or filesystem manipulation.
+
+They simply *start* the real backend or frontend tasks.
+
+-------------------------------------------
+FILES IN THIS FOLDER SHOULD:
+-------------------------------------------
+✔ Launch the admin menu
+✔ Launch the front-end menu
+✔ Launch local dev servers
+✔ Provide small wrapper utilities
+✔ Check week status (light)
+
+-------------------------------------------
+FILES IN THIS FOLDER SHOULD NOT:
+-------------------------------------------
+✘ Run OCR directly
+✘ Create week folders
+✘ Parse flyers or images
+✘ Modify the database
+
+-------------------------------------------
+NOTES:
+-------------------------------------------
+If a script is something the *user clicks* to begin
+a workflow, it belongs here.
+
+If the script *does actual work*, it belongs in:
+
+  • /backend   (heavy logic)
+  • /frontend  (housekeeping / week setup)

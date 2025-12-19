@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Deals-4Me – Flyers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Global site styles -->
+  <link rel="stylesheet" href="theme.css" />
+  <!-- Page-specific styles (optional but recommended) -->
+  <link rel="stylesheet" href="flyers.css" />
+</head>
+<body>
+  <!-- Toolbar placeholder -->
+  <header id="toolbar"></header>
+
+  <main class="page flyers-page">
+    <h1>Choose Your New England Stores</h1>
+    <p>
+      Select the stores you shop at regularly. We'll use this list everywhere
+      else (dashboard, saved items, etc.).
+    </p>
+
+    <!-- ========== MY SAVED ITEMS (PER-USER GLOBAL LIST) ========== -->
+    <section id="saved-items-section" class="page-section">
+      <h2>My Saved Items</h2>
+      <p class="section-subtitle">
+        Add the groceries you want to track (e.g. “peanut butter”, “large eggs 12ct”).
+        We’ll look for these across all of your saved stores.
+      </p>
+
+      <form id="saved-item-form" class="saved-item-form">
+        <div class="form-row">
+          <label for="saved-item-name">Item name</label>
+          <input
+            id="saved-item-name"
+            type="text"
+            required
+            placeholder="e.g. peanut butter, large eggs 12ct"
+          />
+        </div>
+
+        <div class="form-row">
+          <label for="saved-item-notes">Notes (optional)</label>
+          <input
+            id="saved-item-notes"
+            type="text"
+            placeholder="brand, size, flavor, etc."
+          />
+        </div>
+
+        <button type="submit" class="primary-button">Save Item</button>
+        <span id="saved-item-message" class="small-status"></span>
+      </form>
+
+      <div id="saved-items-list" class="saved-items-list">
+        <h3>Items you’re tracking</h3>
+        <ul id="saved-items-ul">
+          <li>Loading your saved items…</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Region Coming Soon Banner -->
+    <div id="region-banner" class="region-banner" style="display: none;">
+      <!-- filled in by JS -->
+    </div>
+
+    <!-- ========== STORES ========== -->
+    <section id="stores-section" class="page-section">
+      <div class="stores-card">
+        <div class="store-selector">
+          <div class="list-box">
+            <h3>Available Stores</h3>
+            <select id="availableStores" multiple></select>
+          </div>
+
+          <div class="list-buttons">
+            <button id="addStoreBtn">&gt;&gt;</button>
+            <button id="removeStoreBtn">&lt;&lt;</button>
+          </div>
+
+          <div class="list-box">
+            <h3>Your Saved Stores</h3>
+            <select id="savedStores" multiple></select>
+          </div>
+        </div>
+
+        <p id="saved-stores-message" class="saved-stores-message">
+          <!-- JS will fill this in -->
+        </p>
+
+        <div class="stores-actions">
+          <button id="saveStoresBtn" class="primary-btn">Save My Stores</button>
+        </div>
+      </div>
+          <!-- ========== DEALS PREVIEW FOR SELECTED STORE ========== -->
+    <section id="store-deals-section" class="page-section">
+      <h2>Deals for Your Saved Stores</h2>
+      <p class="section-subtitle">
+        Pick at least one store in “Your Saved Stores” above. We’ll show this
+        week’s flyer items for your saved stores, starting with the first one.
+      </p>
+
+      <div id="store-deals-status" class="saved-stores-message"></div>
+      <div id="store-deals-list" class="store-deals-list"></div>
+    </section>
+
+    </section>
+
+  </main>
+
+  <!-- JS order matters: Supabase CDN → client wrapper → auth/helpers/toolbar → page logic -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.0/dist/umd/supabase.min.js"></script>
+  <script src="supabaseClient.js"></script>
+  <script src="auth.js"></script>
+  <script src="helpers.js"></script>
+  <script src="toolbar.js"></script>
+  <script src="flyers.js"></script>
+</body>
+</html>

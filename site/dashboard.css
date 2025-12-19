@@ -1,0 +1,210 @@
+/* dashboard.css
+   Owns dashboard-only layout and components.
+   Keep global/shared styles in theme.css.
+*/
+
+/* ----------------------------
+   Dashboard layout / container
+----------------------------- */
+
+.dashboard-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1rem;
+}
+
+/* Dashboard page background (single source of truth) */
+body.dashboard-page {
+  background-color: #84d095;
+}
+
+/* Main dashboard plate/panel */
+.dashboard-plate{
+  color: #103525 !important;
+  max-width: 760px;
+  width: min(760px, calc(100% - 32px));
+  margin: 32px auto;
+  padding: 24px 28px;
+
+  /* solid readable plate (NOT see-through) */
+  background: radial-gradient(
+    circle at 50% 30%,
+    #ffffff 0%,
+    #f2fff8 35%,
+    #e1f7ec 100%
+  );
+
+  border-radius: 18px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 18px 45px rgba(0,0,0,0.22);
+}
+
+/* If you want the plate to scroll instead of the page, keep these on.
+   If you ever dislike this behavior, remove these two lines. */
+.dashboard-plate{
+  max-height: calc(100vh - 140px);
+  overflow: auto;
+}
+
+/* ----------------------------
+   Stores summary cards container
+----------------------------- */
+
+#store-cards-container {
+  max-width: 540px;
+  margin: 1.5rem auto 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+/* Base store card */
+.dash-store-card {
+  background: #020617;
+  border-radius: 0.75rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid #1f2937;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  color: #e2e8f0;
+}
+
+.dash-store-card * {
+  color: inherit;
+}
+
+/* Front header layout */
+.store-card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.store-name {
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.store-week {
+  font-size: 0.85rem;
+  opacity: 0.95;
+}
+
+/* ----------------------------
+   Flip cards (hover desktop + tap mobile)
+   IMPORTANT: uses CSS grid overlay so the card height becomes
+   max(front, back). This avoids "content spills outside the card"
+   WITHOUT any guessing/min-height hacks.
+----------------------------- */
+
+.store-card {
+  perspective: 1000px;
+}
+
+.store-card-flip {
+  width: 100%;
+}
+
+/* Grid overlay = both faces occupy same space, and height is max(face heights) */
+.store-card-inner {
+  display: grid;
+  transform-style: preserve-3d;
+  transition: transform 0.45s ease;
+}
+
+.store-card-face {
+  grid-area: 1 / 1;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Front is default */
+.store-card-front {
+  transform: rotateY(0deg);
+}
+
+/* Back is rotated */
+.store-card-back {
+  transform: rotateY(180deg);
+}
+
+/* Desktop hover flips */
+@media (hover: hover) and (pointer: fine) {
+  .store-card:hover .store-card-inner {
+    transform: rotateY(180deg);
+  }
+}
+
+/* Mobile tap flips (JS toggles .is-flipped on .store-card) */
+.store-card.is-flipped .store-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Card body spacing */
+.store-card-body p {
+  margin: 0.1rem 0;
+  font-size: 0.9rem;
+}
+
+/* ----------------------------
+   Back rows (two sections on the back)
+----------------------------- */
+
+.back-row {
+  margin-top: 0.75rem;
+}
+
+.back-row-title {
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+}
+
+.mini-deal-list {
+  margin: 0;
+  padding-left: 1.15rem;
+}
+
+.mini-deal {
+  margin: 0.15rem 0;
+}
+
+.mini-deal-name {
+  display: inline-block;
+}
+
+.mini-deal-price {
+  display: inline-block;
+  margin-left: 0.5rem;
+  opacity: 0.9;
+}
+
+.mini-deal-actions {
+  margin-top: 0.35rem;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.mini-btn {
+  font-size: 0.85rem;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+}
+/* Make buttons readable on dark cards */
+.mini-btn {
+  background: #111827;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+  border-radius: 6px;
+}
+
+.mini-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+/* Dashboard status text should be readable on light plate */
+#dashboard-status {
+  color: #0f3d2e;       /* dark green, readable */
+  font-weight: 500;
+}

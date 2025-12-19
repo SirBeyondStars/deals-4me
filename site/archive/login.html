@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Deals-4Me – Login</title>
+    <link rel="stylesheet" href="/site/theme.css" />
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <div class="centered-page">
+      <div class="auth-card">
+        <h1 class="page-title">Sign in to Deals-4Me</h1>
+        <p class="page-subtitle">
+          Groceries, smarter. One place for all your weekly deals.
+        </p>
+
+        <div id="login-alert" class="alert" style="display:none;"></div>
+
+        <form id="login-form">
+          <label for="email">Email</label>
+          <input id="email" type="email" autocomplete="email" required />
+
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            autocomplete="current-password"
+            required
+          />
+
+          <button id="login-submit" type="submit">Continue</button>
+        </form>
+
+        <p class="helper-text" style="margin-top:0.75rem;">
+          New here? Sign up lives here later – for now, use your test login.
+        </p>
+      </div>
+    </div>
+
+    <script src="/site/supabaseClient.js"></script>
+    <script>
+      const form = document.getElementById("login-form");
+      const alertBox = document.getElementById("login-alert");
+      const submitBtn = document.getElementById("login-submit");
+
+      function showAlert(message) {
+        alertBox.textContent = message;
+        alertBox.style.display = "block";
+      }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        alertBox.style.display = "none";
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        if (!window.supabaseClient) {
+          showAlert("Supabase client not available.");
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Signing in...";
+
+        const { error } = await supabaseClient.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Continue";
+
+        if (error) {
+          console.error(error);
+          showAlert(error.message || "Login failed.");
+          return;
+        }
+
+        window.location.href = "/site/pin.html";
+      });
+    </script>
+  </body>
+</html>

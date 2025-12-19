@@ -1,0 +1,13 @@
+{
+  "store": "whole_foods",
+  "week_folder_name": "Week46",
+  "week_number": 46,
+  "start_of_week": "Sunday",
+  "created_utc": "2025-11-12T17:26:18.2934364Z",
+  "subfolders": [
+    "raw_pdfs",
+    "raw_images",
+    "ocr_txt",
+    "exports"
+  ]
+}

@@ -1,0 +1,231 @@
+/* site/theme.css */
+
+/* Reset-ish */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  background: #0f172a; /* slate-900 */
+  color: #e5e7eb;      /* gray-200 */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: #38bdf8; /* sky-400 */
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+main {
+  flex: 1;
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Card layout */
+.page-shell {
+  background: #020617; /* slate-950 */
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55);
+  border: 1px solid #1f2937; /* gray-800 */
+}
+
+.page-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.page-subtitle {
+  color: #9ca3af;
+  margin-bottom: 1.25rem;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+.grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+/* Forms */
+form label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+  color: #e5e7eb;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #4b5563;
+  background: #020617;
+  color: #f9fafb;
+  margin-bottom: 0.75rem;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 1px #38bdf8;
+}
+
+button {
+  border-radius: 999px;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(to right, #22c55e, #16a34a);
+  color: #f9fafb;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.secondary {
+  background: #111827;
+  border: 1px solid #4b5563;
+}
+
+/* Toolbar */
+#toolbar-root {
+  width: 100%;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  background: #020617;
+  border-bottom: 1px solid #1f2937;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toolbar-logo {
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.toolbar-beta {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #fbbf24;
+  border: 1px solid #fbbf24;
+  border-radius: 999px;
+  padding: 0.05rem 0.4rem;
+}
+
+.toolbar-nav {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.toolbar-link {
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.toolbar-link.active {
+  background: #111827;
+  color: #f9fafb;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+/* Login / PIN centering */
+.centered-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: #020617;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+  border: 1px solid #1f2937;
+}
+
+/* Tables */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.75rem;
+}
+
+.table th,
+.table td {
+  border-bottom: 1px solid #1f2937;
+  padding: 0.5rem 0.4rem;
+  font-size: 0.85rem;
+}
+
+.table th {
+  text-align: left;
+  color: #9ca3af;
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  background: #111827;
+  color: #e5e7eb;
+}
+
+/* Alert */
+.alert {
+  padding: 0.6rem 0.75rem;
+  background: #0b1120;
+  border-radius: 0.5rem;
+  border: 1px solid #1f2937;
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Helper text */
+.helper-text {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}

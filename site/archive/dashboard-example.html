@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Deals-4Me – Dashboard Example</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    .page-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .page-header h1 {
+      margin: 0 0 0.25rem;
+      font-size: 1.75rem;
+    }
+
+    .page-header p {
+      margin: 0;
+      color: #4b5563;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 0.75rem;
+      padding: 1rem 1.25rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.25rem;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+
+    .card-badge {
+      font-size: 0.75rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #3730a3;
+    }
+
+    .card-main {
+      font-size: 0.9rem;
+      color: #4b5563;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-metric {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .card-submetric {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .card-footer {
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- Top greeting / summary -->
+    <header class="page-header">
+      <h1>Hello <span id="dashName">Guest</span> 👋</h1>
+      <p>
+        Here’s your week at a glance. You can jump into flyers, saved items,
+        comparisons, or manage your plan from here.
+      </p>
+    </header>
+
+    <!-- 4 dashboard “cards” -->
+    <section class="card-grid">
+      <!-- Flyers card -->
+      <article class="card" id="card-flyers">
+        <div>
+          <div class="card-header">
+            <div class="card-title">Flyers This Week</div>
+            <span class="card-badge">This week</span>
+          </div>
+          <div class="card-main">
+            <div class="card-metric" id="flyersDealsCount">–</div>
+            <div class="card-submetric">
+              of your saved items are on sale across your top stores.
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="btn" onclick="goTo('flyers.html')">View Flyers</button>
+        </div>
+      </article>
+
+      <!-- Saved Items card -->
+      <article class="card" id="card-saved">
+        <div>
+          <div class="card-header">
+            <div class="card-title">Your Saved Items</div>
+            <span class="card-badge" id="planBadge">Basic</span>
+          </div>
+          <div class="card-main">
+            <div class="card-metric" id="savedCountMetric">– / –</div>
+            <div class="card-submetric" id="savedCountSub">
+              Items you’re tracking right now.
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="btn secondary" onclick="goTo('saved.html')">
+            Open Saved Items
+          </button>
+        </div>
+      </article>
+
+      <!-- Comparisons card -->
+      <article class="card" id="card-compare">
+        <div>
+          <div class="card-header">
+            <div class="card-title">Store Comparisons</div>
+            <span class="card-badge">Preview</span>
+          </div>
+          <div class="card-main">
+            <div class="card-metric" id="compareCountMetric">–</div>
+            <div class="card-submetric">
+              active comparison sets (e.g., weekly groceries).
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="btn secondary" onclick="goTo('comparisons.html')">
+            Open Comparisons
+          </button>
+        </div>
+      </article>
+
+      <!-- Profile / Plan card -->
+      <article class="card" id="card-profile">
+        <div>
+          <div class="card-header">
+            <div class="card-title">Profile & Plan</div>
+            <span class="card-badge">Account</span>
+          </div>
+          <div class="card-main">
+            <div class="card-metric" id="planMetric">Basic</div>
+            <div class="card-submetric" id="planDetail">
+              You can save up to 12 items. Upgrade to Gold or Platinum anytime.
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="btn secondary" onclick="goTo('profile.html')">
+            Manage Plan
+          </button>
+        </div>
+      </article>
+    </section>
+  </div>
+
+  <script>
+    // 🔹 In your real app, this would come from sessions.js / Supabase.
+    // For this example, we just fake a "current user" object:
+    const fakeUser = {
+      first_name: "Jesse",
+      plan: "basic",        // "basic" | "gold" | "platinum"
+      savedCount: 8,        // current # saved items
+      comparisonsCount: 2,  // current # comparisons
+      onSaleCount: 12       // how many saved items are on sale this week
+    };
+
+    function goTo(page) {
+      // For the demo, this just logs. In the real site, this is window.location.
+      console.log("Navigate to:", page);
+      // window.location.href = page;
+    }
+
+    function applyUserToDashboard(user) {
+      // Greeting name
+      const nameSpot = document.getElementById("dashName");
+      if (nameSpot && user.first_name) {
+        nameSpot.textContent = user.first_name;
+      }
+
+      // Flyers card
+      const flyersDealsCount = document.getElementById("flyersDealsCount");
+      if (flyersDealsCount) {
+        flyersDealsCount.textContent =
+          user.onSaleCount != null ? user.onSaleCount : "–";
+      }
+
+      // Saved items card
+      const planBadge = document.getElementById("planBadge");
+      const savedCountMetric = document.getElementById("savedCountMetric");
+      const savedCountSub = document.getElementById("savedCountSub");
+      const planMetric = document.getElementById("planMetric");
+      const planDetail = document.getElementById("planDetail");
+
+      let limitText = "";
+      if (user.plan === "basic") {
+        limitText = "12";
+        planBadge.textContent = "Basic";
+        planMetric.textContent = "Basic Plan";
+        planDetail.textContent =
+          "You can save up to 12 items. Upgrade to Gold or Platinum anytime.";
+      } else if (user.plan === "gold") {
+        limitText = "40";
+        planBadge.textContent = "Gold";
+        planMetric.textContent = "Gold Plan";
+        planDetail.textContent =
+          "You can save up to 40 items and unlock more detailed price comparisons.";
+      } else if (user.plan === "platinum") {
+        limitText = "∞";
+        planBadge.textContent = "Platinum";
+        planMetric.textContent = "Platinum Plan";
+        planDetail.textContent =
+          "Unlimited saved items and the full Deals-4Me feature set.";
+      }
+
+      if (savedCountMetric) {
+        if (limitText === "∞") {
+          savedCountMetric.textContent = `${user.savedCount} items`;
+        } else {
+          savedCountMetric.textContent = `${user.savedCount} / ${limitText}`;
+        }
+      }
+
+      if (savedCountSub) {
+        savedCountSub.textContent =
+          "Items you’re currently tracking for deals.";
+      }
+
+      // Comparisons card
+      const compareCountMetric = document.getElementById("compareCountMetric");
+      if (compareCountMetric) {
+        compareCountMetric.textContent =
+          user.comparisonsCount != null ? user.comparisonsCount : "0";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      applyUserToDashboard(fakeUser);
+    });
+
+    <article class="card" id="card-savings">
+  <div>
+    <div class="card-header">
+      <div class="card-title">Your Savings So Far</div>
+      <span class="card-badge">Savings</span>
+    </div>
+    <div class="card-main">
+      <div class="card-metric" id="savingsWeekMetric">$–</div>
+      <div class="card-submetric" id="savingsDetails">
+        This week (potential). Month: $– · YTD: $–.
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <button class="btn secondary" onclick="goTo('savings.html')">
+      View savings details
+    </button>
+  </div>
+</article>
+const fakeSavings = {
+  week_potential: 18.40,
+  month_potential: 52.17,
+  ytd_potential: 312.89,
+  week_actual: 12.95
+};
+
+function applySavingsToDashboard(s) {
+  const weekEl = document.getElementById("savingsWeekMetric");
+  const detailsEl = document.getElementById("savingsDetails");
+
+  if (weekEl) {
+    weekEl.textContent = `$${s.week_potential.toFixed(2)}`;
+  }
+
+  if (detailsEl) {
+    detailsEl.textContent =
+      `This week (potential). Actual: $${s.week_actual.toFixed(2)}. ` +
+      `Month: $${s.month_potential.toFixed(2)} · YTD: $${s.ytd_potential.toFixed(2)}.`;
+  }
+}
+
+  </script>
+</body>
+</html>

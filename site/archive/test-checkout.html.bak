@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Test Checkout – Deals-4Me</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; margin: 2rem; }
+    .btn { padding:.8rem 1.2rem; margin:.4rem; border:1px solid #ccc; border-radius:12px; cursor:pointer; }
+    #log { margin-top:1rem; padding:.75rem; background:#f6f6f6; border-radius:8px; white-space:pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Test Checkout</h1>
+  <p>Click the buttons and watch the log below.</p>
+
+  <div>
+    <button id="btn-gold" class="btn">Get Gold – $1.99/mo</button>
+    <button id="btn-platinum" class="btn">Get Platinum – $4.99/mo</button>
+    <button id="btn-signin" class="btn">Sign On</button>
+    <button id="btn-signout" class="btn">Sign Off</button>
+  </div>
+  <div id="log"></div>
+
+  <!-- Stripe (harmless to load now; needed later for real checkout) -->
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <!-- INLINE JS so no path issues tonight -->
+  <script>
+    (function(){
+      const logEl = document.getElementById("log");
+      const log   = (m)=>{ console.log(m); if(logEl) logEl.textContent += m + "\n"; };
+
+      function attach(id, fn){
+        const el = document.getElementById(id);
+        if(!el){ log("Missing " + id); return; }
+        el.addEventListener("click", async () => {
+          try { el.disabled = true; await fn(); }
+          catch(e){ log("Error on " + id + ": " + (e.message||e)); alert(e.message||e); }
+          finally { el.disabled = false; }
+        });
+        log("Attached -> " + id);
+      }
+
+      attach("btn-gold",     () => Promise.resolve(log("Clicked: gold_monthly")));
+      attach("btn-platinum", () => Promise.resolve(log("Clicked: platinum_monthly")));
+      attach("btn-signin",   () => Promise.resolve(log("Clicked: sign in (would go to /login.html)")));
+      attach("btn-signout",  () => Promise.resolve(log("Clicked: sign out")));
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="./styles/theme.css">
+<link rel="stylesheet" href="./styles/toolbarTheme.css">
+</head>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Deals‑4Me — billing</title>
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="toolbarTheme.css" />
+</head>
+<body>
+<header class="header">
+  <div class="header-inner">
+    <a class="brand" data-root-href="index.html">Deals-4Me</a>
+
+    <nav class="nav" aria-label="Main">
+      <a data-root-href="index.html">Home</a>
+
+      <div class="menu" data-submenu>
+        <button class="menu-trigger" aria-haspopup="true" aria-expanded="false">Deals</button>
+        <div class="menu-panel" role="menu">
+          <a role="menuitem" data-root-href="deals.html">All deals</a>
+          <a role="menuitem" data-root-href="flyers.html">Weekly flyers</a>
+
+          <div class="menu" data-submenu>
+            <button class="menu-trigger" aria-haspopup="true" aria-expanded="false">Groceries ▸</button>
+            <div class="menu-panel" role="menu">
+              <a role="menuitem" data-root-href="deals.html?cat=produce">Produce</a>
+              <a role="menuitem" data-root-href="deals.html?cat=meat">Meat</a>
+              <a role="menuitem" data-root-href="deals.html?cat=pantry">Pantry</a>
+            </div>
+          </div>
+
+          <a role="menuitem" data-root-href="deals.html?cat=household">Household</a>
+        </div>
+      </div>
+
+      <a data-root-href="recipes.html">Recipes</a>
+      <a data-root-href="gamesHub.html">Games</a>
+
+      <div class="menu" data-submenu>
+        <button class="menu-trigger" aria-haspopup="true" aria-expanded="false">Research</button>
+        <div class="menu-panel" role="menu">
+          <a role="menuitem" data-root-href="dashboard.html">Dashboard</a>
+          <a role="menuitem" data-root-href="search-deals.html">Search deals</a>
+        </div>
+      </div>
+
+      <!-- NEW: make Contact easy to find -->
+      <a data-root-href="contact.html" class="contact-link">Contact</a>
+
+      <!-- Auth controls: auto-toggled by header-auth.js -->
+      <a id="loginLink" data-root-href="auth/login.html">Login</a>
+      <button id="logoutBtn" class="logout-btn hidden" type="button">Logout</button>
+    </nav>
+
+    <button class="nav-toggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Toggle menu">☰</button>
+  </div>
+
+  <nav id="mobileNav" class="nav-drawer" aria-label="Mobile"></nav>
+</header>
+
+<style>
+  /* minimal sugar; your theme.css can style these further */
+  .contact-link { color:#1a4dd8; font-weight:600; }
+  .menu[data-submenu] { position: relative; }
+  .menu-panel { display:none; position:absolute; top:100%; left:0; background:#fff; border:1px solid #e5e7eb; border-radius:8px; padding:6px 0; box-shadow:0 4px 12px rgba(0,0,0,.06); z-index:50; }
+  .menu[data-open="true"] > .menu-panel { display:block; }
+  .nav-toggle { background:none; border:1px solid #e5e7eb; border-radius:8px; padding:6px 10px; }
+  .nav-drawer { display:none; }
+  @media (max-width: 820px){
+    .nav { display:none; }
+    .nav-drawer { display:block; border-top:1px solid #e5e7eb; }
+  }
+</style>
+
+  <!-- Shared header include -->
+  <div id="site-header"></div>
+  <script src="header.behavior.js" defer></script>
+  <script>
+    fetch('header.html')
+      .then(r => r.text())
+      .then(html => {
+        document.getElementById('site-header').innerHTML = html;
+        window.initDealsHeader && window.initDealsHeader();
+      });
+  </script>
+
+  <main class="wrap">
+    <!-- CONTENT START (billing) -->
+    <h1>billing</h1>
+    <p class="muted">Billing options and early-bird counter widget.</p>
+    <!-- Put your existing billing page content here below this line. -->
+  </main>
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a data-root-href="tos.html">Terms of Service</a>
+      <a data-root-href="privacy.html">Privacy Policy</a>
+      <a data-root-href="contact.html">Contact</a>
+    </div>
+
+    <div class="footer-meta">
+      © <span id="footerYear"></span> Deals-4Me — All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script>
+  // keep the year updated even when loaded as a fragment
+  document.getElementById("footerYear").textContent = new Date().getFullYear();
+</script>
+
+<style>
+  /* minimal styling — your theme.css can override/extend */
+  .footer { background:#ffffff; border-top:1px solid #e5e7eb; margin-top:48px; }
+  .footer-inner {
+    max-width:1100px; margin:0 auto; padding:20px 16px;
+    display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between;
+  }
+  .footer-links { display:flex; gap:16px; flex-wrap:wrap; }
+  .footer-links a { color:#374151; text-decoration:none; font-size:14px; }
+  .footer-links a:hover { color:#1a4dd8; }
+  .footer-meta { color:#9ca3af; font-size:12px; }
+</style>
+
+
+</html>
+

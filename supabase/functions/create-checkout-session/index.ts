@@ -10,9 +10,10 @@ const supabase = createClient(
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
 
+
 // TODO: replace these with your real Stripe price IDs later
 const PRICE_IDS = {
-  gold_monthly: "PRICE_ID_GOLD_MONTHLY",
+  gold_monthly: "price_1SLZ3MEpOEtlvGXKVBDzhhIv",
   platinum_monthly: "PRICE_ID_PLATINUM_MONTHLY",
   gold_annual: "PRICE_ID_GOLD_ANNUAL",
   platinum_annual: "PRICE_ID_PLATINUM_ANNUAL",

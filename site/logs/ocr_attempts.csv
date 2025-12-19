@@ -1,0 +1,2 @@
+timestamp_utc,store_id,week_code,source_file,attempt,status,reason,details
+2025-12-18T23:02:32.538020+00:00,unknown,unknown,C:\Users\jwein\OneDrive\Desktop\deals-4me\flyers\whole_foods\week50\raw_png\1.png,1,FAIL,EXCEPTION:TesseractNotFoundError,

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Deals-4Me — Set up your household</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f3f4f6;
+      color: #111827;
+      display: flex;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .setup-shell {
+      width: 100%;
+      max-width: 460px;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.15);
+      padding: 24px 22px 26px;
+    }
+
+    h1 {
+      margin: 0 0 .25rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .muted {
+      font-size: .9rem;
+      color: #6b7280;
+      margin-bottom: 1.2rem;
+    }
+
+    .field {
+      margin-bottom: .85rem;
+    }
+
+    label {
+      display: block;
+      font-size: .85rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: .2rem;
+    }
+
+    input {
+      width: 100%;
+      padding: .55rem .75rem;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      font-size: .95rem;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #2563eb;
+      background: #ffffff;
+      box-shadow: 0 0 0 1px #2563eb22;
+    }
+
+    .two-col {
+      display: flex;
+      gap: .6rem;
+    }
+
+    .help {
+      font-size: .8rem;
+      color: #6b7280;
+      margin-bottom: .8rem;
+    }
+
+    .error {
+      font-size: .83rem;
+      color: #b91c1c;
+      margin-bottom: .4rem;
+      display: none;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: .8rem;
+    }
+
+    button.primary {
+      border: none;
+      border-radius: 999px;
+      padding: .55rem 1.4rem;
+      font-size: .9rem;
+      font-weight: 600;
+      background: #2563eb;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    button.primary:disabled {
+      opacity: .6;
+      cursor: default;
+    }
+
+    .small-note {
+      margin-top: .7rem;
+      font-size: .78rem;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+
+<div class="setup-shell">
+  <h1>Set up your household</h1>
+  <p class="muted">
+    We’ll use this info to personalize your Deals-4Me experience and protect your account with a 6-digit PIN.
+  </p>
+
+  <form id="setupForm">
+    <div class="field">
+      <label for="householdName">Household name</label>
+      <input id="householdName" type="text" autofocus placeholder="Weintraub Family" required />
+    </div>
+
+    <div class="field">
+      <label for="zip">ZIP (optional)</label>
+      <input id="zip" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="10" placeholder="02324" />
+    </div>
+
+    <div class="field">
+      <label for="ownerName">Owner name</label>
+      <input id="ownerName" type="text" placeholder="Jesse" required />
+    </div>
+
+    <p class="help">
+      The owner controls household settings and can help reset PINs for other family members later.
+    </p>
+
+    <div class="two-col">
+      <div class="field" style="flex:1">
+        <label for="pin">Create 6-digit PIN</label>
+        <input id="pin" type="password"
+               inputmode="numeric" pattern="[0-9]*"
+               maxlength="6" autocomplete="off" required />
+      </div>
+      <div class="field" style="flex:1">
+        <label for="pinConfirm">Confirm PIN</label>
+        <input id="pinConfirm" type="password"
+               inputmode="numeric" pattern="[0-9]*"
+               maxlength="6" autocomplete="off" required />
+      </div>
+    </div>
+
+    <div id="errorBox" class="error"></div>
+
+    <div class="btn-row">
+      <button id="submitBtn" class="primary" type="submit">Save &amp; continue</button>
+    </div>
+
+    <p class="small-note">
+      Your PIN is checked and stored securely on our servers. We never store the raw PIN.
+    </p>
+  </form>
+</div>
+
+<!-- Firebase SDKs (compat builds) -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-functions-compat.js"></script>
+
+<script>
+  // TODO: paste your real Firebase config here (same as login/dashboard)
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "deals-4me-24e59.firebaseapp.com",
+    projectId: "deals-4me-24e59",
+    storageBucket: "deals-4me-24e59.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+  const functions = firebase.functions(); // default region (us-central1)
+
+  const setupForm = document.getElementById("setupForm");
+  const errorBox = document.getElementById("errorBox");
+  const submitBtn = document.getElementById("submitBtn");
+
+  const householdNameInput = document.getElementById("householdName");
+  const zipInput = document.getElementById("zip");
+  const ownerNameInput = document.getElementById("ownerName");
+  const pinInput = document.getElementById("pin");
+  const pinConfirmInput = document.getElementById("pinConfirm");
+
+  function showError(msg) {
+    errorBox.textContent = msg;
+    errorBox.style.display = "block";
+  }
+
+  function clearError() {
+    errorBox.textContent = "";
+    errorBox.style.display = "none";
+  }
+
+  // Make sure only signed-in users can use this page
+  auth.onAuthStateChanged((user) => {
+    if (!user) {
+      // If they somehow got here without logging in, kick back to auth
+      window.location.href = "login.html";
+    }
+  });
+
+  setupForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    clearError();
+
+    const pin = pinInput.value.trim();
+    const pinConfirm = pinConfirmInput.value.trim();
+    const householdName = householdNameInput.value.trim();
+    const zip = zipInput.value.trim();
+    const ownerName = ownerNameInput.value.trim();
+
+    if (pin.length !== 6 || !/^\d{6}$/.test(pin)) {
+      showError("PIN must be exactly 6 digits.");
+      return;
+    }
+    if (pin !== pinConfirm) {
+      showError("PINs do not match.");
+      return;
+    }
+
+    const user = auth.currentUser;
+    if (!user) {
+      showError("You are not signed in. Please log in again.");
+      return;
+    }
+
+    submitBtn.disabled = true;
+
+    try {
+      const userId = user.uid;
+      const householdId = "primary"; // you can change this later if you support multiple households
+      const profileId = "owner";
+
+      // 1) Create / update the household doc
+      const householdRef = db
+        .collection("users")
+        .doc(userId)
+        .collection("households")
+        .doc(householdId);
+
+      await householdRef.set(
+        {
+          householdName,
+          zip: zip || null,
+          ownerProfileId: profileId,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        },
+        { merge: true }
+      );
+
+      // 2) Create / update the owner profile metadata
+      const ownerProfileRef = householdRef
+        .collection("profiles")
+        .doc(profileId);
+
+      await ownerProfileRef.set(
+        {
+          displayName: ownerName || "Owner",
+          ageGroup: "adult",
+          isOwner: true,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        },
+        { merge: true }
+      );
+
+      // 3) Call Cloud Function to set the secure PIN hash
+      const setProfilePin = functions.httpsCallable("setProfilePin");
+      await setProfilePin({
+        userId,
+        householdId,
+        profileId,
+        pin
+      });
+
+      // 4) Go to dashboard (or wherever you want first)
+      window.location.href = "../dashboard.html";
+    } catch (err) {
+      console.error(err);
+      showError("Something went wrong saving your info. Please try again.");
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>

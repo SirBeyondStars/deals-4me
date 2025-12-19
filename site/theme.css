@@ -1,0 +1,198 @@
+/* site/theme.css */
+
+/* Reset-ish */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body{
+  background: #061222; /* deep navy */
+  color: #e6eefc;
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+a{
+  color: #7dd3fc;
+  text-decoration: none;
+}
+a:hover{
+  text-decoration: underline;
+}
+
+main{
+  padding: 18px;
+}
+
+/* Simple page container helpers */
+.page-shell{
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.page-title{
+  margin: 0 0 6px 0;
+  font-size: 1.6rem;
+  letter-spacing: 0.2px;
+}
+.page-subtitle{
+  margin: 0 0 18px 0;
+  color: #bcd0ea;
+}
+
+/* Toolbar */
+.toolbar{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.18);
+}
+.toolbar a{
+  color: #dbeafe;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+.toolbar a:hover{
+  background: rgba(255,255,255,0.08);
+  text-decoration: none;
+}
+
+/* Buttons */
+.btn{
+  display: inline-block;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: #e6eefc;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.btn:hover{
+  background: rgba(255,255,255,0.10);
+}
+.btn.primary{
+  background: rgba(34,197,94,0.16);
+  border-color: rgba(34,197,94,0.30);
+}
+
+/* Inputs */
+input, select, textarea{
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: #e6eefc;
+  outline: none;
+}
+input::placeholder, textarea::placeholder{
+  color: rgba(230,238,252,0.60);
+}
+label{
+  display: block;
+  margin: 10px 0 6px 0;
+  color: #cfe1ff;
+  font-weight: 800;
+}
+
+/* Cards (generic) */
+.card{
+  background: rgba(0,0,0,0.22);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+/* Tables (generic) */
+table{
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td{
+  text-align: left;
+  padding: 10px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+th{
+  color: #cfe1ff;
+  font-weight: 900;
+  font-size: 0.9rem;
+}
+
+/* Utility */
+.muted{ color: #bcd0ea; }
+.small{ font-size: 0.9rem; }
+.center{ text-align: center; }
+.hidden{ display: none !important; }
+
+/* Auth / centered pages */
+.centered-page{
+  min-height: calc(100vh - 54px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.auth-card{
+  width: 100%;
+  max-width: 420px;
+  background: rgba(0,0,0,0.22);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 18px;
+  padding: 18px;
+}
+
+/* Profiles table tweaks (kept global because it’s reused) */
+.table-actions{
+  display: flex;
+  gap: 8px;
+}
+
+/* Save status helpers (reused across pages) */
+.save-status {
+  display: inline-block;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+.save-status.saving {
+  color: #ffd166;
+}
+.save-status.saved {
+  color: #1dd75f;
+}
+.save-status.error {
+  color: #ff4d4f;
+}
+
+/* Region banner (reused anywhere) */
+.region-banner {
+  margin: 12px 0 16px 0;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #f59e0b;
+  background: rgba(251, 191, 36, 0.1);
+  color: #fef3c7;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+.region-banner strong {
+  color: #fff;
+}
+
+/* Money palette tokens (global variables) */
+:root{
+  --money-green-1: #0b5f3b;  /* dark edge */
+  --money-green-2: #1f8a5b;  /* mid */
+  --money-green-3: #e9fff6;  /* center glow */
+}

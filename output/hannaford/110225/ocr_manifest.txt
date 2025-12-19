@@ -1,0 +1,5 @@
+store=hannaford
+week=110225
+wrote=0
+skipped=0
+errors=0

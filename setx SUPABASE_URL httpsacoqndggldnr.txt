@@ -1,0 +1,2 @@
+setx SUPABASE_URL https://acoqndggldnrsjmonlge.supabase.co
+setx SUPABASE_ANON_KEY sb_publishable_0spAlB_gWzHk84bklBFdgg_CkJNwUYF

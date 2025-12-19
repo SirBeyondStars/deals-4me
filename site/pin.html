@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Deals-4Me – Enter PIN</title>
+
+    <!-- PIN page specific styles -->
+    <link rel="stylesheet" href="pin.css" />
+
+    <style>
+      header .value-frame{
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-weight: 600;
+        line-height: 1.35;
+        opacity: 0.95;
+      }
+      header .value-frame .accent{
+        opacity: 0.98;
+      }
+    </style>
+
+  </head>
+  <body>
+    <div class="page-wrap">
+      <header>
+        <h1>Household PIN Access</h1>
+        <p id="pin-owner-info">
+          Select your profile and enter your 6-digit PIN to continue.
+        </p>
+
+        <div class="value-frame" aria-label="Deals-4Me value statement">
+          <div>Shopping lists help you buy.</div>
+          <div class="accent">Saved items help you buy better over time.</div>
+        </div>
+        <p id="pin-error" class="pin-error" style="display: none;"></p>
+      </header>
+
+      <div class="cards-grid">
+        <!-- LEFT: PIN entry -->
+        <section class="card pin-card">
+          <h2>Choose Profile &amp; Enter PIN</h2>
+
+          <!-- Everything wrapped in a single form -->
+          <form id="pin-form" novalidate>
+            <!-- Profiles list (JS fills this) -->
+            <div class="profiles-list" id="profile-list">
+              <!-- Example structure JS can inject:
+              <button class="profile-pill" data-profile-id="uuid">Jesse</button>
+              -->
+            </div>
+
+            <!-- PIN display -->
+            <div class="pin-display-wrap">
+              <label for="pin-input">PIN (6 digits)</label>
+              <div class="pin-dots" id="pin-dots">
+                <!-- JS shows •••••• here -->
+              </div>
+              <input
+                type="password"
+                id="pin-input"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                minlength="6"
+                maxlength="6"
+                pattern="[0-9]{6}"
+                class="pin-hidden-input"
+              />
+            </div>
+
+            <!-- Keypad -->
+            <div class="keypad" id="pin-keypad">
+              <button type="button" class="key-btn" data-digit="1">1</button>
+              <button type="button" class="key-btn" data-digit="2">2</button>
+              <button type="button" class="key-btn" data-digit="3">3</button>
+
+              <button type="button" class="key-btn" data-digit="4">4</button>
+              <button type="button" class="key-btn" data-digit="5">5</button>
+              <button type="button" class="key-btn" data-digit="6">6</button>
+
+              <button type="button" class="key-btn" data-digit="7">7</button>
+              <button type="button" class="key-btn" data-digit="8">8</button>
+              <button type="button" class="key-btn" data-digit="9">9</button>
+
+              <button
+                type="button"
+                class="key-btn key-btn-secondary"
+                data-action="clear"
+              >
+                Clear
+              </button>
+              <button type="button" class="key-btn" data-digit="0">0</button>
+              <button
+                type="button"
+                class="key-btn key-btn-secondary"
+                data-action="backspace"
+              >
+                ⌫
+              </button>
+            </div>
+
+            <!-- Single Continue button -->
+            <div class="pin-actions">
+              <button type="submit" id="pin-submit-btn" class="btn-primary">
+                Continue
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- RIGHT: Ads / DOTW placeholder -->
+        <section class="card ads-card">
+          <h2>Deals-4Me Highlights</h2>
+
+          <p class="ads-intro">
+            This space will soon showcase your personalized
+            <strong>Deal of the Week</strong> and featured offers.
+            For now, here’s where ads or sponsor messages will appear.
+          </p>
+
+          <div class="ad-slot ad-slot-large">
+            <span class="ad-label">Future: Deal of the Week</span>
+          </div>
+
+          <div class="ad-slot-grid">
+            <div class="ad-slot">
+              <span class="ad-label">Ad Slot A</span>
+            </div>
+            <div class="ad-slot">
+              <span class="ad-label">Ad Slot B</span>
+            </div>
+          </div>
+
+          <p class="ads-footer">
+            As Deals-4Me grows, this panel becomes dynamic: rotating sponsors,
+            smart grocery promos, and your top matched offers.
+          </p>
+        </section>
+      </div>
+    </div>
+
+    <!-- JS: Supabase / auth / pin logic -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.0/dist/umd/supabase.min.js"></script>
+    <script src="supabaseClient.js"></script>
+    <script src="auth.js"></script>
+    <script src="helpers.js"></script>
+    <!-- IMPORTANT: no toolbar on PIN page -->
+    <!-- <script src="toolbar.js"></script> -->
+    <script src="pinLogin.js"></script>
+  </body>
+</html>

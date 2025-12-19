@@ -1,0 +1,36 @@
+===========================================
+Deals-4Me — FRONTEND MAINTENANCE SCRIPTS
+===========================================
+
+This folder contains scripts used to manage the
+flyer folder structure, clean up old data, archive
+old weeks, and prepare upcoming weeks.
+
+These scripts are safe to run and handle all
+housekeeping tasks.
+
+-------------------------------------------
+FILES IN THIS FOLDER SHOULD:
+-------------------------------------------
+✔ Create new week folders
+✔ Rename week folders correctly
+✔ Prepare raw_images/raw_pdfs
+✔ Clean up old snips or leftover files
+✔ Archive old weeks
+✔ Build start-day view files
+✔ Remove empty folders
+
+-------------------------------------------
+FILES IN THIS FOLDER SHOULD NOT:
+-------------------------------------------
+✘ Run store ingest logic
+✘ Process or OCR images
+✘ Call Python backend scripts
+✘ Modify database or parsed data
+
+-------------------------------------------
+NOTES:
+-------------------------------------------
+If a script organizes folders, moves files,
+cleans things, or prepares the structure for
+OCR/ingest, it belongs here.

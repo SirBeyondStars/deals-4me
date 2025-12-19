@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Deals-4Me Plans</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Optional: if you already have theme.css, you can uncomment this -->
+  <!-- <link rel="stylesheet" href="/css/theme.css" /> -->
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    .d4m-page-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 0 3rem;
+    }
+
+    .d4m-pricing-section {
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .d4m-pricing-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .d4m-pricing-header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .d4m-pricing-header p {
+      font-size: 0.95rem;
+      color: #555;
+      max-width: 650px;
+      margin: 0.25rem auto 0;
+    }
+
+    .d4m-pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .d4m-pricing-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .d4m-plan-card {
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .d4m-plan-card.highlight {
+      border-color: #2b7a3f; /* adjust to your theme color */
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .d4m-plan-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .d4m-plan-tagline {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.75rem;
+    }
+
+    .d4m-plan-price {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .d4m-plan-price span {
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: #666;
+    }
+
+    .d4m-plan-list {
+      list-style: none;
+      padding: 0;
+      margin: 0.75rem 0 1rem;
+      font-size: 0.9rem;
+    }
+
+    .d4m-plan-list li {
+      margin-bottom: 0.4rem;
+    }
+
+    .d4m-plan-footer {
+      margin-top: auto;
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    .d4m-plan-pill {
+      display: inline-block;
+      background: #e0f2e7;
+      color: #205c30;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+    }
+  </style>
+</head>
+<body>
+  <div class="d4m-page-wrapper">
+    <section class="d4m-pricing-section" id="plans">
+      <div class="d4m-pricing-header">
+        <h1>Deals-4Me Plans</h1>
+        <p>
+          Pick the level that fits how you shop. Every plan is built around one goal:
+          helping you save real money on the groceries you already buy.
+        </p>
+      </div>
+
+      <div class="d4m-pricing-grid">
+
+        <!-- BASIC (FREE) -->
+        <article class="d4m-plan-card">
+          <div class="d4m-plan-header">
+            <div class="d4m-plan-name">
+              Basic
+              <span class="d4m-plan-pill">Free</span>
+            </div>
+            <p class="d4m-plan-tagline">
+              Perfect for trying Deals-4Me and getting weekly savings on your most important items.
+            </p>
+          </div>
+
+          <div class="d4m-plan-body">
+            <div class="d4m-plan-price">$0 <span>/ month</span></div>
+            <ul class="d4m-plan-list">
+              <li>Save up to <strong>12 items</strong> on your list.</li>
+              <li>See <strong>where those items are on sale</strong> each week.</li>
+              <li>Know your <strong>#1 best store</strong> based on savings.</li>
+              <li>See optional stores (<strong>+</strong>) that also have deals from your saved list.</li>
+              <li>See single standout deals (<strong>++</strong>) on your saved items.</li>
+              <li>Weekly savings summary.</li>
+              <li>Ad-supported experience.</li>
+            </ul>
+          </div>
+
+          <div class="d4m-plan-footer">
+            Great for getting to know the app and checking if your core items are on sale each week.
+          </div>
+        </article>
+
+        <!-- GOLD -->
+        <article class="d4m-plan-card highlight">
+          <div class="d4m-plan-header">
+            <div class="d4m-plan-name">
+              Gold
+              <span class="d4m-plan-pill">Most popular</span>
+            </div>
+            <p class="d4m-plan-tagline">
+              Designed for shoppers who want smarter weekly planning and fewer full-price surprises.
+            </p>
+          </div>
+
+          <div class="d4m-plan-body">
+            <div class="d4m-plan-price">$1.99 <span>/ month</span></div>
+            <ul class="d4m-plan-list">
+              <li>Everything in <strong>Basic</strong>, plus:</li>
+              <li><strong>Smart deal predictions</strong> — see which items are likely to go on sale soon.</li>
+              <li>“<strong>Stock up</strong> now” vs “<strong>wait</strong>” guidance based on sale patterns.</li>
+              <li>Seasonal and cycle-based deal insights (coffee, paper goods, pantry items, etc.).</li>
+              <li>Save up to <strong>50 items</strong> on your list.</li>
+              <li><strong>No ads</strong> — a cleaner, faster experience.</li>
+            </ul>
+          </div>
+
+          <div class="d4m-plan-footer">
+            Great for families and weekly planners who want to avoid paying full price whenever possible.
+          </div>
+        </article>
+
+        <!-- PLATINUM -->
+        <article class="d4m-plan-card">
+          <div class="d4m-plan-header">
+            <div class="d4m-plan-name">Platinum</div>
+            <p class="d4m-plan-tagline">
+              The full Deals-4Me experience — your all-in-one grocery savings assistant.
+            </p>
+          </div>
+
+          <div class="d4m-plan-body">
+            <div class="d4m-plan-price">$4.99 <span>/ month</span></div>
+            <ul class="d4m-plan-list">
+              <li>Everything in <strong>Gold</strong>, plus:</li>
+              <li><strong>Universal search bar</strong> — look up any item across supported stores, even if it’s not on your saved list.</li>
+              <li>Instantly find the <strong>cheapest price</strong> on staples like meat, coffee, detergent, diapers, and more.</li>
+              <li><strong>Unlimited saved items</strong> — build out your full grocery universe.</li>
+              <li>The most complete weekly savings map Deals-4Me can offer.</li>
+            </ul>
+          </div>
+
+          <div class="d4m-plan-footer">
+            Great for power savers, large households, and anyone who wants maximum savings with minimum effort.
+          </div>
+        </article>
+
+      </div>
+    </section>
+  </div>
+</body>
+</html>

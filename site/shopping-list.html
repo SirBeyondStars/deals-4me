@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deals-4Me – Saved Items</title>
+
+  <link rel="stylesheet" href="shopping-list.css" />
+
+</head>
+
+<body>
+  <main class="page-main">
+    <h1>Saved Items</h1>
+
+    <p id="saved-items-status" class="status-text">
+      Checking your session...
+    </p>
+
+    <section class="add-item-section">
+      <h2>Add a new item to track</h2>
+      <form id="add-item-form" class="add-item-form">
+        <input
+          id="new-item-input"
+          type="text"
+          placeholder="e.g. eggs, 2% milk, ground beef"
+          autocomplete="off"
+        />
+        <button type="submit">Add item</button>
+      </form>
+      <p class="hint-text">
+        This is your personal list. Later we’ll use it to search flyers and find the best prices.
+      </p>
+    </section>
+
+    <section class="saved-items-list-section">
+      <h2>Your saved items</h2>
+      <div id="saved-items-empty" class="empty-state hidden">
+        You haven’t saved any items yet. Add a few above to get started.
+      </div>
+      <ul id="saved-items-list" class="saved-items-list"></ul>
+    </section>
+  </main>
+
+  <!-- JS: Supabase library + client + this page logic -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseClient.js"></script>
+  <script src="shopping-list.js"></script>
+</body>
+</html>

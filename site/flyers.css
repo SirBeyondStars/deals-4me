@@ -1,0 +1,362 @@
+/* Page-specific styles for flyers */
+
+:root {
+  --bg: #020819;
+  --card-bg: rgba(10, 20, 40, 0.9);
+  --accent: #1ddf6f;
+  --text-main: #f5f7ff;
+  --text-muted: #9ca3af;
+  --border-subtle: rgba(148, 163, 184, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: radial-gradient(circle at top, #071023 0, #020819 55%);
+  color: var(--text-main);
+}
+
+/* Keep this so other pages can match later */
+.page-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0 0 0.5rem;
+}
+
+/* Layout */
+.flyers-layout {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin-top: 1rem;
+}
+
+.flyers-left {
+  flex: 1;
+  max-width: 260px;
+}
+
+.flyers-right {
+  flex: 2.5;
+}
+
+@media (max-width: 900px) {
+  .flyers-layout {
+    flex-direction: column;
+  }
+  .flyers-left {
+    max-width: none;
+  }
+}
+
+/* Left side */
+.flyers-left-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.flyers-status-text {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0 0 0.75rem;
+}
+
+.store-selector-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.store-selector-label {
+  font-size: 0.9rem;
+}
+
+.store-selector {
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.4rem;
+  border: 1px solid var(--border-subtle);
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text-main);
+  font-size: 0.9rem;
+}
+
+.store-selector:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.saved-count-row {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.saved-count-row span:first-child {
+  font-weight: 600;
+  color: var(--text-main);
+  margin-right: 0.25rem;
+}
+
+/* Right side card */
+.flyers-card {
+  border-radius: 0.9rem;
+  padding: 1rem 1.1rem 1.2rem;
+  border: 1px solid var(--border-subtle);
+  background: var(--card-bg);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.8);
+}
+
+.flyers-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.flyers-card-header h2 {
+  font-size: 1.25rem;
+}
+
+.selected-store-label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-align: right;
+  flex: 1;
+}
+
+/* Deals list */
+.flyers-deals-container {
+  min-height: 120px;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.flyer-items-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.flyer-item-card {
+  border-radius: 0.7rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border-subtle);
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.9),
+    rgba(30, 64, 175, 0.45)
+  );
+}
+
+.flyer-item-main {
+  margin-bottom: 0.35rem;
+}
+
+.flyer-item-name {
+  font-weight: 600;
+  margin-bottom: 0.1rem;
+}
+
+.flyer-item-size {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.flyer-item-prices {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+.flyer-item-sale {
+  font-weight: 700;
+}
+
+.flyer-item-regular {
+  font-size: 0.85rem;
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+/* Saved stores row + save button */
+.saved-stores-row {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.saved-stores-row-title {
+  font-weight: 500;
+  margin-right: 0.25rem;
+}
+
+.saved-stores-empty {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.saved-store-pill {
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--border-subtle);
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text-main);
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.saved-store-pill.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(29, 223, 111, 0.4);
+}
+
+.save-store-btn {
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text-main);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.save-store-btn.is-saved {
+  border-color: var(--accent);
+}
+
+.save-store-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.selected-store-label-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+/* View Saved Stores button */
+.saved-mode {
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+.saved-mode-btn {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text-main);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.saved-mode-btn:hover {
+  border-color: var(--accent);
+}
+
+.saved-mode-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+/* ==== Saved items layout ==== */
+
+#saved-items-list {
+  margin-top: 0.75rem;
+}
+
+#saved-items-ul {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding-left: 0;
+
+  /* 2-column (or more) responsive grid */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.75rem 1.5rem;
+}
+
+#saved-items-ul li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.6rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  font-size: 0.9rem;
+}
+/* Smaller “Remove” pill for saved items */
+#saved-items-ul .inline-danger-button {
+  padding: 0.15rem 0.6rem;
+  font-size: 0.75rem;
+  border-radius: 999px;  /* nice small pill */
+}
+
+.store-selector {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.list-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-box h3 {
+  margin-bottom: 8px;
+  color: #e5e5e5;
+  font-size: 1rem;
+}
+
+.list-box select {
+  width: 220px;
+  height: 240px;
+  background: #0f172a;
+  color: white;
+  border: 1px solid #334155;
+  padding: 5px;
+}
+
+.list-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.list-buttons button {
+  width: 60px;
+  padding: 10px 0;
+  background: #22c55e;
+  border: none;
+  color: #052e16;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.list-buttons button:hover {
+  background: #16a34a;
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deals-4Me | Predicted Sales</title>
+  <link rel="stylesheet" href="./styles/theme.css" />
+  <link rel="stylesheet" href="./styles/toolbarTheme.css" />
+</head>
+<body>
+
+  <!-- ✅ Toolbar -->
+  <div id="toolbar"></div>
+
+  <main class="p-4 max-w-5xl mx-auto">
+    <h1 class="text-3xl font-bold mb-4">Predicted Sales Forecasts</h1>
+    <p class="mb-6 text-gray-600">These are the items our system expects to go on sale soon based on historical flyer data.</p>
+
+    <div id="forecastGrid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+  </main>
+
+  <script type="module" src="./js/toolbar.js"></script>
+  <script type="module" src="./js/forecast.js"></script>
+</body>
+</html>

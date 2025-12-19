@@ -1,0 +1,10 @@
+# Python exe (your venv first; fallback is "py")
+PYTHON_PATH=C:\Users\jwein\onedrive\desktop\deals-4me\.venv\Scripts\python.exe
+
+# Simple gate so only you can trigger ingest from the UI
+DEALS4ME_ADMIN_TOKEN=replace_with_a_long_random_string
+
+# (You already have these if Stripe/Supabase are set)
+# STRIPE_SECRET_KEY=...
+# SUPABASE_URL=...
+# SUPABASE_SERVICE_KEY=...

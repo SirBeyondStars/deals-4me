@@ -1,0 +1,35 @@
+===========================================
+Deals-4Me — BACKEND PROCESSING
+===========================================
+
+This folder contains all HEAVY LOGIC used by
+Deals-4Me. These scripts power ingestion, OCR,
+weekly exports, and other backend tasks.
+
+These files should NOT be directly run by users;
+they are called by admin tools.
+
+-------------------------------------------
+FILES IN THIS FOLDER SHOULD:
+-------------------------------------------
+✔ Run ingestion for all stores or a single store
+✔ Call Python to parse flyers and generate exports
+✔ Run OCR on PDFs or PNGs
+✔ Process raw_images and raw_pdfs
+✔ Handle week overrides
+✔ Manage store-specific ingest rules
+
+-------------------------------------------
+FILES IN THIS FOLDER SHOULD NOT:
+-------------------------------------------
+✘ Display menus or UI tools
+✘ Handle renaming or preparing week folders
+✘ Do cleanup, archiving, or pruning tasks
+
+-------------------------------------------
+NOTES:
+-------------------------------------------
+All complex code should go here.
+
+If it affects parsing, OCR, ingestion,
+or involves Python → it belongs here.

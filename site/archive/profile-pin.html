@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Deals-4Me — Select Profile</title>
+
+  <!-- NO TOOLBAR HERE per your rule -->
+  <link rel="stylesheet" href="../styles/theme.css" />
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center">
+
+  <main class="w-full max-w-md p-6 rounded-2xl bg-slate-900 shadow-lg">
+    <h1 class="text-2xl font-bold mb-2">Who’s signing in?</h1>
+    <p class="text-slate-300 mb-6">
+      Choose your profile, then enter your 6-digit PIN.
+    </p>
+
+    <form id="pin-form" class="space-y-4">
+      <label class="block">
+        <span class="text-sm text-slate-300">Profile</span>
+        <select id="profile-select"
+                class="mt-1 w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700">
+          <option value="">Loading profiles...</option>
+        </select>
+      </label>
+
+      <label class="block">
+        <span class="text-sm text-slate-300">6-digit PIN</span>
+        <input id="pin-input"
+               type="password"
+               inputmode="numeric"
+               maxlength="6"
+               pattern="[0-9]{6}"
+               class="mt-1 w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 tracking-widest text-center text-lg"
+               placeholder="••••••"
+               autocomplete="off" />
+      </label>
+
+      <button type="submit"
+              class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 font-semibold">
+        Continue
+      </button>
+    </form>
+
+    <div id="status" class="mt-4 text-sm text-slate-300"></div>
+  </main>
+
+  <script type="module" src="../scripts/profile-pin.js"></script>
+</body>
+</html>

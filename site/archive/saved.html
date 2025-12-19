@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Deals-4Me – Saved Items</title>
+    <link rel="stylesheet" href="/site/theme.css" />
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <div id="toolbar-root"></div>
+
+    <main>
+      <div class="page-shell">
+        <h1 class="page-title">Saved Items</h1>
+        <p class="page-subtitle">
+          Your personal watchlist for recurring groceries and favorite finds.
+        </p>
+
+        <div id="saved-alert" class="alert">
+          Loading your saved items...
+        </div>
+
+        <table class="table" style="margin-top:0.5rem;">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Best price</th>
+              <th>Store</th>
+              <th>Last seen</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="saved-body"></tbody>
+        </table>
+      </div>
+    </main>
+
+    <script src="/site/supabaseClient.js"></script>
+    <script src="/site/auth.js"></script>
+    <script src="/site/helpers.js"></script>
+    <script src="/site/toolbar.js"></script>
+    <script src="/site/saved.js"></script>
+  </body>
+</html>

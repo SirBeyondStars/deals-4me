@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Deals-4Me Login</title>
+
+  <style>
+    .value-frame{
+      margin: 14px 0 22px;
+      text-align: center;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+    .value-frame .accent{
+      opacity: 0.95;
+    }
+  </style>
+
+</head>
+<body>
+  <h1>Login</h1>
+
+  <div class="value-frame" aria-label="Deals-4Me value statement">
+    <div>Shopping lists help you buy.</div>
+    <div class="accent">Saved items help you buy better over time.</div>
+  </div>
+
+  <form id="login-form">
+    <label>
+      Email
+      <input type="email" id="email" required />
+    </label>
+    <br />
+    <label>
+      Password
+      <input type="password" id="password" required />
+    </label>
+    <br />
+    <button type="submit">Log In</button>
+  </form>
+  
+
+  <p style="margin-top: 15px;">
+    Don’t have an account?
+    <a href="signup.html">Create one here</a>
+  </p>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.0/dist/umd/supabase.min.js"></script>
+
+  <!-- Supabase Client -->
+  <script src="supabaseClient.js"></script>
+
+  <!-- Login logic -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("login-form");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email    = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        console.log("[login] submitting", email);
+
+        if (!window.supabaseClient) {
+          alert("Supabase client not ready. Check supabaseClient.js.");
+          return;
+        }
+
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (error) {
+          console.error("[login] error", error);
+          alert("Login failed: " + error.message);
+          return;
+        }
+
+        console.log("[login] success → pin.html");
+        window.location.href = "pin.html";
+      });
+    });
+  </script>
+</body>
+</html>

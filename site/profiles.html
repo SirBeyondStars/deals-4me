@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Deals-4Me – Household Profiles</title>
+
+    <!-- Global styles for the app (if you have this) -->
+    <!-- <link rel="stylesheet" href="theme.css" /> -->
+
+    <!-- Profiles page specific styles -->
+    <link rel="stylesheet" href="profiles.css" />
+  </head>
+  <body>
+    <div class="page-wrap">
+      <header>
+        <h1>Household Profiles</h1>
+        <p id="owner-info"></p>
+        <p
+          id="access-warning"
+          style="color: red; font-weight: bold; display: none;"
+        ></p>
+      </header>
+
+      <div class="cards-grid">
+        <!-- Left: current members -->
+        <section class="card">
+          <h2>
+            Current Members
+            <span class="badge">Household</span>
+          </h2>
+
+          <table class="profiles-table">
+            <thead>
+              <tr>
+                <th>Display Name</th>
+                <th>Role</th>
+                <th>Age Group</th>
+                <th>Active?</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="profiles-tbody">
+              <tr>
+                <td colspan="6">Loading...</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Right: add / edit form -->
+        <section class="card">
+          <h2>
+            Add / Edit Member
+            <span class="badge">Manage</span>
+          </h2>
+
+          <form id="add-member-form">
+            <div class="form-row">
+              <label for="new-display-name">Display Name</label>
+              <input type="text" id="new-display-name" required />
+            </div>
+
+            <div class="form-row">
+              <label for="new-role">Role</label>
+              <select id="new-role">
+                <option value="adult">Adult</option>
+                <option value="child">Child</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <label for="new-age-group">Age Group</label>
+              <select id="new-age-group" required>
+                <option value="">-- select age group --</option>
+                <option value="0-5">0–5 (Preschool)</option>
+                <option value="6-9">6–9 (Early Elementary)</option>
+                <option value="10-12">10–12 (Pre-Teen)</option>
+                <option value="13-17">13–17 (Teen)</option>
+                <option value="18+">18+ (Adult)</option>
+              </select>
+              <small class="helper-text">
+                Age group helps unlock the right games and experiences later.
+              </small>
+            </div>
+
+            <div class="form-row" id="pin-row">
+              <label for="new-pin">PIN (6 digits)</label>
+              <input
+                type="password"
+                id="new-pin"
+                maxlength="6"
+                pattern="[0-9]{6}"
+                autocomplete="off"
+                inputmode="numeric"
+              />
+              <small class="helper-text">
+                Not required for ages 0–5. Required for ages 6+.
+              </small>
+            </div>
+
+            <div class="form-row">
+              <label>
+                <input type="checkbox" id="new-is-active" checked />
+                Active profile
+              </label>
+              <small class="helper-text">
+                Inactive profiles will not appear on the PIN selection screen.
+              </small>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="submit"
+                id="member-submit-btn"
+                class="btn btn-primary"
+              >
+                Add Member
+              </button>
+              <button
+                type="button"
+                id="cancel-edit-btn"
+                class="btn btn-ghost"
+                style="display: none;"
+              >
+                Cancel Edit
+              </button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+
+    <!-- JS order matters: Supabase CDN ➜ client wrapper ➜ page logic -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.0/dist/umd/supabase.min.js"></script>
+    <script src="supabaseClient.js"></script>
+    <script src="auth.js"></script>
+    <script src="helpers.js"></script>
+    <script src="toolbar.js"></script>
+    <script src="profiles-page.js"></script>
+  </body>
+</html>

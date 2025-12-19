@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Deals-4Me – Sign Up</title>
+</head>
+<body>
+  <h1>Create Your Deals-4Me Account</h1>
+
+  <form id="signup-form">
+    <p>
+      <label>
+        Your Name (profile name):<br />
+        <input type="text" id="owner-name" required />
+      </label>
+    </p>
+
+    <p>
+      <label>
+        Email:<br />
+        <input type="email" id="email" required />
+      </label>
+    </p>
+
+    <p>
+      <label>
+        Password:<br />
+        <input type="password" id="password" required minlength="6" />
+      </label>
+    </p>
+
+    <p>
+      <label>
+        Confirm Password:<br />
+        <input type="password" id="password-confirm" required minlength="6" />
+      </label>
+    </p>
+
+    <p>
+      <label>
+        Household Address (one line for now):<br />
+        <input type="text" id="address-line"
+               placeholder="123 Main St, Bridgewater, MA 02324" />
+      </label>
+    </p>
+
+    <p>
+      <label>
+        Owner PIN (6 digits):<br />
+        <input
+  type="password"
+  id="owner-pin"
+  maxlength="6"
+  pattern="[0-9]{6}"
+  required
+  autocomplete="off"
+  inputmode="numeric"
+/>
+
+      </label>
+      <br />
+      <small>We’ll use this as your profile PIN on the PIN page.</small>
+    </p>
+
+    <p>
+      <button type="submit">Create Account</button>
+    </p>
+  </form>
+
+  <p>
+    Already have an account?
+    <a href="login.html">Log in here</a>
+  </p>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.0/dist/umd/supabase.min.js"></script>
+  <script src="supabaseClient.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("signup-form");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        if (!window.supabaseClient) {
+          alert("Supabase client not ready. Check supabaseClient.js.");
+          return;
+        }
+
+        const ownerName       = document.getElementById("owner-name").value.trim();
+        const email           = document.getElementById("email").value.trim();
+        const password        = document.getElementById("password").value;
+        const passwordConfirm = document.getElementById("password-confirm").value;
+        const addressLine     = document.getElementById("address-line").value.trim();
+        const ownerPin        = document.getElementById("owner-pin").value.trim();
+
+        if (!ownerName || !email || !password || !ownerPin) {
+          alert("Please fill in all required fields.");
+          return;
+        }
+
+        if (password !== passwordConfirm) {
+          alert("Passwords do not match.");
+          return;
+        }
+
+        if (!/^[0-9]{6}$/.test(ownerPin)) {
+          alert("PIN must be exactly 6 digits.");
+          return;
+        }
+
+        console.log("[signup] creating auth user for", email);
+
+        const { data: signupData, error: signupError } =
+          await supabaseClient.auth.signUp({
+            email,
+            password,
+            options: {
+              data: {
+                display_name: ownerName,
+                address_line: addressLine
+              }
+            }
+          });
+
+        if (signupError) {
+          console.error("[signup] auth error", signupError);
+          alert("Sign-up failed: " + signupError.message);
+          return;
+        }
+
+        const newUser = signupData.user;
+        if (!newUser) {
+          alert(
+            "Account created, but no user object returned.\n" +
+            "If email confirmation is enabled, please verify your email, then log in."
+          );
+          window.location.href = "login.html";
+          return;
+        }
+
+        console.log("[signup] auth user created:", newUser.id);
+
+        // Insert owner profile into household_profiles
+        console.log("[signup] inserting owner profile row");
+
+        const { error: profileError } = await supabaseClient
+          .from("household_profiles")
+          .insert([
+            {
+              owner_user_id: newUser.id,
+              display_name: ownerName,
+              pin: ownerPin,
+              role: "owner",
+              is_active: true,
+              address_line: addressLine || null
+              // household_id can stay null/use default for now
+            }
+          ]);
+
+        if (profileError) {
+          console.error("[signup] profile insert error", profileError);
+          alert(
+            "Account created in auth, but failed to save profile:\n" +
+            profileError.message
+          );
+          return;
+        }
+
+        alert(
+          "Account created! You can now log in with your email and password." +
+          (signupData.session ? "" : " If email confirmation is enabled, please verify your email first.")
+        );
+
+        window.location.href = "login.html";
+      });
+    });
+  </script>
+
+  <script src="supabaseClient.js"></script>
+  <script src="auth.js"></script>
+
+</body>
+</html>

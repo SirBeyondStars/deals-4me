@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Deals-4Me — Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    /* === SPLIT LAYOUT === */
+    .auth-shell {
+      min-height: 100vh;
+      display: flex;
+    }
+
+    .auth-hero {
+      flex: 1.15;
+      padding: 40px;
+      background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+      color: #f9fafb;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .auth-hero h1 { font-size: 2.4rem; margin-bottom: 0.5rem; }
+    .auth-hero p { font-size: 1rem; max-width: 380px; opacity: .95; }
+
+    .auth-panel-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px;
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 420px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 18px 45px rgba(15,23,42,0.18);
+      padding: 24px 22px 28px;
+    }
+
+    .auth-card h2 { margin: 0 0 .35rem; font-size: 1.4rem; font-weight: 600; }
+    .auth-card .muted { font-size: .9rem; color: #6b7280; }
+
+    .field-label { margin-top: 1rem; font-size: .85rem; font-weight: 600; color: #374151; }
+    select.profile-select {
+      width: 100%;
+      padding: .6rem .9rem;
+      border-radius: 10px;
+      background: #f9fafb;
+      border: 1px solid #d1d5db;
+      font-size: .95rem;
+    }
+    .hint { font-size: .82rem; color: #6b7280; margin: .35rem 0 1rem; }
+
+    /* === PIN SECTION === */
+    .pin-section {
+      margin-top: .75rem;
+      padding-top: .75rem;
+      border-top: 1px dashed #e5e7eb;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transform: translateY(4px);
+      transition: all .2s ease-out;
+    }
+    .pin-section.visible {
+      opacity: 1;
+      max-height: 600px;
+      transform: translateY(0);
+    }
+
+    .pin-input-wrap { position: relative; margin-bottom: .6rem; }
+    .pin-input-hidden {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .pin-dots { display: flex; gap: 6px; margin-bottom: .4rem; }
+    .pin-dot {
+      width: 14px; height: 14px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+    }
+    .pin-dot.filled { background: #111827; border-color: #111827; }
+
+    .pin-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: .5rem;
+    }
+    .pin-key {
+      padding: .65rem 0;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .pin-key.secondary { font-size: .8rem; }
+
+    .pin-footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .pin-forgot {
+      border: none;
+      background: none;
+      font-size: .8rem;
+      color: #2563eb;
+      cursor: pointer;
+    }
+    .pin-submit {
+      padding: .5rem 1rem;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      font-size: .88rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .pin-submit:disabled { background: #9ca3af; }
+
+    @media (max-width: 860px) {
+      .auth-shell { flex-direction: column; }
+      .auth-hero { padding: 20px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="auth-shell">
+
+  <!-- LEFT SIDE -->
+  <section class="auth-hero">
+    <h1>Welcome back to Deals-4Me</h1>
+    <p>Choose your profile, enter your PIN, and dive into your savings.</p>
+  </section>
+
+  <!-- RIGHT SIDE -->
+  <section class="auth-panel-wrap">
+    <div class="auth-card">
+
+      <h2>Who's using Deals-4Me?</h2>
+      <p class="muted">Select your profile, then enter your 6-digit PIN.</p>
+
+      <div class="field-label">Profile</div>
+      <select id="profileSelect" class="profile-select">
+        <option value="">Select…</option>
+        <option value="jesse" data-requires-pin="true">Jesse (Adult)</option>
+        <option value="patty" data-requires-pin="true">Patty (Adult)</option>
+        <option value="rara" data-requires-pin="true">Rara (Teen)</option>
+        <option value="mikey" data-requires-pin="true">Mikey (Kid 6+)</option>
+        <option value="baby" data-requires-pin="false">Baby (0–5, No PIN)</option>
+      </select>
+
+      <p id="profileHint" class="hint">Profiles without a PIN can be opened by an adult.</p>
+
+      <!-- PIN SECTION -->
+      <div id="pinSection" class="pin-section">
+
+        <div class="pin-header">
+          <span id="pinTitle">Enter PIN</span>
+        </div>
+
+        <div class="pin-input-wrap">
+          <input id="pinInput"
+                 type="tel"
+                 inputmode="numeric"
+                 pattern="[0-9]*"
+                 autocomplete="one-time-code"
+                 class="pin-input-hidden" />
+
+          <div class="pin-dots" id="pinDots">
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+          </div>
+        </div>
+
+        <div class="pin-grid">
+          <button class="pin-key" data-key="1">1</button>
+          <button class="pin-key" data-key="2">2</button>
+          <button class="pin-key" data-key="3">3</button>
+          <button class="pin-key" data-key="4">4</button>
+          <button class="pin-key" data-key="5">5</button>
+          <button class="pin-key" data-key="6">6</button>
+          <button class="pin-key" data-key="7">7</button>
+          <button class="pin-key" data-key="8">8</button>
+          <button class="pin-key" data-key="9">9</button>
+          <button class="pin-key secondary" data-action="clear">Clear</button>
+          <button class="pin-key" data-key="0">0</button>
+          <button class="pin-key secondary" data-action="backspace">⌫</button>
+        </div>
+
+        <div class="pin-footer-row">
+          <button class="pin-forgot">Forgot PIN?</button>
+          <button id="pinSubmit" class="pin-submit" disabled>Continue</button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+</div>
+
+
+<!-- =============================================================== -->
+<!--                         SCRIPT — FIXED                          -->
+<!-- =============================================================== -->
+
+<script>
+const profileSelect = document.getElementById('profileSelect');
+const profileHint = document.getElementById('profileHint');
+const pinSection = document.getElementById('pinSection');
+const pinTitle = document.getElementById('pinTitle');
+const pinDots = Array.from(document.querySelectorAll('.pin-dot'));
+const pinKeys = Array.from(document.querySelectorAll('.pin-key'));
+const pinSubmit = document.getElementById('pinSubmit');
+const pinInput = document.getElementById('pinInput');
+const pinDotsWrap = document.getElementById('pinDots');
+
+let activeProfile = null;
+let pinValue = "";
+
+// Update dots
+function updatePinDots() {
+  pinDots.forEach((dot, idx) =>
+    dot.classList.toggle('filled', idx < pinValue.length)
+  );
+  pinSubmit.disabled = pinValue.length !== 6;
+  pinInput.value = pinValue;
+}
+
+// Reset PIN
+function resetPin() {
+  pinValue = "";
+  updatePinDots();
+}
+
+// When profile changes
+profileSelect.addEventListener('change', () => {
+  const selected = profileSelect.options[profileSelect.selectedIndex];
+  activeProfile = selected.value || null;
+  const requiresPin = selected.dataset.requiresPin === "true";
+
+  if (!activeProfile) {
+    pinSection.classList.remove('visible');
+    profileHint.textContent = "Profiles without a PIN can be opened by an adult.";
+    resetPin();
+    return;
+  }
+
+  if (requiresPin) {
+    pinTitle.textContent = `Hi, ${selected.textContent.split(" ")[0]} — enter your PIN`;
+    pinSection.classList.add('visible');
+    profileHint.textContent = "Enter the 6-digit PIN for this profile.";
+    resetPin();
+    pinInput.focus(); // open numeric keyboard on phones
+  } else {
+    pinSection.classList.remove('visible');
+    profileHint.textContent = "This profile does not use a PIN.";
+    resetPin();
+  }
+});
+
+// Clicking dots focuses hidden input
+pinDotsWrap.addEventListener('click', () => pinInput.focus());
+
+// On-screen keypad
+pinKeys.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const key = btn.dataset.key;
+    const action = btn.dataset.action;
+
+    if (action === "clear") {
+      pinValue = "";
+    } else if (action === "backspace") {
+      pinValue = pinValue.slice(0, -1);
+    } else if (key && pinValue.length < 6) {
+      pinValue += key;
+    }
+    updatePinDots();
+  });
+});
+
+// Hidden input (mobile keyboard + hardware keyboard)
+pinInput.addEventListener('input', () => {
+  pinValue = pinInput.value.replace(/\D/g, "").slice(0, 6);
+  updatePinDots();
+});
+
+// Keyboard: ONLY backspace + enter handled here
+window.addEventListener('keydown', (e) => {
+  if (!pinSection.classList.contains("visible") || !activeProfile) return;
+
+  if (e.key === "Backspace") {
+    pinValue = pinValue.slice(0, -1);
+    updatePinDots();
+    e.preventDefault();
+    return;
+  }
+
+  if (e.key === "Enter" && pinValue.length === 6) {
+    pinSubmit.click();
+    e.preventDefault();
+  }
+});
+
+// Submit
+pinSubmit.addEventListener("click", () => {
+  if (pinValue.length === 6) {
+    alert(`PIN OK for ${activeProfile} → redirect to dashboard`);
+  }
+});
+
+updatePinDots();
+</script>
+
+</body>
+</html>

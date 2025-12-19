@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Deals-4Me – Saved Items</title>
+
+    <!-- Always use full paths -->
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="saved.css" />
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  </head>
+
+  <body class="saved-items-page">
+    <div id="toolbar-root"></div>
+
+    <main>
+      <div class="page-shell">
+        <h1 class="page-title">Saved Items</h1>
+        <p class="page-subtitle">
+          Your personal watchlist for recurring groceries and favorite finds.
+        </p>
+
+        <!-- Add form -->
+        <form id="saved-add-form" class="card" style="margin-top: 1rem; padding: 1rem;">
+          <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: flex-end;">
+            <div style="flex: 1; min-width: 220px;">
+              <label for="saved-category" style="display:block; font-weight:700; margin-bottom:0.25rem;">
+                Category
+              </label>
+              <select id="saved-category" class="input" style="width: 100%; padding: 0.5rem;">
+                <option value="">Choose a category…</option>
+              </select>
+              <div id="saved-category-help" class="muted" style="margin-top:0.35rem; font-size:0.9rem;"></div>
+            </div>
+
+            <div style="flex: 2; min-width: 260px;">
+              <label id="saved-refine-label" for="saved-refine" style="display:block; font-weight:700; margin-bottom:0.25rem;">
+                Refinement (optional)
+              </label>
+
+              <!-- Tier 2 dropdown -->
+              <select id="saved-refine-select" class="input" style="width: 100%; padding: 0.5rem; display: none;">
+                <option value="">Choose one…</option>
+              </select>
+
+              <!-- Optional/Other text refine -->
+              <input
+                id="saved-refine"
+                class="input"
+                type="text"
+                placeholder="e.g., shredded, cheddar, cheerios"
+                style="width:100%; padding:0.5rem; margin-top:0.5rem; display:none;"
+              />
+
+              <div id="saved-refine-help" class="muted" style="margin-top:0.35rem; font-size:0.9rem;"></div>
+            </div>
+
+            <div style="min-width: 160px;">
+              <button id="saved-add-btn" type="submit" class="primary" style="width: 100%;">
+                Save item
+              </button>
+            </div>
+          </div>
+
+          <div id="saved-add-error" class="alert" style="display:none; margin-top:0.75rem;"></div>
+        </form>
+
+        <!-- Status -->
+        <div id="saved-alert" class="alert" style="margin-top: 1rem;">
+          Loading your saved items...
+        </div>
+
+        <!-- Saved items table -->
+        <table class="table" style="margin-top:0.75rem;">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Best price</th>
+              <th>Store</th>
+              <th>Last seen</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="saved-body"></tbody>
+        </table>
+
+        <p id="saved-plan-info" class="saved-plan-info" style="margin-top:1rem; opacity:0.85;"></p>
+      </div>
+    </main>
+
+    <!-- Scripts (full paths) -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js"></script>
+    <script src="auth.js"></script>
+    <script src="helpers.js"></script>
+    <script src="toolbar.js"></script>
+    <script src="saved.js"></script>
+  </body>
+</html>

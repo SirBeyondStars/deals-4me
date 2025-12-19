@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Deals-4Me – Compare</title>
+    <link rel="stylesheet" href="theme.css" />
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <div id="toolbar-root"></div>
+
+    <main>
+      <div class="page-shell">
+        <h1 class="page-title">Compare Prices</h1>
+        <p class="page-subtitle">
+          Search for an item and see which store has the best deal this week.
+        </p>
+
+        <form id="compare-form" style="margin-bottom:0.75rem;">
+          <label for="compare-query">What are you looking for?</label>
+          <input
+            id="compare-query"
+            type="text"
+            placeholder="e.g., Cheerios, chicken breast, apples"
+            required
+          />
+          <button type="submit" style="margin-top:0.25rem;">Compare</button>
+        </form>
+
+        <div id="compare-alert" class="alert" style="display:none;"></div>
+
+        <table class="table" style="margin-top:0.5rem;">
+          <thead>
+            <tr>
+              <th>Store</th>
+              <th>Item</th>
+              <th>Price</th>
+              <th>Unit</th>
+            </tr>
+          </thead>
+          <tbody id="compare-body"></tbody>
+        </table>
+      </div>
+    </main>
+
+    <script src="supabaseClient.js"></script>
+    <script src="auth.js"></script>
+    <script src="helpers.js"></script>
+    <script src="toolbar.js"></script>
+    <script src="compare.js"></script>
+  </body>
+</html>
+

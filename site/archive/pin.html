@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Deals-4Me – Choose Profile</title>
+    <link rel="stylesheet" href="/site/theme.css" />
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <div class="centered-page">
+      <div class="auth-card">
+        <h1 class="page-title">Who’s shopping today?</h1>
+        <p class="page-subtitle">
+          Pick your profile and enter your 4-digit PIN.
+        </p>
+
+        <div id="pin-alert" class="alert" style="display:none;"></div>
+
+        <form id="pin-form">
+          <label for="profile-select">Profile</label>
+          <select id="profile-select" required></select>
+
+          <label for="pin-input">4-digit PIN</label>
+          <input
+            id="pin-input"
+            type="password"
+            inputmode="numeric"
+            maxlength="4"
+            required
+            placeholder="••••"
+          />
+
+          <button id="pin-submit" type="submit">Continue</button>
+        </form>
+
+        <p class="helper-text" style="margin-top:0.75rem;">
+          Later: adult profiles can reset their own PINs. For now, use demo data.
+        </p>
+      </div>
+    </div>
+
+    <script src="/site/supabaseClient.js"></script>
+    <script src="/site/auth.js"></script>
+    <script src="/site/pinLogin.js"></script>
+  </body>
+</html>

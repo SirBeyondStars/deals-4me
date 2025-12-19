@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Deals-4Me Backend Test</title>
+  <link rel="stylesheet" href="./styles/theme.css">
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 24px; }
+    h1 { margin-bottom: 16px; }
+    label { display: inline-block; margin-right: 12px; }
+    input, select { padding: 6px 8px; }
+    button { padding: 6px 10px; margin-right: 8px; }
+    .row { margin: 10px 0 16px; }
+    pre, code, #out { 
+      background: #111; color: #eee; padding: 12px; border-radius: 6px;
+      white-space: pre-wrap; word-break: break-word; min-height: 56px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Deals-4Me Backend Tester</h1>
+
+  <div class="row">
+    <label for="tok"><strong>Admin Token:</strong></label>
+    <input id="tok" type="password" placeholder="••••••••••••••••" style="width: 320px;" />
+  </div>
+
+  <div class="row">
+    <label for="store"><strong>Store:</strong></label>
+    <select id="store">
+      <option value="aldi" selected>aldi</option>
+      <!-- add more stores as needed -->
+    </select>
+
+    <label for="week" style="margin-left:12px;"><strong>Week:</strong></label>
+    <input id="week" type="text" value="Week46" style="width: 120px;" />
+  </div>
+
+  <div class="row">
+    <button id="checkAldi">Check Aldi Status</button>
+    <button id="runAldi">Run Aldi Ingest</button>
+  </div>
+
+  <div class="row">
+    <div id="out"></div>
+  </div>
+
+  <!-- ===== JS goes at the very end, right before </body> ===== -->
+<script>
+  // Hard-pin API to Vercel dev on 3000
+  const BASE = "http://localhost:3000/api";
+
+  const $ = (id) => document.getElementById(id);
+  const log = (t) => { $("out").textContent = t; };
+
+  async function request(path) {
+    const token = $("tok").value.trim();
+    if (!token) { log("Missing admin token."); return; }
+    try {
+      const res = await fetch(path, {
+        headers: { "x-deals4me-token": token },
+        mode: "cors",
+      });
+      const text = await res.text();
+      log(`HTTP ${res.status}\n\n${text}`);
+    } catch (err) {
+      log(`Request failed:\n${String(err)}\n\nURL: ${path}\nOnline: ${navigator.onLine}\nTip: Is Vercel dev running on localhost:3000?`);
+    }
+  }
+
+  $("checkAldi").onclick = () => {
+    const store = $("store").value.trim();
+    return request(`${BASE}/ingest-status?store=${encodeURIComponent(store)}`);
+  };
+
+  $("runAldi").onclick = () => {
+    const store = $("store").value.trim();
+    const week  = $("week").value.trim();
+    return request(`${BASE}/run-ingest?store=${encodeURIComponent(store)}&week=${encodeURIComponent(week)}`);
+  };
+</script>
+
+</body>
+</html>
