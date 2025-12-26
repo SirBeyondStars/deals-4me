@@ -1,161 +1,205 @@
+# files_to_run/backend/prep_week_flyer_folders.ps1
+# Purpose:
+#   Seed flyer folders for a given region and week using a locked-in week code:
+#     wk_YYYYMMDD  (Sunday start date of the week)
+#
+# Folder layout (canonical):
+#   flyers/<REGION>/<store_slug>/<wk_YYYYMMDD>/
+#     raw_pdf/
+#     raw_png/
+#     raw_images/
+#     processed/
+#     ocr/
+#     exports/
+#     logs/
+#     week_manifest.json
+#
+# Examples (run from project root):
+#   pwsh -File ".\files_to_run\backend\prep_week_flyer_folders.ps1" -Mode current_week -Region NE
+#   pwsh -File ".\files_to_run\backend\prep_week_flyer_folders.ps1" -Mode next_week   -Region NE
+#   pwsh -File ".\files_to_run\backend\prep_week_flyer_folders.ps1" -Mode current_week -Region NE -ForDate "2025-12-28"
+#
+# Notes:
+# - Week starts Sunday, ends Saturday
+# - This script auto-creates the store folders under flyers/<REGION>/ using the canonical list
+# - Omits non-stores like _inbox, logs, sprouts (per your instruction)
+
+[CmdletBinding()]
 param(
-    # "current"  -> create just the next week after the latest existing one
-    # "both"     -> create the next two weeks after the latest existing one
-    # "next"     -> treated same as "current" here
-    [ValidateSet("current","next","both")]
-    [string]$Mode = "both"
+  [Parameter(Mandatory = $false)]
+  [ValidateSet("current_week","next_week")]
+  [string]$Mode = "current_week",
+
+  [Parameter(Mandatory = $false)]
+  [ValidateNotNullOrEmpty()]
+  [string]$Region = "NE",
+
+  # Optional: any date within the week you want; script snaps back to Sunday start.
+  [Parameter(Mandatory = $false)]
+  [datetime]$ForDate = (Get-Date),
+
+  # Project root (deals-4me). Default assumes script is in files_to_run/backend/
+  [Parameter(Mandatory = $false)]
+  [string]$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 )
 
+Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-# ----------------- Paths -----------------
-# Script is in: deals-4me\files_to_run\backend
-# Project root : deals-4me
-$projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
-$flyersRoot  = Join-Path $projectRoot "flyers"
+function Write-Ok   { param([string]$m) Write-Host $m -ForegroundColor Green }
+function Write-Info { param([string]$m) Write-Host $m -ForegroundColor Cyan }
+function Write-Note { param([string]$m) Write-Host $m -ForegroundColor Gray }
+function Write-Warn { param([string]$m) Write-Host $m -ForegroundColor Yellow }
 
-Write-Host "Deals-4Me: Prep Week Flyer Folders" -ForegroundColor Cyan
-Write-Host "project_root : $projectRoot"
-Write-Host "flyers_root  : $flyersRoot"
-Write-Host ""
+function Get-SundayStart {
+  param([datetime]$Date)
+  # .NET DayOfWeek: Sunday=0 .. Saturday=6
+  $delta = [int]$Date.DayOfWeek
+  return $Date.Date.AddDays(-1 * $delta)
+}
 
-# ----------------- Store list -----------------
-$stores = @(
-    "aldi",
-    "big_y",
-    "hannaford",
-    "market_basket",
-    "price_chopper_market_32",
-    "pricerite",
-    "roche_bros",
-    "shaws",
-    "sprouts",
-    "stop_and_shop_ct",
-    "stop_and_shop_mari",
-    "trucchis",
-    "wegmans",
-    "whole_foods"
+function Get-WeekCode {
+  param([datetime]$SundayStart)
+  return ("wk_" + $SundayStart.ToString("yyyyMMdd"))
+}
+
+# --- Canonical store list for NE (per your screenshot) ---
+# Omits: _inbox, logs, sprouts
+$StoreSlugs = @(
+  "aldi",
+  "big_y",
+  "hannaford",
+  "market_basket",
+  "price_chopper",
+  "pricerite",
+  "roche_bros",
+  "shaws",
+  "stop_and_shop_ct",
+  "stop_and_shop_mari",
+  "trucchis",
+  "wegmans",
+  "whole_foods"
 )
 
-Write-Host "Stores configured for flyer prep:" -ForegroundColor Yellow
-foreach ($s in $stores) { Write-Host " - $s" }
-Write-Host ""
-
-# ----------------- Figure out latest week (from sample store) -----------------
-$sampleStore = $stores[0]                  # "aldi"
-$sampleRoot  = Join-Path $flyersRoot $sampleStore
-
-$existingWeeks = @()
-
-if (Test-Path $sampleRoot) {
-    Get-ChildItem -Path $sampleRoot -Directory |
-        Where-Object { $_.Name -match '^week(\d{1,2})$' } |
-        ForEach-Object {
-            $num = [int]$matches[1]
-            if ($num -ge 1 -and $num -le 99) {
-                $existingWeeks += $num
-            }
-        }
+# --- Resolve paths ---
+$flyersRoot = Join-Path $ProjectRoot "flyers"
+if (!(Test-Path $flyersRoot)) {
+  throw "Flyers root not found: $flyersRoot"
 }
 
-[int]$latestWeek = 0
-if ($existingWeeks.Count -gt 0) {
-    $latestWeek = ($existingWeeks | Measure-Object -Maximum).Maximum
+# Region folder: flyers/<REGION>
+$regionRoot = Join-Path $flyersRoot $Region
+New-Item -ItemType Directory -Force -Path $regionRoot | Out-Null
+
+# Logs stay top-level (not per-region)
+$logsRoot = Join-Path $flyersRoot "logs"
+$taskLogs = Join-Path $logsRoot "tasks"
+New-Item -ItemType Directory -Force -Path $taskLogs | Out-Null
+
+# --- Determine week based on Mode + ForDate ---
+$baseDate = $ForDate
+if ($Mode -eq "next_week") { $baseDate = $baseDate.AddDays(7) }
+
+$sundayStart = Get-SundayStart -Date $baseDate
+$weekCode    = Get-WeekCode -SundayStart $sundayStart
+
+Write-Info "ProjectRoot : $ProjectRoot"
+Write-Info "FlyersRoot  : $flyersRoot"
+Write-Ok   "Region      : $Region"
+Write-Info "Mode        : $Mode"
+Write-Info "ForDate     : $($ForDate.ToString('yyyy-MM-dd'))"
+Write-Ok   ("Week Start  : " + $sundayStart.ToString("yyyy-MM-dd") + " (Sunday)")
+Write-Ok   ("Week Code   : " + $weekCode)
+Write-Note ""
+
+# --- Ensure canonical store folders exist under flyers/<REGION>/ ---
+foreach ($slug in $StoreSlugs) {
+  $p = Join-Path $regionRoot $slug
+  if (!(Test-Path $p)) {
+    New-Item -ItemType Directory -Force -Path $p | Out-Null
+    Write-Ok "Created store folder: flyers\$Region\$slug"
+  }
 }
 
-Write-Host "Latest existing week in '$sampleStore' = $latestWeek"
+Write-Info ("Stores in $Region (canonical): " + ($StoreSlugs -join ", "))
+Write-Note ""
 
-# ----------------- Decide which NEW weeks to create -----------------
-if ($latestWeek -eq 0) {
-    # No folders yet -> start at week01
-    $next1 = 1
-} else {
-    $next1 = $latestWeek + 1
-}
-if ($next1 -gt 52) { $next1 = 1 }
+# --- “Guts” under each store/week folder ---
+$weekSubfolders = @(
+  "raw_pdf",
+  "raw_png",
+  "raw_images",
+  "processed",
+  "ocr",
+  "exports",
+  "logs"
+)
 
-$next2 = $next1 + 1
-if ($next2 -gt 52) { $next2 = 1 }
+$createdWeekFolders = 0
+$alreadyExisted     = 0
 
-Write-Host "Next week candidates: $next1 and $next2"
-Write-Host ""
+foreach ($storeSlug in $StoreSlugs) {
+  $storeRoot = Join-Path $regionRoot $storeSlug
 
-$weeksToCreate = @()
+  # flyers/<REGION>/<store_slug>/<wk_YYYYMMDD>/
+  $weekRoot = Join-Path $storeRoot $weekCode
 
-switch ($Mode.ToLower()) {
-    "current" {
-        $weeksToCreate += ("week{0:D2}" -f $next1)
+  if (!(Test-Path $weekRoot)) {
+    New-Item -ItemType Directory -Force -Path $weekRoot | Out-Null
+    $createdWeekFolders++
+    Write-Ok "Created week folder: flyers\$Region\$storeSlug\$weekCode"
+  } else {
+    $alreadyExisted++
+    Write-Warn "Week folder exists:  flyers\$Region\$storeSlug\$weekCode"
+  }
+
+  foreach ($sub in $weekSubfolders) {
+    $p = Join-Path $weekRoot $sub
+    if (!(Test-Path $p)) {
+      New-Item -ItemType Directory -Force -Path $p | Out-Null
+      Write-Note "  + $sub"
     }
-    "next" {
-        $weeksToCreate += ("week{0:D2}" -f $next1)
-    }
-    "both" {
-        $weeksToCreate += ("week{0:D2}" -f $next1)
-        $weeksToCreate += ("week{0:D2}" -f $next2)
-    }
+  }
+
+  # Per-store-week manifest (handy for sanity checks)
+  $manifestPath = Join-Path $weekRoot "week_manifest.json"
+  if (!(Test-Path $manifestPath)) {
+    $manifest = [ordered]@{
+      region       = $Region
+      store_slug   = $storeSlug
+      week_code    = $weekCode
+      week_start   = $sundayStart.ToString("yyyy-MM-dd")
+      created_utc  = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+      mode         = $Mode
+      structure    = $weekSubfolders
+    } | ConvertTo-Json -Depth 5
+
+    $manifest | Out-File -FilePath $manifestPath -Encoding UTF8
+    Write-Note "  + week_manifest.json"
+  }
+
+  Write-Note ""
 }
 
-if (-not $weeksToCreate -or $weeksToCreate.Count -eq 0) {
-    Write-Error "No weeks were selected to create. Mode='$Mode', latestWeek='$latestWeek'."
-    return
-}
+Write-Ok "Done."
+Write-Info "Region               : $Region"
+Write-Info "Week folders created : $createdWeekFolders"
+Write-Info "Week folders existed : $alreadyExisted"
+Write-Info "Week code            : $weekCode"
 
-Write-Host "Weeks to create:"
-foreach ($w in $weeksToCreate) { Write-Host " - $w" }
-Write-Host ""
+# Run log
+$runLog = Join-Path $taskLogs ("prep_week_flyer_folders_" + $Region + "_" + (Get-Date -Format "yyyyMMdd_HHmmss") + ".log")
+@(
+  "ProjectRoot=$ProjectRoot"
+  "FlyersRoot=$flyersRoot"
+  "Region=$Region"
+  "Mode=$Mode"
+  "ForDate=$($ForDate.ToString('yyyy-MM-dd'))"
+  "WeekStart=$($sundayStart.ToString('yyyy-MM-dd'))"
+  "WeekCode=$weekCode"
+  "Stores=$($StoreSlugs -join ', ')"
+  "CreatedWeekFolders=$createdWeekFolders"
+  "ExistedWeekFolders=$alreadyExisted"
+) | Out-File -FilePath $runLog -Encoding UTF8
 
-# ----------------- Work out the GUTS template -----------------
-# Default template if nothing exists yet:
-$subFolders = @("ocr", "raw_json", "raw_pdf", "raw_png", "snips")
-
-if ($latestWeek -gt 0) {
-    $templateWeekName = "week{0:D2}" -f $latestWeek
-    $templateWeekDir  = Join-Path $sampleRoot $templateWeekName
-
-    if (Test-Path $templateWeekDir) {
-        $found = Get-ChildItem -Path $templateWeekDir -Directory |
-                 Select-Object -ExpandProperty Name
-        if ($found -and $found.Count -gt 0) {
-            $subFolders = $found
-        }
-    }
-}
-
-Write-Host "Subfolder template (from $sampleStore/week$('{0:D2}' -f $latestWeek)):"
-Write-Host "  $($subFolders -join ', ')"
-Write-Host ""
-
-# ----------------- Creation loop (stores + weeks + guts) -----------------
-foreach ($store in $stores) {
-    $storeRoot = Join-Path $flyersRoot $store
-    if (-not (Test-Path $storeRoot)) {
-        Write-Host "Creating store folder: $storeRoot"
-        New-Item -ItemType Directory -Force -Path $storeRoot | Out-Null
-    }
-
-    foreach ($weekName in $weeksToCreate) {
-        $weekDir = Join-Path $storeRoot $weekName
-        if (-not (Test-Path $weekDir)) {
-            Write-Host "  Creating week folder: $store/$weekName"
-            New-Item -ItemType Directory -Force -Path $weekDir | Out-Null
-        }
-        else {
-            Write-Host "  Verified existing folder: $store/$weekName"
-        }
-
-        # Create/verify guts
-        foreach ($sub in $subFolders) {
-            $subDir = Join-Path $weekDir $sub
-            if (-not (Test-Path $subDir)) {
-                Write-Host "    Creating subfolder: $store/$weekName/$sub"
-                New-Item -ItemType Directory -Force -Path $subDir | Out-Null
-            }
-            else {
-                Write-Host "    Verified subfolder: $store/$weekName/$sub"
-            }
-        }
-    }
-}
-
-Write-Host ""
-Write-Host "All requested flyer-week folders created / verified." -ForegroundColor Green
+Write-Ok "Log written: flyers\logs\tasks\$(Split-Path $runLog -Leaf)"

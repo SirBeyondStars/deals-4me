@@ -28,7 +28,7 @@ function Test-WeekCode {
   return ($WeekCode -match '^wk_\d{8}$')
 }
 
-function Parse-WeekCodeStartDate {
+function ConvertTo-WeekCodeStartDate {
   param([string]$WeekCode)
   if (-not (Test-WeekCode -WeekCode $WeekCode)) {
     throw "Invalid week code '$WeekCode'. Expected format: wk_YYYYMMDD"
@@ -43,7 +43,7 @@ function Test-WeekCodeIsSundayStart {
   return ($d.DayOfWeek -eq [System.DayOfWeek]::Sunday)
 }
 
-function Normalize-Region {
+function ConvertTo-RegionCode {
   param([string]$Region = "NE")
   if ([string]::IsNullOrWhiteSpace($Region)) { return "NE" }
   return $Region.Trim().ToUpperInvariant()
@@ -114,7 +114,7 @@ function Get-CanonicalStores {
   return @()
 }
 
-function Ensure-RegionAndStoresExist {
+function Initialize-RegionFolders {
   param(
     [string]$ProjectRoot,
     [string]$Region = "NE"
