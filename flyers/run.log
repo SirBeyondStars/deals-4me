@@ -1,6 +1,0 @@
-﻿[2025-10-18 10:15:55] Task started (scheduled). Waiting for OneDrive + folder readiness…
-[2025-10-18 10:15:56] Root is writable. Continuing.
-[2025-10-18 11:51:19] Cleanup start: keeping 2 weeks per store; AlsoKeepDays=21; DoDelete=False
-[2025-10-18 11:51:20] Cleanup completed.
-[2025-10-18 12:03:32] Cleanup start: keeping 2 weeks per store; AlsoKeepDays=21; DoDelete=False
-[2025-10-18 12:03:33] Cleanup completed.
