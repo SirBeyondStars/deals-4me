@@ -5,8 +5,10 @@
 #  - OCRs PNGs in raw_png/
 #  - uses date_ocr_utils.extract_date_range() to detect flyer date ranges
 #  - logs failures to logs/date_ocr_failures.csv
-
 from __future__ import annotations
+
+import pytesseract
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 import argparse
 import subprocess
@@ -116,8 +118,12 @@ def find_store_week_pngs(flyers_root: Path, week_code: str) -> List[tuple]:
             continue
 
         for img_path in png_dir.glob("*.png"):
-            flyer_key = f"{store_slug}:{week_code}"
-            results.append((store_slug, flyer_key, img_path))
+        # Skip already-processed OCR images
+         if ".ocr." in img_path.name:
+          continue
+
+    flyer_key = f"{store_slug}:{week_code}"
+    results.append((store_slug, flyer_key, img_path))
 
     return results
 
@@ -152,6 +158,17 @@ def run_for_week(flyers_root: Path, week_code: str, default_year: Optional[int] 
                 reason="no_date_found",
                 log_file=LOG_FAIL,
             )
+            
+            log_ocr_attempt(
+                store_id=store_slug,
+                week_code=week_code,
+                source_file=str(img_path),
+                attempt=999,
+                status="FAIL",
+                reason="NO_DATE_FOUND",
+            )
+            
+            
 
     print(f"[date_ocr] Done. Success: {success_count}, Failures: {fail_count}")
     if fail_count > 0:

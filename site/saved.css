@@ -1,25 +1,22 @@
 /* ============================
    Saved Items page styles
+   (one-big-pond, theme.css owns colors)
    ============================ */
 
-/* Saved Items page styles (dark theme friendly) */
-.saved-items-page {
-  color: rgba(255, 255, 255, 0.92);
-}
-
-/* Labels & text */
+/* Labels & text: inherit theme text color */
 .saved-items-page label,
 .saved-items-page p,
 .saved-items-page span {
-  color: rgba(255, 255, 255, 0.85);
+  color: inherit;
   font-weight: 500;
 }
 
+/* Muted text should use theme’s muted token if it exists */
 .saved-items-page .muted {
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(0, 0, 0, 0.60);
 }
 
-/* Inputs & dropdowns */
+/* Inputs & dropdowns (these are fine as-is) */
 .saved-items-page select,
 .saved-items-page input {
   color: #0f172a;
@@ -49,20 +46,20 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
-/* Saved Items: plan info readability */
+
+/* Saved Items: plan info readability (for light background) */
 #saved-plan-info {
   margin-top: 12px;
   padding: 10px 12px;
   border-radius: 10px;
 
-  /* readable on dark background */
-  color: rgba(255, 255, 255, 0.92);
-  background: rgba(255, 255, 255, 0.08);
+  color: rgba(0, 0, 0, 0.80);
+  background: rgba(0, 0, 0, 0.04);
 
-  /* subtle separation */
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   line-height: 1.35;
 }
+
 #saved-plan-info strong {
-  color: #fff;
+  color: rgba(0, 0, 0, 0.95);
 }

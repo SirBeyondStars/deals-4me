@@ -3,16 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <title>Deals-4Me – Saved Items</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Always use full paths -->
+    <!-- One-big-pond paths (same folder as this HTML) -->
     <link rel="stylesheet" href="theme.css" />
     <link rel="stylesheet" href="saved.css" />
-
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   </head>
 
   <body class="saved-items-page">
+    <!-- Standard toolbar mount (must match toolbar.js expectations) -->
     <div id="toolbar-root"></div>
+
 
     <main>
       <div class="page-shell">
@@ -89,8 +90,8 @@
       </div>
     </main>
 
-    <!-- Scripts (full paths) -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <!-- Scripts (one-big-pond, same folder as this HTML) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.0/dist/umd/supabase.min.js"></script>
     <script src="supabaseClient.js"></script>
     <script src="auth.js"></script>
     <script src="helpers.js"></script>
@@ -98,3 +99,4 @@
     <script src="saved.js"></script>
   </body>
 </html>
+

@@ -2,56 +2,79 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Deals-4Me Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Deals-4Me – Login</title>
 
-  <style>
-    .value-frame{
-      margin: 14px 0 22px;
-      text-align: center;
-      font-weight: 600;
-      line-height: 1.35;
-    }
-    .value-frame .accent{
-      opacity: 0.95;
-    }
-  </style>
+ <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="theme.css"/>
+<link rel="stylesheet" href="auth.css"/>
 
 </head>
-<body>
-  <h1>Login</h1>
 
-  <div class="value-frame" aria-label="Deals-4Me value statement">
-    <div>Shopping lists help you buy.</div>
-    <div class="accent">Saved items help you buy better over time.</div>
+<body class="d4m-body">
+
+  <div class="container">
+
+    <!-- LEFT COLUMN -->
+    <div class="left">
+      <div class="brand">
+        <span class="badge">Deals-4Me</span>
+        <h1>Welcome to Deals-4Me</h1>
+        <p class="muted">A simple way to save this week — and shop smarter over time.</p>
+      </div>
+
+      <div class="card">
+        <form id="login-form">
+          <label for="email">Email</label>
+          <input type="email" id="email" required />
+
+          <label for="password">Password</label>
+          <input type="password" id="password" required />
+
+          <div class="actions">
+            <button class="btn" type="submit">Log in</button>
+            <p class="muted" style="margin-top: .75rem; font-size: .9rem;">
+            Your saved items and stores stay private to your account.
+            </p>
+
+          </div>
+        </form>
+
+        <p style="margin-top: 14px;">
+          Don’t have an account?
+          <a class="link" href="signup.html">Create an account</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="right">
+      <div class="card">
+        <h2>How it works</h2>
+        <p>
+           Deals-4Me helps you track the groceries you actually buy and quickly spot
+           what’s worth grabbing this week — without being a marketplace or a social app.
+        </p>
+
+        <ul>
+          <li><strong>Pick your stores</strong> (only the ones you shop)</li>
+          <li><strong>Save your staples</strong> (eggs, chicken, cereal, produce)</li>
+          <li><strong>See your deals fast</strong> and compare prices in one place</li>
+        </ul>
+
+        <p class="muted" style="margin-top: 1rem;">
+          Coverage grows over time as we add more stores.
+        </p>
+
+      </div>
+    </div>
+
   </div>
 
-  <form id="login-form">
-    <label>
-      Email
-      <input type="email" id="email" required />
-    </label>
-    <br />
-    <label>
-      Password
-      <input type="password" id="password" required />
-    </label>
-    <br />
-    <button type="submit">Log In</button>
-  </form>
-  
-
-  <p style="margin-top: 15px;">
-    Don’t have an account?
-    <a href="signup.html">Create one here</a>
-  </p>
-
-  <!-- Supabase CDN -->
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.0/dist/umd/supabase.min.js"></script>
-
-  <!-- Supabase Client -->
   <script src="supabaseClient.js"></script>
 
-  <!-- Login logic -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const form = document.getElementById("login-form");
@@ -59,28 +82,21 @@
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const email    = document.getElementById("email").value.trim();
+        const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value;
 
-        console.log("[login] submitting", email);
-
         if (!window.supabaseClient) {
-          alert("Supabase client not ready. Check supabaseClient.js.");
+          alert("Supabase client not ready. Check supabaseClient.js");
           return;
         }
 
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
-          email,
-          password,
-        });
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
         if (error) {
-          console.error("[login] error", error);
           alert("Login failed: " + error.message);
           return;
         }
 
-        console.log("[login] success → pin.html");
         window.location.href = "pin.html";
       });
     });

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us • Deals-4Me</title>
+
+  <!-- Your existing global theme -->
+  <link rel="stylesheet" href="theme.css" />
+  <!-- Contact-page-specific -->
+  <link rel="stylesheet" href="contact.css" />
+
+  <meta name="description" content="Contact Deals-4Me support, billing, feedback, privacy, or general info." />
+</head>
+
+<body class="d4m-body">
+  <!-- If you already have a global header loader, keep it.
+       Otherwise this page stands alone cleanly. -->
+
+  <main class="contact-page">
+    <section class="contact-hero">
+      <div class="contact-hero__inner">
+        <h1>Contact Deals-4Me</h1>
+        <p>
+          Need help, have feedback, or a billing question? Email us and we’ll get you to the right place.
+        </p>
+      </div>
+    </section>
+
+    <section class="contact-grid">
+      <!-- Left: direct email tiles -->
+      <div class="contact-card contact-card--channels">
+        <h2>Best email for your issue</h2>
+
+        <div class="channels">
+          <a class="channel" href="mailto:support@deals-4me.com?subject=Deals-4Me%20Support%20Request">
+            <div class="channel__top">
+              <span class="channel__title">Support</span>
+              <span class="channel__tag">Primary</span>
+            </div>
+            <div class="channel__email">support@deals-4me.com</div>
+            <div class="channel__desc">Login issues, saved items, bugs, “something isn’t working”.</div>
+          </a>
+
+          <a class="channel" href="mailto:billing@deals-4me.com?subject=Deals-4Me%20Billing%20Question">
+            <div class="channel__top">
+              <span class="channel__title">Billing</span>
+            </div>
+            <div class="channel__email">billing@deals-4me.com</div>
+            <div class="channel__desc">Subscriptions, refunds, receipts, payment questions.</div>
+          </a>
+
+          <a class="channel" href="mailto:feedback@deals-4me.com?subject=Deals-4Me%20Feedback">
+            <div class="channel__top">
+              <span class="channel__title">Feedback</span>
+            </div>
+            <div class="channel__email">feedback@deals-4me.com</div>
+            <div class="channel__desc">Ideas, feature requests, UX feedback, store requests.</div>
+          </a>
+
+          <a class="channel" href="mailto:privacy@deals-4me.com?subject=Deals-4Me%20Privacy%20Request">
+            <div class="channel__top">
+              <span class="channel__title">Privacy</span>
+            </div>
+            <div class="channel__email">privacy@deals-4me.com</div>
+            <div class="channel__desc">Data questions, deletion/export requests, privacy concerns.</div>
+          </a>
+
+          <a class="channel" href="mailto:info@deals-4me.com?subject=Deals-4Me%20General%20Question">
+            <div class="channel__top">
+              <span class="channel__title">General</span>
+            </div>
+            <div class="channel__email">info@deals-4me.com</div>
+            <div class="channel__desc">Partnerships, press, anything else.</div>
+          </a>
+        </div>
+
+        <div class="contact-note">
+          <h3>No phone support (yet)</h3>
+          <p>
+            We’re email-first right now so we can keep support fast and organized.
+          </p>
+          <p class="muted">
+            If you received a text alert from our SMS number, that line is for automated alerts only.
+            Please email <strong>support@deals-4me.com</strong> for help.
+          </p>
+        </div>
+      </div>
+
+      <!-- Right: smart mailto form -->
+      <div class="contact-card contact-card--form">
+        <h2>Email us</h2>
+        <p class="muted">
+          This form opens your email app with everything filled in. (No login required.)
+        </p>
+
+        <form id="contactForm" class="contact-form" novalidate>
+          <label>
+            Topic
+            <select id="topic" required>
+              <option value="support" selected>Support (recommended)</option>
+              <option value="billing">Billing</option>
+              <option value="feedback">Feedback</option>
+              <option value="privacy">Privacy</option>
+              <option value="info">General</option>
+            </select>
+          </label>
+
+          <label>
+            Your name
+            <input id="name" type="text" placeholder="Optional" maxlength="80" />
+          </label>
+
+          <label>
+            Your email
+            <input id="email" type="email" placeholder="Optional (helps us reply)" maxlength="120" />
+          </label>
+
+          <label>
+            Message
+            <textarea id="message" rows="7" placeholder="Tell us what’s going on…" required maxlength="4000"></textarea>
+          </label>
+
+          <div class="contact-actions">
+            <button type="submit" class="btn-primary">Open Email</button>
+            <button type="button" id="resetBtn" class="btn-ghost">Clear</button>
+          </div>
+
+          <p class="tiny muted">
+            Don’t include passwords. If you’re reporting a bug, include what page you were on and what you expected to happen.
+          </p>
+        </form>
+
+        <div class="contact-faq">
+          <h3>Quick tips</h3>
+          <ul>
+            <li><strong>Billing:</strong> include the email used for your subscription.</li>
+            <li><strong>Support:</strong> tell us what device/browser you’re on.</li>
+            <li><strong>Privacy:</strong> tell us what you want (export, delete, question).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer class="contact-footer">
+      <div class="contact-footer__inner">
+        <span class="muted">© <span id="year"></span> Deals-4Me. All rights reserved.</span>
+      </div>
+    </footer>
+  </main>
+
+  <script src="contact.js"></script>
+</body>
+</html>

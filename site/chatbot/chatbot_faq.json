@@ -1,0 +1,71 @@
+[
+  {
+    "id": "what-is-deals-4me",
+    "patterns": [
+      "what is deals 4me",
+      "what's deals 4me",
+      "what do you do",
+      "what is this site"
+    ],
+    "answer": "Deals-4Me is a smart grocery flyer and price comparison tool. You pick your favorite stores, save the items you care about, and we show you when and where they’re on sale."
+  },
+  {
+    "id": "regions",
+    "patterns": [
+      "what region are you using",
+      "which regions",
+      "what is region 1",
+      "what is ne",
+      "do you support other regions"
+    ],
+    "answer": "Right now the focus is Region 1 (NE – New England). More regions will be added later, but NE is the only active region during early development."
+  },
+  {
+    "id": "saved-items",
+    "patterns": [
+      "how do i save an item",
+      "add saved item",
+      "track an item",
+      "follow an item",
+      "save eggs",
+      "save milk"
+    ],
+    "answer": "To save an item, you’ll open a store flyer, click the product, and use the Save option. Saved items appear on your dashboard so you can see deals faster."
+  },
+  {
+    "id": "saved-stores",
+    "patterns": [
+      "how do i save stores",
+      "choose my stores",
+      "pick stores",
+      "saved stores",
+      "my stores"
+    ],
+    "answer": "You'll be able to choose which grocery stores you want to follow. Deals-4Me then focuses only on those stores instead of showing every flyer in the region."
+  },
+  {
+    "id": "d4mii",
+    "patterns": [
+      "what is d4mii",
+      "d4m index",
+      "deals 4me index",
+      "price index"
+    ],
+    "answer": "D4Mii (Deals-4Me Index) is the behind-the-scenes pricing system that tracks flyer data over time. It helps identify trends and eventually power smarter savings insights."
+  },
+  {
+    "id": "accounts",
+    "patterns": [
+      "account types",
+      "basic gold platinum",
+      "what are the plans",
+      "subscription tiers"
+    ],
+    "answer": "Deals-4Me will have a free Basic tier plus paid options as the platform grows. Basic allows limited saved items; higher tiers unlock more features and tracking."
+  },
+  {
+    "id": "fallback",
+    "patterns": [],
+    "answer": "I'm still learning this version of Deals-4Me. Try asking about saved items, stores, regions, or what D4Mii does."
+  }
+]

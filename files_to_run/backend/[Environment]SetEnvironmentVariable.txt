@@ -1,0 +1,2 @@
+[Environment]::SetEnvironmentVariable("SUPABASE_ANON_KEY","sb_publishable_0spAlB_gWzHk84bklBFdgg_CkJNwUYF","User")
+$env:SUPABASE_ANON_KEY = [Environment]::GetEnvironmentVariable("SUPABASE_ANON_KEY","User")

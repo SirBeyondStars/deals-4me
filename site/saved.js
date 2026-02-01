@@ -1,497 +1,449 @@
-// site/saved.js
+// site/scripts/saved.js
+// Deals-4Me – Saved Items page (one-big-pond)
+//
+// FIXED:
+// - Stops calling the RPC (your table doesn't have list_type/tier columns)
+// - Inserts directly into user_saved_items using real columns only
+// - Enforces Basic tier cap (12) on the client for now
+// - profile_id fallback: uses active profile uuid if present, else user.id (valid uuid)
 
-const SAVED_ITEM_LIMITS = {
+console.log("SAVED.JS LOADED – DIRECT INSERT FIX (no RPC)");
+
+// ---- Config ----
+const TABLE_SAVED_ITEMS = "user_saved_items";
+
+const LIMITS = {
   basic: 12,
   gold: 40,
-  platinum: null, // unlimited
+  platinum: Infinity,
 };
 
-// ----------------------
-// Saved-item category rules (locked v1)
-// ----------------------
-const SAVED_RULES = {
-  tier1: [
-    "Beef","Chicken","Pork","Turkey","Fish","Seafood","Bacon","Milk","Eggs","Butter",
-    "Yogurt","Cottage cheese","Apples","Grapes","Bananas","Oranges","Potatoes","Onions",
-    "Flour","Sugar","Rice","Pasta","Cooking oil","Olive oil","Vinegar","Pickles","Olives",
-    "Hummus","Spices"
-  ],
-  tier2: [
-    "Cereal","Chips","Crackers","Candy","Ice cream","Coffee","Soda","Cheese","Soup","Deli",
-    "Frozen foods","Bakery","Snacks","Pasta sauce","Salad kits"
-  ],
-  notAllowed: ["Produce", "Grocery", "Groceries", "Food", "Frozen", "Drinks", "Beverages"],
-  refineHints: {
-    cheese: ["shredded","sliced","block","crumbles","string","deli sliced"],
-    cereal: ["cheerios","granola","raisin bran","frosted flakes"],
-    chips: ["tortilla","potato","kettle","doritos","lays"],
-    soup: ["tomato","chicken noodle","clam chowder"],
-    deli: ["ham","turkey","salami","roast beef"],
-    "frozen foods": ["pizza","meals","vegetables","ice cream"],
-    bakery: ["bread","bagels","muffins","cookies"],
-    snacks: ["nuts","trail mix","protein bars","popcorn"],
-    "pasta sauce": ["marinara","alfredo","vodka","pesto"],
-    "salad kits": ["caesar","greek","southwest"],
-  },
+const CATEGORIES = [
+  { key: "produce", label: "Produce", refine: ["Bananas", "Apples", "Berries", "Salad", "Potatoes", "Onions", "Tomatoes", "Other…"] },
+  { key: "meat", label: "Meat / Seafood", refine: ["Chicken", "Beef", "Pork", "Seafood", "Deli", "Other…"] },
+  { key: "dairy", label: "Dairy", refine: ["Milk", "Eggs", "Cheese", "Butter", "Yogurt", "Other…"] },
+  { key: "frozen", label: "Frozen", refine: ["Pizza", "Vegetables", "Meals", "Ice Cream", "Other…"] },
+  { key: "pantry", label: "Pantry", refine: ["Pasta", "Rice", "Sauces", "Canned Goods", "Peanut Butter", "Other…"] },
+  { key: "snacks", label: "Snacks", refine: ["Chips", "Crackers", "Cookies", "Granola Bars", "Other…"] },
+  { key: "cereal", label: "Cereal / Breakfast", refine: ["Cheerios", "Frosted Flakes", "Oatmeal", "Pancake Mix", "Other…"] },
+  { key: "beverages", label: "Beverages", refine: ["Soda", "Juice", "Water", "Coffee", "Tea", "Other…"] },
+  { key: "household", label: "Household", refine: ["Paper Towels", "Toilet Paper", "Trash Bags", "Laundry", "Other…"] },
+  { key: "personal_care", label: "Personal Care", refine: ["Soap", "Shampoo", "Toothpaste", "Deodorant", "Other…"] },
+  { key: "baby_kids", label: "Baby / Kids", refine: ["Diapers", "Wipes", "Baby Food", "Other…"] },
+  { key: "pet", label: "Pet", refine: ["Dog Food", "Cat Food", "Litter", "Treats", "Other…"] },
+  { key: "other", label: "Other", refine: null },
+];
+
+// ---- DOM ----
+const el = {
+  category: document.getElementById("saved-category"),
+  categoryHelp: document.getElementById("saved-category-help"),
+
+  refineSelect: document.getElementById("saved-refine-select"),
+  refineText: document.getElementById("saved-refine"),
+  refineHelp: document.getElementById("saved-refine-help"),
+
+  form: document.getElementById("saved-add-form"),
+  addError: document.getElementById("saved-add-error"),
+
+  alert: document.getElementById("saved-alert"),
+  tbody: document.getElementById("saved-body"),
+  planInfo: document.getElementById("saved-plan-info"),
 };
 
-// ---------- Safe defaults + Supabase client ----------
-const sb = window.sb || window.supabaseClient || window.supabase;
-if (!sb) console.warn("[saved] Supabase client not found on window (sb/supabaseClient/supabase).");
-
-function setError(msg) {
-  console.warn("[saved] " + msg);
-  const el = document.getElementById("saved-status") || document.getElementById("saved-add-error");
-  if (el) {
-    el.style.display = "block";
-    el.textContent = msg;
+// ---- Helpers ----
+function getSupabase() {
+  const candidate = window.supabaseClient || window.supabase;
+  if (!candidate || !candidate.from) {
+    console.error("[saved] Supabase client not found. Is supabaseClient.js loaded?");
+    return null;
   }
-}
-function clearError() {
-  const el = document.getElementById("saved-status") || document.getElementById("saved-add-error");
-  if (el) {
-    el.style.display = "none";
-    el.textContent = "";
-  }
+  return candidate;
 }
 
-function norm(s) {
-  return String(s || "").trim().replace(/\s+/g, " ");
-}
-function normKey(s) {
-  return norm(s).toLowerCase();
-}
-function isTier2(category) {
-  const c = normKey(category);
-  return SAVED_RULES.tier2.map(normKey).includes(c);
-}
-function isNotAllowed(category) {
-  const c = normKey(category);
-  return SAVED_RULES.notAllowed.map(normKey).includes(c);
+function escapeHTML(str) {
+  return String(str || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
 
-function formatDisplayName(itemKey) {
-  const s = norm(itemKey);
-  if (!s) return "(unnamed item)";
-  return s
-    .split(" ")
-    .map((w) => (w.length <= 2 ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1)))
-    .join(" ");
+function showAlert(message, isError = false) {
+  if (!el.alert) return;
+  el.alert.textContent = message;
+  el.alert.style.display = "block";
+  el.alert.classList.toggle("error", !!isError);
 }
 
-// Global count for plan-limit checks (set after loading rows)
-let currentCount = null;
-
-// ----------------------
-// Helpers
-// ----------------------
-async function getUserPlanTier(userId) {
-  // Quiet + safe: if anything goes wrong, default to "basic" without scary console noise.
-  try {
-    const { data, error } = await sb
-      .from("profiles")
-      .select("plan_tier")
-      .eq("id", userId)
-      .maybeSingle();
-
-    // Any error (RLS, network, missing column) => basic
-    if (error) return "basic";
-
-    const tier = String(data?.plan_tier || "").toLowerCase();
-    if (tier === "gold" || tier === "platinum" || tier === "basic") return tier;
-
-    return "basic";
-  } catch {
-    return "basic";
-  }
+function hideAddError() {
+  if (!el.addError) return;
+  el.addError.style.display = "none";
+  el.addError.textContent = "";
 }
 
+function showAddError(msg) {
+  if (!el.addError) return;
+  el.addError.style.display = "block";
+  el.addError.textContent = msg;
+}
 
-function showPlanInfo(planTier, planLimit, count) {
-  const infoEl = document.getElementById("saved-plan-info");
-  if (!infoEl) return;
+function formatISODate(iso) {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "—";
+  return d.toISOString().slice(0, 10);
+}
 
-  const label =
-    planTier === "basic" ? "Basic" :
-    planTier === "gold" ? "Gold" :
-    planTier === "platinum" ? "Platinum" : planTier;
+// LocalStorage active profile (your current app keys)
+// If it's JSON and contains a uuid id/profile_id/profileId, use it.
+// Otherwise return null and we'll fallback to user.id.
+function getActiveProfileIdSafe() {
+  const keys = ["d4m_active_profile", "d4m_activeProfile", "d4m_active_profile_id", "active_profile_id", "profile_id"];
 
-  let msg = "";
-  if (planLimit == null) {
-    msg = `You are on the ${label} plan. You can save an unlimited number of favorite items.`;
-  } else {
-    const remaining = Math.max(planLimit - count, 0);
-    msg = `You are on the ${label} plan. You can save up to ${planLimit} items. You currently have ${count} saved item${count === 1 ? "" : "s"}.`;
-    msg += remaining > 0
-      ? ` You can save ${remaining} more item${remaining === 1 ? "" : "s"}.`
-      : ` You’ve reached your saved item limit. Remove an item or upgrade your plan to save more.`;
+  for (const k of keys) {
+    const raw = localStorage.getItem(k);
+    if (!raw) continue;
+
+    if (raw.trim().startsWith("{")) {
+      try {
+        const obj = JSON.parse(raw);
+        const id = obj?.id || obj?.profile_id || obj?.profileId;
+        if (typeof id === "string" && id.includes("-") && id.length > 20) return id;
+      } catch (_) {}
+      continue;
+    }
+
+    if (raw.includes("-") && raw.length > 20) return raw;
   }
 
-  infoEl.textContent = msg;
+  return null;
 }
 
-function escapeHtml(str) {
-  if (!str) return "";
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+function buildItemName(categoryKey, refineValue, refineFreeText) {
+  const cat = CATEGORIES.find((c) => c.key === categoryKey);
+  const catLabel = cat ? cat.label : "Item";
+  const refine = (refineValue || "").trim();
+  const free = (refineFreeText || "").trim();
+  const chosen = refine && refine !== "Other…" ? refine : free;
+  if (chosen) return `${catLabel}: ${chosen}`;
+  return catLabel;
 }
 
-// ----------------------
-// UI-only initializer for category dropdown + refinement UI
-// (NO submit handler here — submit is handled in setupAddForm)
-// ----------------------
-function initCategoryUI() {
-  const form = document.getElementById("saved-add-form");
-  if (!form) return;
+function makeItemKey(itemName) {
+  return String(itemName || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .slice(0, 80);
+}
 
-  const sel = document.getElementById("saved-category");
-  const refine = document.getElementById("saved-refine");
-  const refineSelect = document.getElementById("saved-refine-select");
-  const refineLabel = document.getElementById("saved-refine-label");
-  const catHelp = document.getElementById("saved-category-help");
-  const refineHelp = document.getElementById("saved-refine-help");
+function getRowDisplayName(row) {
+  const candidates = [row.item_name, row.name, row.item, row.title, row.product_name];
+  for (const c of candidates) {
+    if (typeof c === "string" && c.trim()) return c.trim();
+  }
+  return "(unnamed item)";
+}
 
-  if (!sel) return;
+function getRowBestPrice(row) {
+  const v = row.best_price ?? row.lowest_price ?? row.min_price ?? null;
+  if (v == null) return "—";
+  const n = Number(v);
+  if (!Number.isFinite(n)) return "—";
+  return `$${n.toFixed(2)}`;
+}
 
-  // Build dropdown once
-  if (sel.options.length <= 1) {
-    const allCats = [
-      ...SAVED_RULES.tier1.map((c) => ({ name: c, tier: 1 })),
-      ...SAVED_RULES.tier2.map((c) => ({ name: c, tier: 2 })),
-    ].sort((a, b) => a.name.localeCompare(b.name));
+function getRowBestStore(row) {
+  return row.best_store ?? row.best_store_name ?? row.store ?? "—";
+}
 
-    allCats.forEach((c) => {
-      const opt = document.createElement("option");
-      opt.value = c.name;
-      opt.textContent = c.name + (c.tier === 2 ? " (specific)" : "");
-      sel.appendChild(opt);
-    });
+function getRowLastSeen(row) {
+  return row.last_seen ?? row.last_seen_at ?? row.updated_at ?? row.created_at ?? null;
+}
+
+// ---- UI wiring ----
+function populateCategories() {
+  if (!el.category) return;
+
+  el.category.innerHTML = `<option value="">Choose a category…</option>`;
+  for (const c of CATEGORIES) {
+    const opt = document.createElement("option");
+    opt.value = c.key;
+    opt.textContent = c.label;
+    el.category.appendChild(opt);
+  }
+}
+
+function setRefineModeForCategory(categoryKey) {
+  const cat = CATEGORIES.find((c) => c.key === categoryKey);
+
+  if (el.refineSelect) el.refineSelect.style.display = "none";
+  if (el.refineText) el.refineText.style.display = "none";
+  if (el.refineHelp) el.refineHelp.textContent = "";
+  if (el.categoryHelp) el.categoryHelp.textContent = "";
+
+  if (!cat) {
+    if (el.categoryHelp) el.categoryHelp.textContent = "Pick a category first.";
+    return;
   }
 
-  function titleCase(s) {
-    return (s || "")
-      .split(" ")
-      .map((w) => (w ? w[0].toUpperCase() + w.slice(1) : w))
-      .join(" ");
-  }
+  if (el.categoryHelp) el.categoryHelp.textContent = `Optional: refine ${cat.label.toLowerCase()} (brand, size, type).`;
 
-  function setRefineMode({ tier2, categoryKey }) {
-    if (refineSelect) {
-      const options = (SAVED_RULES.refineHints[categoryKey] || []).slice(0, 10);
-      const prev = refineSelect.value;
-
-      refineSelect.innerHTML = '<option value="">Choose one…</option>';
-      options.forEach((o) => {
+  // Presets dropdown
+  if (Array.isArray(cat.refine) && cat.refine.length) {
+    if (el.refineSelect) {
+      el.refineSelect.style.display = "block";
+      el.refineSelect.innerHTML = `<option value="">Choose one…</option>`;
+      for (const r of cat.refine) {
         const opt = document.createElement("option");
-        opt.value = o;
-        opt.textContent = titleCase(o);
-        refineSelect.appendChild(opt);
-      });
-
-      const otherOpt = document.createElement("option");
-      otherOpt.value = "__other__";
-      otherOpt.textContent = "Other (type it)";
-      refineSelect.appendChild(otherOpt);
-
-      if (prev && [...refineSelect.options].some((o) => o.value === prev)) {
-        refineSelect.value = prev;
+        opt.value = r;
+        opt.textContent = r;
+        el.refineSelect.appendChild(opt);
       }
-
-      refineSelect.style.display = tier2 ? "block" : "none";
-      refineSelect.required = !!tier2;
     }
-
-    if (refine) {
-      if (!tier2) {
-        refine.style.display = "block";
-        refine.required = false;
-        refine.placeholder = "Optional (e.g., ground, shredded, cheddar)";
-        return;
-      }
-
-      const otherSelected = refineSelect && refineSelect.value === "__other__";
-      refine.style.display = otherSelected ? "block" : "none";
-      refine.required = !!otherSelected;
-      refine.placeholder = otherSelected ? "Type what you mean (brand/type)" : "";
-      if (!otherSelected) refine.value = "";
+    if (el.refineHelp) el.refineHelp.textContent = "Choose one, or pick “Other…” to type your own.";
+    if (el.refineText) {
+      el.refineText.value = "";
+      el.refineText.style.display = "none";
     }
+    return;
   }
 
-  function refreshUI() {
-    clearError();
-
-    const category = norm(sel.value);
-    const cKey = normKey(category);
-
-    if (!category) {
-      if (catHelp) catHelp.textContent = "Pick a category to save.";
-      if (refineLabel) refineLabel.textContent = "Refinement (optional)";
-      if (refineHelp) refineHelp.textContent = "";
-      setRefineMode({ tier2: false, categoryKey: "" });
-      return;
-    }
-
-    if (isNotAllowed(category)) {
-      if (catHelp) catHelp.textContent = "That category is too broad. Please pick something more specific.";
-      if (refineLabel) refineLabel.textContent = "Refinement (required)";
-      if (refineSelect) refineSelect.style.display = "none";
-      if (refine) {
-        refine.style.display = "block";
-        refine.required = true;
-      }
-      return;
-    }
-
-    const tier2 = isTier2(category);
-    if (catHelp) {
-      catHelp.textContent = tier2
-        ? "Pick a refinement so matches aren’t noisy."
-        : "This category can be saved as-is (refinement optional).";
-    }
-
-    if (refineLabel) refineLabel.textContent = tier2 ? "Refinement (required)" : "Refinement (optional)";
-    setRefineMode({ tier2, categoryKey: cKey });
-
-    const hints = SAVED_RULES.refineHints[cKey] || [];
-    if (refineHelp) refineHelp.textContent = hints.length ? `Examples: ${hints.slice(0, 6).join(", ")}` : "";
+  // Free text
+  if (el.refineText) {
+    el.refineText.style.display = "block";
+    el.refineText.value = "";
   }
-
-  sel.addEventListener("change", refreshUI);
-  if (refineSelect) refineSelect.addEventListener("change", refreshUI);
-  refreshUI();
+  if (el.refineHelp) el.refineHelp.textContent = "Type a quick note (brand, size, etc.) or leave blank.";
 }
 
-// ----------------------
-// Load + render saved items
-// ----------------------
-async function loadAndRenderSavedItems(user) {
-  const alertBox = document.getElementById("saved-alert");
-  const body = document.getElementById("saved-body");
+// ---- Data ----
+async function getAuthedUser(supabase) {
+  if (window.requireAuth) await window.requireAuth();
 
-  const { data: rows, error } = await sb
-    .from("user_saved_items")
-    .select("id, item_key, created_at")
-    .eq("user_id", user.id)
+  const { data, error } = await supabase.auth.getUser();
+  if (error) throw error;
+  if (!data.user) {
+    window.location.href = "login.html";
+    throw new Error("Not logged in");
+  }
+  return data.user;
+}
+
+async function fetchSavedItems(supabase, userId) {
+  // Your table has BOTH user_id and auth_user_id.
+  // We'll prefer auth_user_id if it exists on rows (it does in your schema).
+  const { data, error } = await supabase
+    .from(TABLE_SAVED_ITEMS)
+    .select("*")
+    .eq("auth_user_id", userId)
     .order("created_at", { ascending: true });
 
-  if (error) {
-    console.error("[saved] error loading user_saved_items:", error);
-    if (alertBox) {
-      alertBox.style.display = "block";
-      alertBox.textContent = "Error loading saved items. Please try again.";
-    }
-    currentCount = null;
-    return { rows: [], ok: false };
+  if (error) throw error;
+  return data || [];
+}
+
+async function insertSavedItemDirect(supabase, { userId, profileId, itemName }) {
+  const payload = {
+    auth_user_id: userId,
+    user_id: userId,
+    profile_id: profileId,
+    item_name: itemName,
+    item_key: makeItemKey(itemName),
+    notes: null,
+  };
+
+  const { error } = await supabase.from(TABLE_SAVED_ITEMS).insert(payload);
+  if (error) throw error;
+}
+
+async function removeSavedItem(supabase, userId, row) {
+  if (row?.id) {
+    const { error } = await supabase
+      .from(TABLE_SAVED_ITEMS)
+      .delete()
+      .eq("id", row.id)
+      .eq("auth_user_id", userId);
+    if (error) throw error;
+    return;
   }
 
-  const savedItems = (rows || []).map((r) => ({
-    id: r.id,
-    name: formatDisplayName(r.item_key),
-    rawKey: r.item_key || "",
-    bestPrice: null,
-    store: "",
-    lastSeen: r.created_at ? new Date(r.created_at).toISOString().slice(0, 10) : "",
-  }));
+  // fallback
+  const name = getRowDisplayName(row);
+  const { error } = await supabase
+    .from(TABLE_SAVED_ITEMS)
+    .delete()
+    .eq("auth_user_id", userId)
+    .eq("item_name", name);
+  if (error) throw error;
+}
 
-  currentCount = savedItems.length;
+// ---- Rendering ----
+function renderRows(rows) {
+  if (!el.tbody) return;
+  el.tbody.innerHTML = "";
 
-  if (!savedItems.length) {
-    if (alertBox) {
-      alertBox.style.display = "block";
-      alertBox.textContent =
-        "You don’t have any saved items yet. Save your favorite products from Flyers to track when they go on sale.";
-    }
-    if (body) body.innerHTML = "";
-    return { rows: [], ok: true };
+  if (!rows || rows.length === 0) {
+    el.tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="muted" style="padding: 0.75rem;">
+          You don’t have any saved items yet. Add one above.
+        </td>
+      </tr>
+    `;
+    return;
   }
 
-  if (alertBox) alertBox.style.display = "none";
+  for (const row of rows) {
+    const name = getRowDisplayName(row);
+    const bestPrice = getRowBestPrice(row);
+    const bestStore = escapeHTML(getRowBestStore(row));
+    const lastSeen = formatISODate(getRowLastSeen(row));
 
-  body.innerHTML = savedItems
-    .map(
-      (item) => `
-        <tr>
-          <td>${escapeHtml(item.name)}</td>
-          <td>${item.bestPrice != null && window.formatCurrency ? window.formatCurrency(item.bestPrice) : "&mdash;"}</td>
-          <td>${escapeHtml(item.store || "—")}</td>
-          <td>${escapeHtml(item.lastSeen || "&mdash;")}</td>
-          <td>
-            <button type="button" class="secondary" data-remove-id="${item.id}">Remove</button>
-          </td>
-        </tr>
-      `
-    )
-    .join("");
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${escapeHTML(name)}</td>
+      <td>${escapeHTML(bestPrice)}</td>
+      <td>${bestStore || "—"}</td>
+      <td>${escapeHTML(lastSeen)}</td>
+      <td style="text-align:right;">
+        <button class="mini-btn" data-action="remove">Remove</button>
+      </td>
+    `;
 
-  // Remove handlers
-  body.querySelectorAll("button[data-remove-id]").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const id = btn.getAttribute("data-remove-id");
-      if (!id) return;
+    const btn = tr.querySelector('button[data-action="remove"]');
+    if (btn) {
+      btn.addEventListener("click", () => {
+        document.dispatchEvent(new CustomEvent("saved:remove", { detail: row }));
+      });
+    }
 
-      if (!confirm("Remove this saved item?")) return;
+    el.tbody.appendChild(tr);
+  }
+}
 
-      const { error: delErr } = await sb
-        .from("user_saved_items")
-        .delete()
-        .eq("id", id)
-        .eq("user_id", user.id);
+function renderPlanInfo(count, tierGuess = "basic") {
+  if (!el.planInfo) return;
+  const limit = LIMITS[tierGuess] ?? LIMITS.basic;
+  el.planInfo.textContent =
+    limit === Infinity ? `You’re tracking ${count} item(s).` : `You’re tracking ${count}/${limit} item(s).`;
+}
 
-      if (delErr) {
-        console.error("[saved] delete error:", delErr);
-        alert("Could not remove this item. Please try again.");
-        return;
+// ---- Main ----
+async function initSavedPage() {
+  console.log("[saved] initSavedPage()");
+
+  if (window.renderToolbar) window.renderToolbar("saved");
+
+  const supabase = getSupabase();
+  if (!supabase) {
+    showAlert("Supabase is not available. Are you offline?", true);
+    return;
+  }
+
+  populateCategories();
+  setRefineModeForCategory("");
+
+  if (el.category) {
+    el.category.addEventListener("change", () => setRefineModeForCategory(el.category.value));
+  }
+
+  if (el.refineSelect) {
+    el.refineSelect.addEventListener("change", () => {
+      const v = el.refineSelect.value;
+      if (el.refineText) {
+        el.refineText.style.display = v === "Other…" ? "block" : "none";
+        if (v !== "Other…") el.refineText.value = "";
       }
-
-      await initSaved(); // refresh list without reload
     });
-  });
+  }
 
-  return { rows: savedItems, ok: true };
-}
-
-// ----------------------
-// Submit handler (the ONLY submit handler)
-// ----------------------
-function setupAddForm(ctx) {
-  const form = document.getElementById("saved-add-form");
-  if (!form) {
-    console.warn("[saved] add form not found");
+  let user;
+  try {
+    user = await getAuthedUser(supabase);
+  } catch (err) {
+    console.error("[saved] auth error:", err);
+    showAlert("Please log in again.", true);
     return;
   }
 
-  // Avoid double-binding if initSaved runs multiple times
-  if (form.dataset.bound === "1") return;
-  form.dataset.bound = "1";
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    clearError();
-
-    const categorySelect = document.getElementById("saved-category");
-    const refine = document.getElementById("saved-refine");
-    const refineSelect = document.getElementById("saved-refine-select");
-
-    const category = norm(categorySelect?.value || "");
-    if (!category) {
-      setError("Choose a category first.");
-      return;
-    }
-
-    if (isNotAllowed(category)) {
-      setError("That category is too broad. Please pick something more specific.");
-      return;
-    }
-
-    // Compute refinement
-    let refinement = "";
-    const tier2 = isTier2(category);
-
-    if (tier2) {
-      const selVal = norm(refineSelect?.value || "");
-      if (refineSelect && refineSelect.style.display !== "none") {
-        if (!selVal) {
-          setError("Please choose a refinement.");
-          return;
-        }
-        if (selVal === "__other__") {
-          refinement = norm(refine?.value || "");
-          if (!refinement) {
-            setError("Please type what you mean (brand/type).");
-            return;
-          }
-        } else {
-          refinement = selVal;
-        }
-      } else {
-        refinement = norm(refine?.value || "");
-        if (!refinement) {
-          setError("Please type what you mean (brand/type).");
-          return;
-        }
-      }
-    } else {
-      refinement = norm(refine?.value || "");
-    }
-
-    // Plan limit check (use global currentCount if available; fallback to DOM rows)
-    const countNow = Number.isFinite(currentCount)
-      ? currentCount
-      : document.querySelectorAll("#saved-body tr").length;
-
-    if (ctx.planLimit != null && countNow >= ctx.planLimit) {
-      setError(`You reached your ${ctx.planTier} plan limit (${ctx.planLimit}). Remove an item to add another.`);
-      return;
-    }
-
-    const itemKey = normKey(refinement ? `${category} ${refinement}` : category);
-
-    const { error } = await sb
-      .from("user_saved_items")
-      .insert({ user_id: ctx.user.id, item_key: itemKey });
-
-    if (error) {
-      console.warn("[saved] insert error:", error);
-      setError("Could not save that item (it may already be saved).");
-      return;
-    }
-
-    // Clear inputs
-    if (categorySelect) categorySelect.value = "";
-    if (refineSelect) refineSelect.value = "";
-    if (refine) refine.value = "";
-
-    // Refresh UI
-    await initSaved();
-  });
-}
-
-// ----------------------
-// Main init
-// ----------------------
-async function initSaved() {
-  // Require login
-  if (window.requireAuth) {
-    await window.requireAuth();
-  }
-  // Render toolbar tab highlight
-  if (window.renderToolbar) {
-    window.renderToolbar("saved");
-  }
-
-  if (!sb?.auth) {
-    setError("Supabase client not ready.");
-    return;
-  }
-
-  const { data: userData, error: userErr } = await sb.auth.getUser();
-  if (userErr || !userData?.user) {
-    console.error("[saved] getUser error:", userErr);
-    const alertBox = document.getElementById("saved-alert");
-    if (alertBox) alertBox.textContent = "Please log in to see your saved items.";
-    return;
-  }
-  const user = userData.user;
-
-  const planTier = await getUserPlanTier(user.id);
-  const planLimit = SAVED_ITEM_LIMITS[planTier] ?? null;
-
-  // UI-only setup
-  initCategoryUI();
-
-  // Ensure submit handler exists (single source of truth)
-  setupAddForm({ user, planTier, planLimit });
+  const tier = "basic"; // keep simple for now
 
   // Load + render
-  await loadAndRenderSavedItems(user);
+  try {
+    showAlert("Loading your saved items...");
+    const rows = await fetchSavedItems(supabase, user.id);
+    renderRows(rows);
+    renderPlanInfo(rows.length, tier);
+    showAlert(rows.length ? "Here are your saved items." : "No saved items yet. Add one above.");
+  } catch (err) {
+    console.error("[saved] load error:", err);
+    showAlert("Couldn’t load saved items. Check console for details.", true);
+  }
 
-  // Plan info
-  showPlanInfo(planTier, planLimit, Number.isFinite(currentCount) ? currentCount : 0);
+  // Add item
+  if (el.form) {
+    el.form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      hideAddError();
+
+      const categoryKey = el.category ? el.category.value : "";
+      if (!categoryKey) return showAddError("Pick a category first.");
+
+      const refineSelectVal =
+        el.refineSelect && el.refineSelect.style.display !== "none" ? el.refineSelect.value : "";
+      const refineTextVal =
+        el.refineText && el.refineText.style.display !== "none" ? el.refineText.value : "";
+
+      const itemName = buildItemName(categoryKey, refineSelectVal, refineTextVal);
+
+      try {
+        // reload rows so cap is accurate
+        const rowsBefore = await fetchSavedItems(supabase, user.id);
+        const limit = LIMITS[tier] ?? LIMITS.basic;
+        if (rowsBefore.length >= limit) {
+          return showAddError(`Basic tier limit reached (${limit}).`);
+        }
+
+        // profile_id: use active profile uuid if present, else user.id
+        const profileId = getActiveProfileIdSafe() || user.id;
+
+        await insertSavedItemDirect(supabase, { userId: user.id, profileId, itemName });
+
+        const rows = await fetchSavedItems(supabase, user.id);
+        renderRows(rows);
+        renderPlanInfo(rows.length, tier);
+        showAlert("Saved!", false);
+
+        if (el.category) el.category.value = "";
+        if (el.refineSelect) el.refineSelect.value = "";
+        if (el.refineText) el.refineText.value = "";
+        setRefineModeForCategory("");
+      } catch (err) {
+        console.error("[saved] add error:", err);
+        showAddError(err?.message || "Could not save item. Check console for details.");
+      }
+    });
+  }
+
+  // Remove handler
+  document.addEventListener("saved:remove", async (evt) => {
+    const row = evt.detail;
+    try {
+      await removeSavedItem(supabase, user.id, row);
+      const rows = await fetchSavedItems(supabase, user.id);
+      renderRows(rows);
+      renderPlanInfo(rows.length, tier);
+      showAlert("Removed.", false);
+    } catch (err) {
+      console.error("[saved] remove error:", err);
+      showAlert("Could not remove item. Check console for details.", true);
+    }
+  });
 }
 
-// Kick off
-initSaved();
+document.addEventListener("DOMContentLoaded", () => {
+  initSavedPage().catch((err) => console.error("[saved] init crash:", err));
+});

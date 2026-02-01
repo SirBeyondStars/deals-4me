@@ -1,82 +1,72 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Deals-4Me – Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Site-wide styles -->
-  <link rel="stylesheet" href="theme.css" />
-  <link rel="stylesheet" href="dashboard.css">
 
+  <!-- CSS (also “one pond”) -->
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="dashboard.css" />
 </head>
 <body>
 
-  <!-- Top toolbar (same as other pages) -->
-<header id="toolbar"></header>
+  <div id="toolbar-root"></div>
 
-<!-- Main dashboard content -->
-<main class="dashboard-page">
-   <div class="dashboard-plate">
+  <main class="page">
+    <header class="page-header">
+      <h1>Dashboard</h1>
+      <div class="muted" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+      <div>
+        Date:
+        <input id="shopping-date" type="date" />
+      </div>
+      <div>
+        Showing deals for <strong><span id="shopping-date-label">—</span></strong>
+  </div>
+</div>
 
-  <!-- Header / intro -->
-  <section id="dashboard-header">
-    <h1>Deals-4Me Dashboard</h1>
-    <p class="dashboard-intro">
-      Welcome back! Here are your saved stores and any saved items currently on sale.
-    </p>
+      <div id="dashboard-status" class="status-bar"></div>
+    </header>
 
-    <p id="dashboard-status" class="muted">Loading...</p>
+    <section class="card">
+      <h2>Your stores</h2>
+      <p id="dashboard-no-stores-message" class="muted" style="display:none;">
+        You haven’t chosen any stores yet. Go to Flyers to pick up to 5 stores you shop at regularly.
+      </p>
+      <div id="store-cards-container" class="store-cards"></div>
+    </section>
 
-    <div class="week-summary">
-      <span>Current flyer week:</span>
-      <strong id="current-week-label">—</strong>
-    </div>
-  </section>
+    <section class="card">
+      <h2>My Saved Deals This Week</h2>
+      <div id="saved-deals-error" class="error-box" style="display:none;"></div>
+      <ul id="saved-deals-list" class="saved-deals-list"></ul>
+    </section>
+  </main>
 
-  <!-- Stores overview -->
-  <section id="stores-section">
-    <h2>Your Stores This Week</h2>
+  <!-- =========================
+       Scripts (ORDER MATTERS)
+       One-pond: all files live in site/
+       ========================= -->
 
-    <div id="store-cards-container" class="store-cards">
-      <!-- JS will render store cards here -->
-    </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.0/dist/umd/supabase.min.js"></script>
+<script src="supabaseClient.js"></script>
+<script src="auth.js"></script>
+<script src="helpers.js"></script>
+<script src="toolbar.js"></script>
 
-    <p
-      id="dashboard-no-stores-message"
-      class="dashboard-stores-empty"
-      style="display: none;"
-    >
-      You haven’t chosen any stores yet. Go to the Flyers page to pick up to 5 stores you shop at regularly.
-    </p>
-  </section>
+<!-- Dashboard modules (ORDER MATTERS) -->
+<script src="dashboard_util.js"></script>
+<script src="dashboard_config.js"></script>
+<script src="dashboard_data.js"></script>
+<script src="dashboard_match.js"></script>
+<script src="dashboard_render.js"></script>
+<script src="dashboard_wire.js"></script>
 
-  <!-- Saved deals list -->
-  <section id="saved-deals-section">
-    <h2>My Saved Deals This Week</h2>
-    <p class="subtitle">
-      These are your saved items that are currently on sale at your saved stores.
-    </p>
-
-    <ul id="saved-deals-list" class="saved-deals-list"></ul>
-
-    <p
-      id="saved-deals-error"
-      class="error-message"
-      style="display:none;"
-    ></p>
-  </section>
-
-  <!-- Future sections: budget, LPs, quick links, etc. -->
- </div>
-</main>
+<!-- Orchestrator LAST -->
+<script src="dashboard.js"></script>
 
 
-  <!-- JS order matters: Supabase CDN → client wrapper → auth/helpers/toolbar → page logic -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.0/dist/umd/supabase.min.js"></script>
-  <script src="supabaseClient.js"></script>
-  <script src="auth.js"></script>
-  <script src="helpers.js"></script>
-  <script src="toolbar.js"></script>
-  <script src="dashboard.js"></script>
+
 </body>
 </html>

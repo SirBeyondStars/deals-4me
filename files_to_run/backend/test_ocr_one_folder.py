@@ -14,7 +14,7 @@ def main():
 
     # Import your OCR function (this is the one you just edited)
     from date_ocr_runner import ocr_image
-
+	
     pngs = sorted(folder.glob("*.png"))
     if not pngs:
         print(f"No PNGs found in: {folder}")

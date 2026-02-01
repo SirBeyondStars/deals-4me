@@ -1,0 +1,166 @@
+/* site/auth.css
+   Shared styles for login.html + pin.html
+   ONE BIG POND
+   Goal:
+   - Auth layout rules live here
+   - Theme colors live in theme.css (single source of truth)
+*/
+
+/* ======= RESET (safe) ======= */
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+
+/* IMPORTANT:
+   Do NOT set body background/colors here.
+   theme.css controls site-wide background + text.
+*/
+
+/* ======= LAYOUT (LEFT / RIGHT) ======= */
+.container{
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  min-height: 100vh;
+
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Stack on small screens */
+@media (max-width: 900px){
+  .container{
+    grid-template-columns: 1fr;
+    padding: 1.25rem;
+  }
+}
+
+/* ======= PANES ======= */
+.left, .right{
+  display:flex;
+  flex-direction:column;
+  gap: 1.25rem;
+}
+
+.brand{
+  padding-top:.25rem;
+}
+
+/* Optional mini label (if used on PIN page, etc.) */
+.brand .mini{
+  font-weight:700;
+  letter-spacing:.08em;
+  font-size:.9rem;
+  opacity:.9;
+}
+
+.brand h1{
+  margin:.35rem 0 .35rem;
+  font-size: 2.1rem;
+  line-height:1.15;
+}
+
+.brand p{
+  margin:0;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+/* Right side divider (only when split) */
+@media (min-width: 901px){
+  .right{
+    border-left: 1px solid var(--border-1);
+    padding-left: 2rem;
+  }
+}
+
+/* ======= CARD ======= */
+/* Matches your theme.css surfaces */
+.card{
+  background: var(--surface-1);
+  border: 1px solid var(--border-1);
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow-1);
+}
+
+/* Make the right card a “content column”, not a full-width bar */
+.right .card{
+  max-width: 880px;
+}
+
+/* ======= FORM ======= */
+label{
+  display:block;
+  font-weight:800;
+  margin: .75rem 0 .35rem;
+  color: rgba(15, 23, 42, 0.85); /* consistent with light theme labels */
+}
+
+/* Keep your “light yellow field” look for auth pages */
+input{
+  width:100%;
+  padding: .85rem .95rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-2);
+  outline: none;
+
+  background: rgba(255, 244, 204, 0.92); /* auth field look */
+  color: rgba(15, 23, 42, 0.92);
+  font-size: 1rem;
+}
+
+input::placeholder{
+  color: rgba(15, 23, 42, 0.45);
+}
+
+input:focus{
+  border-color: rgba(58,110,165,0.55);
+  box-shadow: 0 0 0 4px rgba(58,110,165,0.18);
+}
+
+.actions{
+  margin-top: 1rem;
+}
+
+/* Auth primary button (kept separate from global .btn if you want) */
+.btn{
+  width:100%;
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  gap:.5rem;
+  padding: .9rem 1rem;
+
+  border: 1px solid rgba(58,110,165,0.30);
+  border-radius: 12px;
+  cursor:pointer;
+  font-weight:900;
+
+  background: rgba(58,110,165,0.18);
+  color: rgba(15, 23, 42, 0.92);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.08);
+}
+
+.btn:hover{
+  background: rgba(58,110,165,0.24);
+}
+
+/* Link styling inside auth cards */
+.link{
+  color: var(--link);
+  text-decoration:none;
+}
+.link:hover{ text-decoration:underline; }
+
+/* Small muted text blocks */
+.small{
+  color: var(--text-muted);
+  font-size:.95rem;
+  margin:.65rem 0 0;
+}
+
+ul{
+  margin:.75rem 0 0 1.2rem;
+  padding:0;
+}
+li{ margin:.35rem 0; }

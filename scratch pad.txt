@@ -1,0 +1,7 @@
+.\files_to_run\backend\run_export_and_parse_offers.ps1 -Region NE -WeekCode wk_20260111
+
+Test-Path "C:\Users\jwein\OneDrive\Desktop\deals-4me\flyers\MIDATL\shoprite\wk_20260118"
+
+510210214998 order number T-Mobile internet
+
+1001917539512063 - xfinity cancelation id number

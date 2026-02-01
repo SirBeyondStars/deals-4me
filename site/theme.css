@@ -1,39 +1,111 @@
-/* site/theme.css */
+/* =========================================================
+   Deals-4Me — site/theme.css   (ONE BIG POND)
+   Purpose:
+   - Global theme tokens (colors, spacing, surfaces)
+   - Global base styles (body, links, layout)
+   - Reusable components (toolbar, buttons, cards, tables, forms)
+   - Utility helpers
+   - Auth + Signup layout (kept here per "one big pond")
+   ========================================================= */
 
-/* Reset-ish */
-* {
-  box-sizing: border-box;
+
+/* =========================================================
+   1) THEME CONTROL PANEL (Change once, affects everything)
+   Light Theme: soft blue-gray background + calm blue accent
+   ========================================================= */
+
+:root{
+  /* Base background + text */
+  --bg-main: #E3E9F1;                  /* soft blue-gray (RGB 227,233,241) */
+  --text-main: rgba(15, 23, 42, 0.92); /* deep navy text */
+  --text-muted: rgba(15, 23, 42, 0.72);
+
+  /* Accent / links */
+  --accent: #3A6EA5;                   /* calm steel blue (RGB 58,110,165) */
+  --link: var(--accent);
+
+  /* Surfaces */
+  --surface-1: rgba(255,255,255,0.78); /* cards / panels */
+  --surface-2: rgba(255,255,255,0.62); /* toolbar / header */
+  --surface-3: rgba(255,255,255,0.92); /* higher contrast surfaces */
+
+  /* Borders */
+  --border-1: rgba(15, 23, 42, 0.12);
+  --border-2: rgba(15, 23, 42, 0.16);
+
+  /* Shadows */
+  --shadow-1: 0 10px 30px rgba(0,0,0,0.10);
+
+  /* Buttons */
+  --btn-bg: rgba(15, 23, 42, 0.06);
+  --btn-bg-hover: rgba(15, 23, 42, 0.10);
+
+  /* Inputs */
+  --input-bg: rgba(255,255,255,0.80);
+  --placeholder: rgba(15, 23, 42, 0.45);
+
+  /* Status colors */
+  --ok: #16A34A;
+  --warn: #D97706;
+  --err: #DC2626;
+
+  /* “Money palette” tokens (kept for later use if needed) */
+  --money-green-1: #0b5f3b;
+  --money-green-2: #1f8a5b;
+  --money-green-3: #e9fff6;
 }
 
-html, body {
-  height: 100%;
-}
+
+/* =========================================================
+   2) RESET / BASE ELEMENTS
+   ========================================================= */
+
+*{ box-sizing: border-box; }
+
+html, body{ height: 100%; }
 
 body{
-  background: #061222; /* deep navy */
-  color: #e6eefc;
   margin: 0;
+  background: var(--bg-main);
+  color: var(--text-main);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+/* Links */
 a{
-  color: #7dd3fc;
+  color: var(--link);
   text-decoration: none;
 }
-a:hover{
-  text-decoration: underline;
-}
+a:hover{ text-decoration: underline; }
 
-main{
-  padding: 18px;
-}
+/* Default main padding */
+main{ padding: 18px; }
 
-/* Simple page container helpers */
+
+/* =========================================================
+   3) LAYOUT HELPERS (Containers + titles)
+   ========================================================= */
+
+/* Existing page shell */
 .page-shell{
   max-width: 1100px;
   margin: 0 auto;
 }
 
+/* Standardized container for public/legal/static pages */
+.d4m-container{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 18px;
+}
+
+/* Readable text column for long docs (privacy/terms/etc.) */
+.d4m-doc{
+  max-width: 900px;
+  margin: 40px auto 50px;
+}
+
+/* Titles */
 .page-title{
   margin: 0 0 6px 0;
   font-size: 1.6rem;
@@ -41,101 +113,201 @@ main{
 }
 .page-subtitle{
   margin: 0 0 18px 0;
-  color: #bcd0ea;
+  color: var(--text-muted);
 }
 
-/* Toolbar */
+
+/* =========================================================
+   4) TOOLBAR (In-app toolbar — not for login/signup/pin)
+   ========================================================= */
+
 .toolbar{
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  background: rgba(0,0,0,0.18);
-}
-.toolbar a{
-  color: #dbeafe;
-  font-weight: 700;
-  padding: 6px 10px;
-  border-radius: 10px;
-}
-.toolbar a:hover{
-  background: rgba(255,255,255,0.08);
-  text-decoration: none;
+  gap: 10px;
+
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-1);
+  background: var(--surface-2);
+  backdrop-filter: blur(10px);
 }
 
-/* Buttons */
+/* If your toolbar has a "brand" link first, it will sit on the left */
+.toolbar .brand,
+.toolbar .toolbar-brand,
+.toolbar a.brand{
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  margin-right: 8px;
+}
+
+/* All links */
+.toolbar a{
+  color: var(--text-main);
+  font-weight: 800;
+  padding: 7px 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  opacity: 0.92;
+}
+
+.toolbar a:hover{
+  background: rgba(15, 23, 42, 0.07);
+  opacity: 1;
+}
+
+/* Optional "active" state if you add class="active" to current link */
+.toolbar a.active{
+  background: rgba(15, 23, 42, 0.10);
+  opacity: 1;
+}
+
+/* Push anything with class "spacer" to create left/nav/right layout */
+.toolbar .spacer{
+  flex: 1;
+}
+
+/* Right-side bits: username + logout */
+.toolbar .user-pill,
+#toolbar-user-pill{
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.06);
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+/* Buttons inside toolbar */
+.toolbar button,
+#toolbar-logout-btn{
+  border: 1px solid var(--border-2);
+  background: rgba(15, 23, 42, 0.06);
+  color: var(--text-main);
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.toolbar button:hover,
+#toolbar-logout-btn:hover{
+  background: rgba(15, 23, 42, 0.10);
+}
+
+
+/* =========================================================
+   5) BUTTONS (Global)
+   ========================================================= */
+
 .btn{
   display: inline-block;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.06);
-  color: #e6eefc;
+  border: 1px solid var(--border-2);
+  background: var(--btn-bg);
+  color: var(--text-main);
   border-radius: 999px;
   padding: 10px 14px;
   font-weight: 800;
   cursor: pointer;
 }
-.btn:hover{
-  background: rgba(255,255,255,0.10);
-}
+
+.btn:hover{ background: var(--btn-bg-hover); }
+
+/* Primary button uses accent blue (site-wide) */
 .btn.primary{
-  background: rgba(34,197,94,0.16);
-  border-color: rgba(34,197,94,0.30);
+  background: rgba(58,110,165,0.16);
+  border-color: rgba(58,110,165,0.32);
 }
 
-/* Inputs */
+
+/* =========================================================
+   6) FORMS / INPUTS (Global)
+   ========================================================= */
+
 input, select, textarea{
   width: 100%;
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.06);
-  color: #e6eefc;
+  border: 1px solid var(--border-2);
+  background: var(--input-bg);
+  color: var(--text-main);
   outline: none;
 }
-input::placeholder, textarea::placeholder{
-  color: rgba(230,238,252,0.60);
+
+input::placeholder,
+textarea::placeholder{
+  color: var(--placeholder);
 }
+
 label{
   display: block;
   margin: 10px 0 6px 0;
-  color: #cfe1ff;
+  color: rgba(15, 23, 42, 0.85);
   font-weight: 800;
 }
 
-/* Cards (generic) */
+
+/* =========================================================
+   7) CARDS (Generic reusable surface)
+   ========================================================= */
+
 .card{
-  background: rgba(0,0,0,0.22);
-  border: 1px solid rgba(255,255,255,0.10);
+  background: var(--surface-1);
+  border: 1px solid var(--border-1);
   border-radius: 16px;
   padding: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  box-shadow: var(--shadow-1);
 }
 
-/* Tables (generic) */
+
+/* =========================================================
+   8) TABLES (Generic)
+   ========================================================= */
+
 table{
   width: 100%;
   border-collapse: collapse;
 }
+
 th, td{
   text-align: left;
   padding: 10px 10px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid var(--border-1);
 }
+
 th{
-  color: #cfe1ff;
+  color: rgba(15, 23, 42, 0.85);
   font-weight: 900;
   font-size: 0.9rem;
 }
 
-/* Utility */
-.muted{ color: #bcd0ea; }
+/* Table row button group (profiles table etc.) */
+.table-actions{
+  display: flex;
+  gap: 8px;
+}
+
+
+/* =========================================================
+   9) UTILITIES
+   ========================================================= */
+
+.muted{ color: var(--text-muted); }
 .small{ font-size: 0.9rem; }
 .center{ text-align: center; }
 .hidden{ display: none !important; }
 
-/* Auth / centered pages */
+
+/* =========================================================
+   10) AUTH / CENTERED PAGES (Login, PIN, etc.)
+   ========================================================= */
+
 .centered-page{
   min-height: calc(100vh - 54px);
   display: flex;
@@ -147,52 +319,203 @@ th{
 .auth-card{
   width: 100%;
   max-width: 420px;
-  background: rgba(0,0,0,0.22);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: var(--surface-1);
+  border: 1px solid var(--border-1);
   border-radius: 18px;
   padding: 18px;
+  box-shadow: var(--shadow-1);
 }
 
-/* Profiles table tweaks (kept global because it’s reused) */
-.table-actions{
-  display: flex;
-  gap: 8px;
-}
 
-/* Save status helpers (reused across pages) */
-.save-status {
+/* =========================================================
+   11) SAVE STATUS (Reusable “saving/saved/error” badges)
+   ========================================================= */
+
+.save-status{
   display: inline-block;
   font-weight: 800;
   font-size: 0.9rem;
 }
-.save-status.saving {
-  color: #ffd166;
-}
-.save-status.saved {
-  color: #1dd75f;
-}
-.save-status.error {
-  color: #ff4d4f;
-}
+.save-status.saving{ color: var(--warn); }
+.save-status.saved{  color: var(--ok); }
+.save-status.error{  color: var(--err); }
 
-/* Region banner (reused anywhere) */
-.region-banner {
+
+/* =========================================================
+   12) REGION BANNER (Reusable anywhere)
+   ========================================================= */
+
+.region-banner{
   margin: 12px 0 16px 0;
   padding: 10px 14px;
   border-radius: 6px;
-  border: 1px solid #f59e0b;
-  background: rgba(251, 191, 36, 0.1);
-  color: #fef3c7;
+  border: 1px solid rgba(217,119,6,0.55);
+  background: rgba(217,119,6,0.10);
+  color: rgba(120,53,15,0.95);
   font-size: 0.9rem;
   line-height: 1.4;
 }
-.region-banner strong {
-  color: #fff;
+
+/* Keep strong readable on light background */
+.region-banner strong{
+  color: rgba(15, 23, 42, 0.92);
 }
 
-/* Money palette tokens (global variables) */
-:root{
-  --money-green-1: #0b5f3b;  /* dark edge */
-  --money-green-2: #1f8a5b;  /* mid */
-  --money-green-3: #e9fff6;  /* center glow */
+
+/* =========================================================
+   13) SIGNUP PAGE LAYOUT (Signup-specific, kept global)
+   ========================================================= */
+
+.signup-shell{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 22px;
+  display: grid;
+  grid-template-columns: 1.35fr 0.85fr; /* left wider */
+  gap: 28px;
+  align-items: start;
+}
+
+/* Left side container */
+.signup-left{
+  background: var(--surface-1);
+  border: 1px solid var(--border-1);
+  border-radius: 14px;
+  padding: 22px 22px 18px;
+  box-shadow: var(--shadow-1);
+}
+
+/* Signup header */
+.signup-header .brand{
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  opacity: 0.95;
+  margin-bottom: 6px;
+}
+
+.signup-header h1{
+  margin: 0 0 6px 0;
+  font-size: 28px;
+  line-height: 1.15;
+}
+
+.signup-header .subtext{
+  margin: 0 0 18px 0;
+  color: var(--text-muted);
+}
+
+/* Form grid */
+.form-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 16px;
+}
+
+.field{
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/* Signup labels (slightly smaller than global labels) */
+.field label{
+  font-size: 13px;
+  opacity: 0.90;
+}
+
+/* Signup input look (kept “light field look” you liked) */
+.field input{
+  width: 100%;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid var(--border-2);
+  background: rgba(255, 244, 204, 0.92);
+  padding: 10px 12px;
+  outline: none;
+  color: rgba(15, 23, 42, 0.92);
+}
+
+.field input:focus{
+  border-color: rgba(58,110,165,0.55);
+  box-shadow: 0 0 0 3px rgba(58,110,165,0.18);
+}
+
+.span-2{ grid-column: span 2; }
+
+.hint{
+  margin: 4px 0 10px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+/* Signup CTA button (signup-only) */
+.primary-btn{
+  width: 100%;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(58,110,165,0.30);
+  cursor: pointer;
+  font-weight: 800;
+  background: rgba(58,110,165,0.18);
+  color: rgba(15, 23, 42, 0.92);
+}
+
+.primary-btn:hover{
+  background: rgba(58,110,165,0.24);
+}
+
+.below-btn{
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.fineprint{
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Right side info card */
+.signup-right{
+  display: flex;
+  justify-content: stretch;
+}
+
+.info-card{
+  width: 100%;
+  background: var(--surface-1);
+  border: 1px solid var(--border-1);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: var(--shadow-1);
+}
+
+.info-card h2{
+  margin: 0 0 10px 0;
+  font-size: 18px;
+}
+
+.info-card p{
+  margin: 0 0 10px 0;
+  color: var(--text-muted);
+}
+
+.info-card ul{
+  margin: 10px 0 12px 18px;
+  padding: 0;
+}
+
+.info-card li{
+  margin: 8px 0;
+}
+
+/* Signup responsive */
+@media (max-width: 980px){
+  .signup-shell{ grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px){
+  .form-grid{ grid-template-columns: 1fr; }
+  .span-2{ grid-column: span 1; }
 }

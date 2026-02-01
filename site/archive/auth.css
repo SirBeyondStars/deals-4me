@@ -9,7 +9,6 @@
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#fafafa;color:var(--text)}
-.container{display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
 .left{background:radial-gradient(900px 600px at 0% 0%, #e7dcff 0, transparent 60%),radial-gradient(700px 500px at 120% 100%, #e4f0ff 0, transparent 60%),var(--left-bg);padding:4rem 3rem;display:flex;align-items:center;justify-content:center}
 .brand{max-width:520px}
 .badge{display:inline-block;background:#efe7ff;border:1px solid #d9c9ff;color:#5a2a82;padding:.35rem .6rem;border-radius:999px;font-weight:600;margin-bottom:.75rem}
@@ -35,10 +34,107 @@ input:focus{border-color:#5a2a82}
 .link{color:#5a2a82;text-decoration:none;font-size:.9rem}
 .footer{margin-top:1.25rem;text-align:center;color:var(--muted);font-size:.85rem}
 .notice{font-size:.85rem;color:#6b6b76;margin-top:.75rem}
-@media (max-width: 900px){
-  .container{grid-template-columns:1fr}
-  .left{order:2;padding:2rem}
-  .right{order:1;padding:2rem 1.25rem;box-shadow:none}
-  .brand h1{font-size:2rem}
-  .pin-box{width:56px}
+/* ============================
+   AUTH LAYOUT (single source of truth)
+   ============================ */
+
+.container{
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  min-height: 100vh;
 }
+
+/* Left pane should behave like a column */
+.left{
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Right pane should behave like a column (NOT centered like a modal) */
+.right{
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 2.25rem 2rem;
+}
+
+/* Mobile: stack */
+@media (max-width: 700px){
+  .container{ grid-template-columns: 1fr; }
+  .right{ padding: 2rem 1.25rem; }
+}
+
+
+/* -----------------------------
+   LOGIN / AUTH: make the split-pane visually obvious
+   ----------------------------- */
+
+/* Keep the left column neat (prevents the "full-width horizontal bar" look) */
+.left{
+  align-items: flex-start;
+}
+
+.left .card{
+  width: 100%;
+  max-width: 420px;          /* matches your left grid column */
+}
+
+/* Make the right side feel like a separate pane */
+.right{
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-left: 2.25rem;
+  border-left: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Align the right card with the left card (not under the big H1 text) */
+.right .card{
+  width: min(720px, 100%);
+  margin-top: 3.25rem;
+}
+
+/* Make the button feel like a real primary action */
+.btn{
+  width: 100%;
+  padding: 0.9rem 1.1rem;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+/* Optional: tighten input feel a bit (keeps the form from looking stretched) */
+input{
+  max-width: 100%;
+}
+
+/* FORCE left/right panes to behave like panes */
+.left, .right{
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Make the left pane not feel like a full-width bar */
+.left{
+  align-items: flex-start;
+}
+
+.left .card{
+  width: 100%;
+  max-width: 420px;
+}
+
+/* Make the right pane visually separate */
+.right{
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-left: 2.25rem;
+  border-left: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Put the right card near the top so it reads as a column */
+.right .card{
+  width: min(720px, 100%);
+  margin-top: 0;            /* IMPORTANT: remove the big drop */
+}
+

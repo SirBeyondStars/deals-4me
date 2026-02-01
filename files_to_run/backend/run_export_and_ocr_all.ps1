@@ -1,108 +1,118 @@
 <#
-    run_export_and_ocr_all.ps1
+  site/files_to_run/backend/run_export_and_ocr_all.ps1
 
-    Wrapper to run the Python batch "run_all_stores.py"
-    for a given week, across ALL stores.
+  Wrapper to run the Python batch "run_all_stores.py"
+  for a given REGION + week, across ALL stores.
 
-    Expected usage (from run_admin.ps1):
+  New canonical week format:
+    wk_YYYYMMDD  (Sunday start date)
 
-        & "$backendDir\run_export_and_ocr_all.ps1" -weekCode "week51" -flyersRoot "C:\...\flyers"
+  New folder layout:
+    flyers/<REGION>/<store_slug>/<wk_YYYYMMDD>/...
 
-    where:
-      -weekCode   is a week folder name like "week51"
-      -flyersRoot is the root flyers directory.
+  Expected usage (from run_admin.ps1):
+    & "$backendDir\run_export_and_ocr_all.ps1" -Region NE -WeekCode "wk_20251228"
+
+  Optional:
+    -ProjectRoot override if needed
 #>
 
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$weekCode,   # e.g. week51 or 51
+  [Parameter(Mandatory = $true)]
+  [ValidateNotNullOrEmpty()]
+  [string]$Region,   # e.g. NE
 
-    [Parameter(Mandatory = $true)]
-    [string]$flyersRoot
+  [Parameter(Mandatory = $true)]
+  [ValidateNotNullOrEmpty()]
+  [string]$WeekCode, # e.g. wk_20251228
+
+  [Parameter(Mandatory = $false)]
+  [string]$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path,
+
+  [Parameter(Mandatory = $false)]
+  [string]$FlyersRootOverride
 )
 
+Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-# Backend dir is where this script lives
-$backendDir  = $PSScriptRoot
-$projectRoot = Split-Path $backendDir -Parent
+function Write-Ok   { param([string]$m) Write-Host $m -ForegroundColor Green }
+function Write-Info { param([string]$m) Write-Host $m -ForegroundColor Cyan }
+function Write-Note { param([string]$m) Write-Host $m -ForegroundColor Gray }
+function Write-Warn { param([string]$m) Write-Host $m -ForegroundColor Yellow }
 
-function Normalize-WeekCodeForPython {
-    param(
-        [Parameter(Mandatory)]
-        [string]$Code
-    )
-
-    $c = $Code.Trim()
-
-    if ($c -match '^(week|Week)(\d{1,2})$') {
-        $num = [int]$matches[2]
-        return ("week{0:D2}" -f $num)
-    }
-    elseif ($c -match '^(\d{1,2})$') {
-        $num = [int]$matches[1]
-        return ("week{0:D2}" -f $num)
-    }
-    else {
-        throw "Invalid week code '$Code'. Use e.g. 51 or week51."
-    }
+function ConvertTo-RegionCode {
+  param([string]$R)
+  if ([string]::IsNullOrWhiteSpace($R)) { return "NE" }
+  return $R.Trim().ToUpperInvariant()
 }
 
-$weekCodeNorm = Normalize-WeekCodeForPython -Code $weekCode
+function Test-WeekCode {
+  param([string]$W)
+  return ($W -match '^wk_\d{8}$')
+}
 
-# Validate flyers root
+$Region   = ConvertTo-RegionCode -R $Region
+$WeekCode = $WeekCode.Trim()
+
+if (-not (Test-WeekCode -W $WeekCode)) {
+  throw "Invalid WeekCode '$WeekCode'. Expected format: wk_YYYYMMDD (e.g. wk_20251228)."
+}
+
+$backendDir = $PSScriptRoot
+
+# Flyers root
+$flyersRoot = if ($FlyersRootOverride) { $FlyersRootOverride } else { (Join-Path $ProjectRoot "flyers") }
 if (-not (Test-Path $flyersRoot)) {
-    Write-Host "ERROR: Flyers root not found: $flyersRoot" -ForegroundColor Red
-    exit 1
+  throw "Flyers root not found: $flyersRoot"
 }
 
-# Locate Python batch script
+# Python batch script
 $pyScript = Join-Path $backendDir "run_all_stores.py"
 if (-not (Test-Path $pyScript)) {
-    Write-Host "ERROR: run_all_stores.py not found in $backendDir" -ForegroundColor Red
-    exit 1
+  throw "run_all_stores.py not found in: $backendDir"
 }
 
-# Choose Python executable
-$venvPython = Join-Path $projectRoot ".venv\Scripts\python.exe"
+# Python executable
+$venvPython = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
 if (Test-Path $venvPython) {
-    $pythonExe = $venvPython
-    Write-Host "Using virtualenv Python: $pythonExe" -ForegroundColor DarkGray
-}
-else {
-    $pythonExe = "python"
-    Write-Host "Using system Python on PATH" -ForegroundColor DarkGray
+  $pythonExe = $venvPython
+  Write-Note "Using virtualenv Python: $pythonExe"
+} else {
+  $pythonExe = "python"
+  Write-Note "Using system Python on PATH"
 }
 
 Write-Host ""
 Write-Host "========================================="
-Write-Host " Running export + OCR for week: $weekCodeNorm"
-Write-Host " Flyers root: $flyersRoot"
-Write-Host " Backend dir: $backendDir"
+Write-Host " Export + OCR (ALL stores)"
+Write-Host " Region     : $Region"
+Write-Host " Week       : $WeekCode"
+Write-Host " FlyersRoot : $flyersRoot"
+Write-Host " BackendDir : $backendDir"
 Write-Host "========================================="
 Write-Host ""
 
-# Build arguments for run_all_stores.py
-$args = @(
-    $pyScript,
-    "--flyers-root", $flyersRoot,
-    "--week", $weekCodeNorm
+$pyArgs = @(
+  $pyScript,
+  "--flyers-root", $flyersRoot,
+  "--region", $Region,
+  "--week", $WeekCode
 )
 
 Write-Host "$pythonExe $($args -join ' ')" -ForegroundColor DarkGray
 
 $proc = Start-Process -FilePath $pythonExe `
-                      -ArgumentList $args `
+                      A-ArgumentList $pyargs `
                       -NoNewWindow `
                       -PassThru `
                       -Wait
 
 if ($proc.ExitCode -eq 0) {
-    Write-Host "All stores processed successfully for $weekCodeNorm." -ForegroundColor Green
-}
-else {
-    Write-Host "Batch ingest FAILED with exit code $($proc.ExitCode)." -ForegroundColor Red
+  Write-Ok "All stores processed successfully for $Region $WeekCode."
+} else {
+  Write-Host "Batch export/OCR FAILED with exit code $($proc.ExitCode)." -ForegroundColor Red
 }
 
 exit $proc.ExitCode

@@ -1,17 +1,18 @@
-<header class="d4m-toolbar">
-  <div class="d4m-toolbar-left">
-    <span class="d4m-logo-text">Deals-4Me</span>
-  </div>
+<!-- toolbar.html -->
+<nav class="d4m-toolbar" role="navigation" aria-label="Deals-4Me Toolbar">
+  <div class="d4m-toolbar__inner">
+    <a class="d4m-toolbar__brand" href="dashboard.html">Deals-4Me</a>
 
-  <nav class="d4m-toolbar-nav">
-    <a href="dashboard.html" class="d4m-nav-link">Dashboard</a>
-    <a href="flyers.html" class="d4m-nav-link">Flyers</a>
-    <a href="saved.html" class="d4m-nav-link">Saved Items</a>
-    <a href="account.html" class="d4m-nav-link">Account</a>
-  </nav>
+    <div class="d4m-toolbar__nav">
+      <a class="d4m-toolbar__link" data-page="dashboard" href="dashboard.html">Dashboard</a>
+      <a class="d4m-toolbar__link" data-page="flyers" href="flyers.html">Flyers</a>
+      <a class="d4m-toolbar__link" data-page="saved" href="saved.html">Saved Items</a>
+      <a class="d4m-toolbar__link" data-page="account" href="account.html">Account</a>
+    </div>
 
-  <div class="d4m-toolbar-right">
-    <span id="toolbar-user-pill" class="d4m-user-pill">Profile</span>
-    <button id="toolbar-logout-btn" class="logout-btn">Logout</button>
+    <div class="d4m-toolbar__right">
+      <span id="toolbar-user-pill" class="d4m-toolbar__pill">—</span>
+      <button id="toolbar-logout-btn" class="d4m-toolbar__btn" type="button">Logout</button>
+    </div>
   </div>
-</header>
+</nav>

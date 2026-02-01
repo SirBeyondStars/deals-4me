@@ -2,184 +2,247 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Deals-4Me – Sign Up</title>
+
+  <style>
+    html, body { height: 100%; }
+    body{
+      margin: 0;
+      color: #eef2ff;
+      background: radial-gradient(1200px 700px at 20% 10%, rgba(140, 90, 255, 0.18), transparent 55%),
+                  radial-gradient(900px 600px at 80% 40%, rgba(60, 160, 255, 0.10), transparent 60%),
+                  #070b14;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    a{ color: inherit; }
+
+    .signup-shell{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px 22px;
+      display: grid;
+      grid-template-columns: 1.35fr 0.85fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .signup-left, .info-card{
+      background: rgba(10, 16, 28, 0.55);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    .brand{ font-weight: 700; letter-spacing: 0.3px; opacity: 0.95; margin-bottom: 6px; }
+    h1{ margin: 0 0 6px 0; font-size: 28px; line-height: 1.15; }
+    .subtext{ margin: 0 0 18px 0; opacity: 0.85; }
+
+    .form-grid{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 16px;
+    }
+
+    .field{ display: flex; flex-direction: column; gap: 7px; }
+    .field label{ font-size: 13px; opacity: 0.90; }
+
+    .field input, .field select{
+      width: 100%;
+      height: 44px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255, 244, 204, 0.92);
+      padding: 10px 12px;
+      outline: none;
+      box-sizing: border-box;
+      color: #151515;
+    }
+
+    .field input:focus, .field select:focus{
+      border-color: rgba(160, 120, 255, 0.60);
+      box-shadow: 0 0 0 3px rgba(160, 120, 255, 0.18);
+    }
+
+    .span-2{ grid-column: span 2; }
+
+    .hint{ margin: 4px 0 10px; font-size: 12.5px; opacity: 0.85; }
+
+    .primary-btn{
+      width: 100%;
+      height: 44px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      background: rgba(120, 70, 210, 0.95);
+      color: white;
+    }
+
+    .below-btn{ margin-top: 10px; font-size: 13px; opacity: 0.9; }
+    .fineprint{ margin-top: 14px; font-size: 12px; opacity: 0.8; }
+
+    @media (max-width: 980px){
+      .signup-shell{ grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px){
+      .form-grid{ grid-template-columns: 1fr; }
+      .span-2{ grid-column: span 1; }
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Create Your Deals-4Me Account</h1>
+  <main class="signup-shell">
+    <section class="signup-left">
+      <div class="brand">Deals-4Me</div>
+      <h1>Create your account</h1>
+      <p class="subtext">Set up your household profile once — then use your PIN for quick access.</p>
 
-  <form id="signup-form">
-    <p>
-      <label>
-        Your Name (profile name):<br />
-        <input type="text" id="owner-name" required />
-      </label>
-    </p>
+      <form id="signup-form">
+        <div class="form-grid">
 
-    <p>
-      <label>
-        Email:<br />
-        <input type="email" id="email" required />
-      </label>
-    </p>
+          <div class="field span-2">
+            <label for="owner-name">Your Name (profile name)</label>
+            <input type="text" id="owner-name" required autocomplete="name" />
+          </div>
 
-    <p>
-      <label>
-        Password:<br />
-        <input type="password" id="password" required minlength="6" />
-      </label>
-    </p>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" required autocomplete="email" />
+          </div>
 
-    <p>
-      <label>
-        Confirm Password:<br />
-        <input type="password" id="password-confirm" required minlength="6" />
-      </label>
-    </p>
+          <div class="field">
+            <label for="email2">Confirm Email</label>
+            <input type="email" id="email2" required autocomplete="email" />
+          </div>
 
-    <p>
-      <label>
-        Household Address (one line for now):<br />
-        <input type="text" id="address-line"
-               placeholder="123 Main St, Bridgewater, MA 02324" />
-      </label>
-    </p>
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" required minlength="6" autocomplete="new-password" />
+          </div>
 
-    <p>
-      <label>
-        Owner PIN (6 digits):<br />
-        <input
-  type="password"
-  id="owner-pin"
-  maxlength="6"
-  pattern="[0-9]{6}"
-  required
-  autocomplete="off"
-  inputmode="numeric"
-/>
+          <div class="field">
+            <label for="password-confirm">Confirm Password</label>
+            <input type="password" id="password-confirm" required minlength="6" autocomplete="new-password" />
+          </div>
 
-      </label>
-      <br />
-      <small>We’ll use this as your profile PIN on the PIN page.</small>
-    </p>
+          <div class="field span-2">
+            <label for="street">Street Address</label>
+            <input type="text" id="street" autocomplete="address-line1" placeholder="123 Main St" />
+          </div>
 
-    <p>
-      <button type="submit">Create Account</button>
-    </p>
-  </form>
+          <div class="field span-2">
+            <label for="street2">Address Line 2 (Apt / Unit)</label>
+            <input type="text" id="street2" autocomplete="address-line2" placeholder="Apt 2B" />
+          </div>
 
-  <p>
-    Already have an account?
-    <a href="login.html">Log in here</a>
-  </p>
+          <div class="field city-field">
+            <label for="city">City</label>
+            <input type="text" id="city" autocomplete="address-level2" placeholder="Bridgewater" />
+          </div>
 
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.0/dist/umd/supabase.min.js"></script>
-  <script src="supabaseClient.js"></script>
+          <!-- State dropdown (small + consistent) -->
+          <div class="field state-field">
+            <label for="state">State</label>
+            <select id="state" autocomplete="address-level1">
+              <option value="" selected>Select</option>
+              <option value="AL">AL</option><option value="AK">AK</option><option value="AZ">AZ</option><option value="AR">AR</option>
+              <option value="CA">CA</option><option value="CO">CO</option><option value="CT">CT</option><option value="DE">DE</option>
+              <option value="FL">FL</option><option value="GA">GA</option><option value="HI">HI</option><option value="ID">ID</option>
+              <option value="IL">IL</option><option value="IN">IN</option><option value="IA">IA</option><option value="KS">KS</option>
+              <option value="KY">KY</option><option value="LA">LA</option><option value="ME">ME</option><option value="MD">MD</option>
+              <option value="MA">MA</option><option value="MI">MI</option><option value="MN">MN</option><option value="MS">MS</option>
+              <option value="MO">MO</option><option value="MT">MT</option><option value="NE">NE</option><option value="NV">NV</option>
+              <option value="NH">NH</option><option value="NJ">NJ</option><option value="NM">NM</option><option value="NY">NY</option>
+              <option value="NC">NC</option><option value="ND">ND</option><option value="OH">OH</option><option value="OK">OK</option>
+              <option value="OR">OR</option><option value="PA">PA</option><option value="RI">RI</option><option value="SC">SC</option>
+              <option value="SD">SD</option><option value="TN">TN</option><option value="TX">TX</option><option value="UT">UT</option>
+              <option value="VT">VT</option><option value="VA">VA</option><option value="WA">WA</option><option value="WV">WV</option>
+              <option value="WI">WI</option><option value="WY">WY</option>
+            </select>
+          </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("signup-form");
+          <!-- ZIP: keep as text + numeric keyboard (preserves leading zeros) -->
+          <div class="field">
+            <label for="zip">ZIP Code</label>
+            <input
+              type="text"
+              id="zip"
+              inputmode="numeric"
+              autocomplete="postal-code"
+              placeholder="12345 or 12345-6789"
+              pattern="^\d{5}(-\d{4})?$"
+              maxlength="10"
+            />
 
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+          <div class="row pin-row span-2">
+            <div class="field">
+              <label for="owner-pin">Owner PIN (6 digits)</label>
+              <input
+                type="password"
+                id="owner-pin"
+                maxlength="6"
+                pattern="[0-9]{6}"
+                required
+                inputmode="numeric"
+                /> 
+            </div>
 
-        if (!window.supabaseClient) {
-          alert("Supabase client not ready. Check supabaseClient.js.");
-          return;
-        }
+            <div class="field">
+              <label for="owner-pin2">Confirm PIN</label>
+                <input
+                type="password"
+                id="owner-pin2"
+                maxlength="6"
+                pattern="[0-9]{6}"
+                required
+                inputmode="numeric"
+              />
+            </div>
+          </div>
 
-        const ownerName       = document.getElementById("owner-name").value.trim();
-        const email           = document.getElementById("email").value.trim();
-        const password        = document.getElementById("password").value;
-        const passwordConfirm = document.getElementById("password-confirm").value;
-        const addressLine     = document.getElementById("address-line").value.trim();
-        const ownerPin        = document.getElementById("owner-pin").value.trim();
 
-        if (!ownerName || !email || !password || !ownerPin) {
-          alert("Please fill in all required fields.");
-          return;
-        }
+          <div class="field span-2">
+            <p class="hint">You’ll use this PIN on the PIN page after signup.</p>
+            <button type="submit" class="primary-btn">Create Account</button>
 
-        if (password !== passwordConfirm) {
-          alert("Passwords do not match.");
-          return;
-        }
+            <div class="below-btn">
+              Already have an account? <a href="login.html">Log in here</a>
+            </div>
 
-        if (!/^[0-9]{6}$/.test(ownerPin)) {
-          alert("PIN must be exactly 6 digits.");
-          return;
-        }
+            <p class="fineprint">
+              By creating an account, you agree to the
+              <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy Policy</a>.
+            </p>
+          </div>
 
-        console.log("[signup] creating auth user for", email);
+        </div>
+      </form>
+    </section>
 
-        const { data: signupData, error: signupError } =
-          await supabaseClient.auth.signUp({
-            email,
-            password,
-            options: {
-              data: {
-                display_name: ownerName,
-                address_line: addressLine
-              }
-            }
-          });
+    <aside>
+      <div class="info-card">
+        <h2>What you’re creating</h2>
+        <p>Deals-4Me is built for weekly savings and long-term smart shopping — not social media, not a marketplace.</p>
+        <ul>
+          <li><strong>Private by default</strong> — your saved items and stores stay in your account</li>
+          <li><strong>Fast login</strong> — after signup, use your PIN for quick access</li>
+          <li><strong>Location-ready</strong> — your address helps us show nearby store coverage later</li>
+        </ul>
+        <p><strong>Tip:</strong> Use a real email so you can recover access if you ever forget your PIN.</p>
+      </div>
+    </aside>
+  </main>
 
-        if (signupError) {
-          console.error("[signup] auth error", signupError);
-          alert("Sign-up failed: " + signupError.message);
-          return;
-        }
-
-        const newUser = signupData.user;
-        if (!newUser) {
-          alert(
-            "Account created, but no user object returned.\n" +
-            "If email confirmation is enabled, please verify your email, then log in."
-          );
-          window.location.href = "login.html";
-          return;
-        }
-
-        console.log("[signup] auth user created:", newUser.id);
-
-        // Insert owner profile into household_profiles
-        console.log("[signup] inserting owner profile row");
-
-        const { error: profileError } = await supabaseClient
-          .from("household_profiles")
-          .insert([
-            {
-              owner_user_id: newUser.id,
-              display_name: ownerName,
-              pin: ownerPin,
-              role: "owner",
-              is_active: true,
-              address_line: addressLine || null
-              // household_id can stay null/use default for now
-            }
-          ]);
-
-        if (profileError) {
-          console.error("[signup] profile insert error", profileError);
-          alert(
-            "Account created in auth, but failed to save profile:\n" +
-            profileError.message
-          );
-          return;
-        }
-
-        alert(
-          "Account created! You can now log in with your email and password." +
-          (signupData.session ? "" : " If email confirmation is enabled, please verify your email first.")
-        );
-
-        window.location.href = "login.html";
-      });
-    });
-  </script>
-
+  <!-- Scripts at the end (your standard) -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="supabaseClient.js"></script>
   <script src="auth.js"></script>
+  <script src="helpers.js"></script>
 
+  <!-- New: signup.js -->
+  <script src="signup.js"></script>
 </body>
 </html>
